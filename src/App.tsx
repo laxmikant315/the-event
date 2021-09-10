@@ -1,4 +1,4 @@
-import "./App.less";
+import "./App.css";
 import { Alert, Layout, Menu } from "antd";
 import {
   UploadOutlined,
