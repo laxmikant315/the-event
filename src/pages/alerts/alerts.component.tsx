@@ -1,7 +1,9 @@
 import { Button, Card, Col, Row, Space } from "antd";
 import axios from "axios";
+import moment from "moment";
 import { useEffect, useState } from "react";
-
+import { Descriptions } from "antd";
+import Title from "antd/lib/typography/Title";
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 
 const StockCard = ({ data }: any) => (
@@ -9,16 +11,23 @@ const StockCard = ({ data }: any) => (
     <Card
       title={`${data.symbol} @${data.buyPrice}`}
       bordered={false}
+      size="small"
       style={{ marginBottom: 20 }}
     >
-      <p>Volume Date : {data.tradeDate}</p>
-      <p>Buy Date : {data.buyDate}</p>
-      <p>
-        Target : {data.target} ({data.targetPer}%)
-      </p>
-      <p>
-        Stoploss : {data.stopLoss} ({data.stopLossPer}%)
-      </p>
+      <Descriptions layout="vertical" bordered size="small">
+        <Descriptions.Item label="Volume Date" span={2}>
+          {moment(data.tradeDate).format("D MMM h:mm a")}
+        </Descriptions.Item>
+        <Descriptions.Item label="Buy Date">
+          {moment(data.buyDate).format("D MMM h:mm a")}
+        </Descriptions.Item>
+        <Descriptions.Item label="Target">
+          {data.target} ({data.targetPer}%)
+        </Descriptions.Item>
+        <Descriptions.Item label="Stoploss">
+          {data.stopLoss} ({data.stopLossPer}%)
+        </Descriptions.Item>
+      </Descriptions>
     </Card>
   </Col>
 );
@@ -38,14 +47,18 @@ const Alerts = () => {
       className="site-card-wrapper"
       style={{ height: "100%", display: "flex", flexDirection: "column" }}
     >
-      <Row justify="center" style={{ marginBottom: 20 }}>
-        <Space>
-          <Button onClick={() => setIndex(index - 1)} disabled={index <= 0}>
-            Prev
-          </Button>
-          <Button onClick={() => setIndex(index + 1)}>Next</Button>
-        </Space>
-        <br />
+      <Row justify="space-between" style={{ marginBottom: 20 }}>
+        <Col>
+          <Title level={3}>Alerts</Title>
+        </Col>
+        <Col>
+          <Space>
+            <Button onClick={() => setIndex(index - 1)} disabled={index <= 0}>
+              Prev
+            </Button>
+            <Button onClick={() => setIndex(index + 1)}>Next</Button>
+          </Space>
+        </Col>
       </Row>
       <Row
         gutter={16}
