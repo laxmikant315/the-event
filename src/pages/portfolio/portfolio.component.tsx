@@ -1,4 +1,4 @@
-import { Button, Card, Col, Row, Space, Spin } from "antd";
+import { Button, Card, Col, Progress, Row, Skeleton, Space, Spin } from "antd";
 import axios from "axios";
 import moment from "moment";
 import { useEffect, useState } from "react";
@@ -9,23 +9,51 @@ const serverUrl = process.env.REACT_APP_SERVER_URL;
 const StockCard = ({ data }: any) => (
   <Col xs={24} sm={12} md={12} lg={8} xl={6} span={8}>
     <Card
-      title={`${data.symbol} @${data.buyPrice}`}
+      title={
+        <Row justify="space-between">
+          <span>
+            {data.symbol} <small>{data.last_price}</small>
+          </span>
+          <span style={{ color: data["pnl"] > 0 ? "#73d13d" : "#ff4d4f" }}>
+            {data.pnl.toFixed(2)}
+          </span>
+        </Row>
+      }
       bordered={false}
       size="small"
       style={{ marginBottom: 20 }}
     >
+      {data["pnl"] > 0 ? (
+        <Progress
+          percent={+data["progress"].toFixed(1)}
+          status="active"
+          strokeColor="#73d13d"
+        />
+      ) : (
+        <Progress
+          percent={+Math.abs(data["progress"]).toFixed(1)}
+          status="active"
+          strokeColor="#ff4d4f"
+        />
+      )}
+
       <Descriptions bordered size="small">
-        <Descriptions.Item label="Volume Date" span={4}>
-          {moment(data.tradeDate).format("D MMM h:mm a")}
-        </Descriptions.Item>
         <Descriptions.Item label="Buy Date" span={4}>
-          {moment(data.buyDate).format("D MMM h:mm a")}
+          {moment(data.buy_date).format("D MMM h:mm a")}
         </Descriptions.Item>
+        <Descriptions.Item label="Buy Price" span={4}>
+          {data.buy_price}
+        </Descriptions.Item>
+
         <Descriptions.Item label="Target" span={4}>
           {data.target} ({data.targetPer}%)
         </Descriptions.Item>
         <Descriptions.Item label="Stoploss" span={4}>
           {data.stopLoss} ({data.stopLossPer}%)
+        </Descriptions.Item>
+        <Descriptions.Item label="Value" span={4}>
+          x{data.quantity} = {(data.buy_price * data.quantity).toFixed(2)} & Now{" "}
+          {(data.last_price * data.quantity).toFixed(2)}
         </Descriptions.Item>
       </Descriptions>
     </Card>
@@ -40,7 +68,7 @@ const Alerts = () => {
   useEffect(() => {
     (async () => {
       setLoading(true);
-      const alerts = await axios.get(`${serverUrl}/alerts/${index}`);
+      const alerts = await axios.get(`${serverUrl}/portfolio`);
       setData(alerts.data);
       setLoading(false);
     })();
@@ -52,15 +80,7 @@ const Alerts = () => {
     >
       <Row justify="space-between" style={{ marginBottom: 20 }}>
         <Col>
-          <Title level={3}>Alerts</Title>
-        </Col>
-        <Col>
-          <Space>
-            <Button onClick={() => setIndex(index - 1)} disabled={index <= 0}>
-              Prev
-            </Button>
-            <Button onClick={() => setIndex(index + 1)}>Next</Button>
-          </Space>
+          <Title level={3}>Portfolio</Title>
         </Col>
       </Row>
       <Spin spinning={loading} size="large" style={{ color: "green" }}>
@@ -69,10 +89,14 @@ const Alerts = () => {
           justify="start"
           style={{ overflow: "auto", height: "100%" }}
         >
-          {data.map((item) => (
-            <StockCard data={item} />
-          ))}
-        </Row>
+          {data
+            .sort(
+              (x: any, y: any) => Math.abs(y.progress) - Math.abs(x.progress)
+            )
+            .map((item) => (
+              <StockCard data={item} />
+            ))}
+        </Row>{" "}
       </Spin>
     </div>
   );
