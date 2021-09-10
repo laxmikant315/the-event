@@ -7,24 +7,24 @@ import Title from "antd/lib/typography/Title";
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 
 const StockCard = ({ data }: any) => (
-  <Col xs={24} sm={12} md={6} lg={8} xl={6} span={8}>
+  <Col xs={24} sm={12} md={12} lg={8} xl={6} span={8}>
     <Card
       title={`${data.symbol} @${data.buyPrice}`}
       bordered={false}
       size="small"
       style={{ marginBottom: 20 }}
     >
-      <Descriptions layout="vertical" bordered size="small">
-        <Descriptions.Item label="Volume Date" span={2}>
+      <Descriptions bordered size="small">
+        <Descriptions.Item label="Volume Date" span={4}>
           {moment(data.tradeDate).format("D MMM h:mm a")}
         </Descriptions.Item>
-        <Descriptions.Item label="Buy Date">
+        <Descriptions.Item label="Buy Date" span={4}>
           {moment(data.buyDate).format("D MMM h:mm a")}
         </Descriptions.Item>
-        <Descriptions.Item label="Target">
+        <Descriptions.Item label="Target" span={4}>
           {data.target} ({data.targetPer}%)
         </Descriptions.Item>
-        <Descriptions.Item label="Stoploss">
+        <Descriptions.Item label="Stoploss" span={4}>
           {data.stopLoss} ({data.stopLossPer}%)
         </Descriptions.Item>
       </Descriptions>

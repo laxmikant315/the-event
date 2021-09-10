@@ -23,25 +23,19 @@ const App = () => (
     >
       <div className="logo" />
       <Menu theme="dark" mode="inline" defaultSelectedKeys={["4"]}>
-        <Menu.Item key="1" icon={<UserOutlined />}>
-          nav 1
-        </Menu.Item>
-        <Menu.Item key="2" icon={<VideoCameraOutlined />}>
-          nav 2
-        </Menu.Item>
         <Menu.Item key="3" icon={<UploadOutlined />}>
-          nav 3
+          Portfolio
         </Menu.Item>
         <Menu.Item key="4" icon={<UserOutlined />}>
-          nav 4
+          Alerts
         </Menu.Item>
       </Menu>
     </Sider>
     <Layout>
-      <Header
+      {/* <Header
         className="site-layout-sub-header-background"
         style={{ padding: 0 }}
-      />
+      /> */}
       <Content style={{ margin: "24px 16px 0" }}>
         <div
           className="site-layout-background"
@@ -50,7 +44,7 @@ const App = () => (
           <Alerts />
         </div>
       </Content>
-      <Footer style={{ textAlign: "center" }}>Teksa ©2021</Footer>
+      {/* <Footer style={{ textAlign: "center" }}>Teksa ©2021</Footer> */}
     </Layout>
   </Layout>
 );
