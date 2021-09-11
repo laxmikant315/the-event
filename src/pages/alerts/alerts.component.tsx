@@ -20,8 +20,15 @@ import LineChartOutlined from "@ant-design/icons/lib/icons/LineChartOutlined";
 import BarChartOutlined from "@ant-design/icons/lib/icons/BarChartOutlined";
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 const StockCard = ({ data }: any) => {
-  const { progress, last_price } = JSON.parse(data.additionalInfo || "{}");
+  const { progress, last_price, techIndex } = JSON.parse(
+    data.additionalInfo || "{}"
+  );
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const techColor = `rgba(${techIndex > 50 ? 115 : 255}, ${
+    techIndex > 50 ? 209 : 77
+  }, ${techIndex > 50 ? 60 : 79}, ${
+    techIndex > 50 ? techIndex / 100 : (100 - techIndex) / 100
+  })`;
   return (
     <>
       <Modal
@@ -42,19 +49,23 @@ const StockCard = ({ data }: any) => {
           title={
             <Row justify="space-between">
               <span>
+                <Button
+                  type="text"
+                  size="small"
+                  onClick={() => setIsModalVisible(true)}
+                  style={{
+                    background: techColor,
+                  }}
+                >
+                  <BarChartOutlined /> {techIndex}
+                </Button>
+                {"   "}
                 {data.symbol} @{data.buyPrice}
               </span>
               <span>
                 <Button
                   type="text"
-                  size="large"
-                  onClick={() => setIsModalVisible(true)}
-                >
-                  <BarChartOutlined />
-                </Button>
-                <Button
-                  type="text"
-                  size="large"
+                  size="small"
                   target="_blank"
                   href={`https://in.tradingview.com/chart/i6VwIssE/?symbol=NSE%3A${data.symbol}`}
                 >
