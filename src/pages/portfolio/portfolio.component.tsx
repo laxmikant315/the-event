@@ -4,6 +4,8 @@ import moment from "moment";
 import { useEffect, useState } from "react";
 import { Descriptions } from "antd";
 import Title from "antd/lib/typography/Title";
+
+import { LineChartOutlined } from "@ant-design/icons";
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 
 const StockCard = ({ data }: any) => (
@@ -15,6 +17,14 @@ const StockCard = ({ data }: any) => (
             {data.symbol} <small>{data.last_price}</small>
           </span>
           <span style={{ color: data["pnl"] > 0 ? "#73d13d" : "#ff4d4f" }}>
+            <Button
+              type="text"
+              size="large"
+              target="_blank"
+              href={`https://in.tradingview.com/chart/i6VwIssE/?symbol=NSE%3A${data.symbol}`}
+            >
+              <LineChartOutlined />
+            </Button>
             {data.pnl.toFixed(2)}
           </span>
         </Row>
