@@ -128,7 +128,8 @@ const Alerts = () => {
     (async () => {
       setLoading(true);
       const alerts = await axios.get(
-        `${serverUrl}/alerts/${index}/${isUpdate ? "True" : "False"}`
+        `${serverUrl}/alerts/${index}/${isUpdate ? "True" : "False"}`,
+        { timeout: 100000 }
       );
       setData(alerts.data);
       setLoading(false);
