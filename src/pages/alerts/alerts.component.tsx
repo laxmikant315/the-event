@@ -1,4 +1,5 @@
 import {
+  Badge,
   Button,
   Card,
   Col,
@@ -192,7 +193,7 @@ const Alerts = () => {
   const [refresh, setRefresh] = useState(0);
   const [isUpdate, setIsUpdate] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  const [dates, setDates] = useState<any>([]);
   useEffect(() => {
     (async () => {
       setLoading(true);
@@ -200,6 +201,10 @@ const Alerts = () => {
         `${serverUrl}/alerts/${index}/${isUpdate ? "True" : "False"}`,
         { timeout: 100000 }
       );
+      const datesSet: any = new Set(
+        alerts.data.map((x: any) => x["date_created"].slice(0, 10))
+      );
+      setDates([...datesSet]);
       setData(alerts.data);
       setLoading(false);
     })();
@@ -237,24 +242,51 @@ const Alerts = () => {
         </Col>
       </Row>
       <Row gutter={16} style={{ overflow: "auto", height: "100%" }}>
-        <Col lg={24} xs={24} sm={24} xl={24}>
+        <Col lg={24}>
           {loading ? (
             <Skeleton />
           ) : (
-            <Row
-              gutter={16}
-              justify="start"
-              style={{ overflow: "auto", height: "100%" }}
-            >
-              {data.map((item) => (
-                <StockCard
-                  index={index}
-                  data={item}
-                  setRefresh={setRefresh}
-                  refresh={refresh}
-                />
-              ))}
-            </Row>
+            <>
+              {dates &&
+                dates.map((date: string) => {
+                  const filtered = data.filter(
+                    (x: any) => x["date_created"].slice(0, 10) === date
+                  );
+                  return (
+                    <Row
+                      justify="center"
+                      style={{
+                        margin: 20,
+                        background: "#030303",
+                        borderRadius: 10,
+                      }}
+                    >
+                      <Col>
+                        <Title level={5}>
+                          {" "}
+                          {moment(date).format("DD MMM YYYY")}
+                        </Title>
+                      </Col>
+                      <Col lg={24} xs={24} sm={24} xl={24}>
+                        <Row
+                          gutter={16}
+                          justify="center"
+                          style={{ overflow: "auto", height: "100%" }}
+                        >
+                          {filtered.map((item) => (
+                            <StockCard
+                              index={index}
+                              data={item}
+                              setRefresh={setRefresh}
+                              refresh={refresh}
+                            />
+                          ))}
+                        </Row>
+                      </Col>
+                    </Row>
+                  );
+                })}
+            </>
           )}
         </Col>
       </Row>
