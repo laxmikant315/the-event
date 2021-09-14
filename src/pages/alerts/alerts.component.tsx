@@ -3,6 +3,8 @@ import {
   Card,
   Col,
   Modal,
+  notification,
+  Popconfirm,
   Progress,
   Row,
   Skeleton,
@@ -19,7 +21,13 @@ import { ReloadOutlined } from "@ant-design/icons";
 import LineChartOutlined from "@ant-design/icons/lib/icons/LineChartOutlined";
 import BarChartOutlined from "@ant-design/icons/lib/icons/BarChartOutlined";
 const serverUrl = process.env.REACT_APP_SERVER_URL;
-const StockCard = ({ data }: any) => {
+const StockCard = ({
+  data: dataFromProps,
+  index,
+  refresh,
+  setRefresh,
+}: any) => {
+  const [data, setData] = useState(dataFromProps);
   const { progress, last_price, techIndex } = JSON.parse(
     data.additionalInfo || "{}"
   );
@@ -29,6 +37,24 @@ const StockCard = ({ data }: any) => {
   }, ${techIndex > 50 ? 60 : 79}, ${
     techIndex > 50 ? techIndex / 100 : (100 - techIndex) / 100
   })`;
+  const [refreshCard, setRefreshCard] = useState(0);
+
+  useEffect(() => {
+    if (refreshCard || isModalVisible) {
+      (async () => {
+        setLoading(true);
+        const alerts = await axios.get(
+          `${serverUrl}/alerts/${index}/True/${data.id}`
+        );
+        if (alerts.data && alerts.data.length) {
+          setData(alerts.data[0]);
+        }
+        setLoading(false);
+      })();
+    }
+  }, [refreshCard, isModalVisible]);
+
+  const [loading, setLoading] = useState(false);
   return (
     <>
       <Modal
@@ -52,6 +78,7 @@ const StockCard = ({ data }: any) => {
                 <Button
                   type="text"
                   size="small"
+                  loading={loading}
                   onClick={() => setIsModalVisible(true)}
                   style={{
                     background: techColor,
@@ -65,12 +92,54 @@ const StockCard = ({ data }: any) => {
               <span>
                 <Button
                   type="text"
+                  icon={<ReloadOutlined />}
+                  loading={loading}
+                  onClick={() => setRefreshCard(refreshCard + 1)}
+                />
+                <Button
+                  type="text"
                   size="small"
                   target="_blank"
                   href={`https://in.tradingview.com/chart/i6VwIssE/?symbol=NSE%3A${data.symbol}`}
                 >
                   <LineChartOutlined />
                 </Button>
+                <Popconfirm
+                  placement="bottomRight"
+                  title={"Are you sure?"}
+                  onConfirm={async () => {
+                    const order = await axios.get(
+                      `${serverUrl}/buy/${data.id}`
+                    );
+
+                    if (order.data && order.data.status === "order_completed") {
+                      notification.success({
+                        message: "Order Success",
+                        description: "Order successfully placed.",
+                      });
+                      setRefresh(refresh + 1);
+                    } else {
+                      notification.error({
+                        message: "Order Failed",
+                        description: "Order placing failed.",
+                      });
+                    }
+                  }}
+                  okText="Yes"
+                  cancelText="No"
+                  okButtonProps={{ size: "large" }}
+                  cancelButtonProps={{ size: "large" }}
+                >
+                  <Button
+                    type="text"
+                    size="small"
+                    style={{
+                      background: techColor,
+                    }}
+                  >
+                    Buy
+                  </Button>
+                </Popconfirm>
               </span>
             </Row>
           }
@@ -178,7 +247,12 @@ const Alerts = () => {
               style={{ overflow: "auto", height: "100%" }}
             >
               {data.map((item) => (
-                <StockCard data={item} />
+                <StockCard
+                  index={index}
+                  data={item}
+                  setRefresh={setRefresh}
+                  refresh={refresh}
+                />
               ))}
             </Row>
           )}
