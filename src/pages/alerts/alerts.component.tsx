@@ -122,7 +122,10 @@ const StockCard = ({
                     } else {
                       notification.error({
                         message: "Order Failed",
-                        description: "Order placing failed.",
+                        description:
+                          order.data.reason == "low_margin"
+                            ? "Due to unsuffiecient margin, please add funds."
+                            : "Order placing failed.",
                       });
                     }
                   }}
