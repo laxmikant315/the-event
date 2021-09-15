@@ -3,6 +3,7 @@ import {
   Button,
   Card,
   Col,
+  InputNumber,
   Modal,
   notification,
   Popconfirm,
@@ -56,6 +57,11 @@ const StockCard = ({
   }, [refreshCard, isModalVisible]);
 
   const [loading, setLoading] = useState(false);
+  const [orderLoading, setOrderLoading] = useState(false);
+  const [orderInfo, setOrderInfo] = useState({
+    orderType: "MARKET",
+    price: data.buyPrice,
+  });
   return (
     <>
       <Modal
@@ -106,11 +112,46 @@ const StockCard = ({
                   <LineChartOutlined />
                 </Button>
                 <Popconfirm
+                  disabled={data.orderExecuting}
                   placement="bottomRight"
-                  title={"Are you sure?"}
+                  title={
+                    <Row justify="space-between">
+                      <Space>
+                        <Switch
+                          checkedChildren="Limit"
+                          unCheckedChildren="Market"
+                          onChange={(checked) => {
+                            setOrderInfo({
+                              ...orderInfo,
+                              orderType: checked ? "LIMIT" : "MARKET",
+                            });
+                          }}
+                        />
+
+                        <InputNumber<string>
+                          min="0"
+                          step="0.05"
+                          value={orderInfo.price}
+                          disabled={orderInfo.orderType === "MARKET"}
+                          onChange={(newPrice) => {
+                            setOrderInfo({
+                              ...orderInfo,
+                              price: newPrice,
+                            });
+                          }}
+                          stringMode
+                        />
+                      </Space>
+                    </Row>
+                  }
                   onConfirm={async () => {
+                    let price = 0;
+                    if (orderInfo.orderType === "LIMIT") {
+                      price = orderInfo.price;
+                    }
+                    setOrderLoading(true);
                     const order = await axios.get(
-                      `${serverUrl}/buy/${data.id}`
+                      `${serverUrl}/buy/${orderInfo.orderType}/${data.id}/${price}`
                     );
 
                     if (order.data && order.data.status === "order_completed") {
@@ -119,6 +160,15 @@ const StockCard = ({
                         description: "Order successfully placed.",
                       });
                       setRefresh(refresh + 1);
+                    } else if (
+                      order.data &&
+                      order.data.status === "open_order_placed"
+                    ) {
+                      notification.warning({
+                        message: "Order Success",
+                        description: "Order placed but not executed yet",
+                      });
+                      setData({ ...data, orderExecuting: true });
                     } else {
                       notification.error({
                         message: "Order Failed",
@@ -128,20 +178,25 @@ const StockCard = ({
                             : "Order placing failed.",
                       });
                     }
+                    setOrderLoading(false);
                   }}
-                  okText="Yes"
-                  cancelText="No"
+                  okText="Submit"
+                  cancelText="Cancel"
                   okButtonProps={{ size: "large" }}
                   cancelButtonProps={{ size: "large" }}
+                  icon={null}
                 >
                   <Button
                     type="text"
                     size="small"
+                    disabled={data.orderExecuting}
+                    loading={orderLoading}
                     style={{
-                      background: techColor,
+                      background: data.orderExecuting ? "#fa8c16" : techColor,
+                      color: "#fff",
                     }}
                   >
-                    Buy
+                    {data.orderExecuting ? "Buying..." : "Buy"}
                   </Button>
                 </Popconfirm>
               </span>
