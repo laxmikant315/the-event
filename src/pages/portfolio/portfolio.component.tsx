@@ -73,87 +73,110 @@ const StockCard = ({ data: dataFromProps }: any) => {
         >
           <Card
             title={
-              <Row justify="space-between">
-                <span>
-                  <Button
-                    loading={loading}
-                    type="text"
-                    size="small"
-                    onClick={() => setIsModalVisible(true)}
-                    style={{
-                      background: techColor,
-                    }}
-                  >
-                    <BarChartOutlined /> {techIndex}
-                  </Button>
-                  {"   "}
-                  {data.symbol} <small>{data.last_price}</small>
-                </span>
-                <span
-                  style={{ color: data["pnl"] > 0 ? "#73d13d" : "#ff4d4f" }}
-                >
-                  <Button
-                    type="text"
-                    size="large"
-                    target="_blank"
-                    href={`https://in.tradingview.com/chart/i6VwIssE/?symbol=NSE%3A${data.symbol}`}
-                  >
-                    <LineChartOutlined />
-                  </Button>
-                  {data.pnl.toFixed(2)}
-
-                  <Popconfirm
-                    placement="bottomRight"
-                    title={"Are you sure?"}
-                    onConfirm={async () => {
-                      const order = await axios.get(
-                        `${serverUrl}/sell/${data.symbol}`
-                      );
-
-                      if (
-                        order.data &&
-                        order.data.status === "order_completed"
-                      ) {
-                        notification.success({
-                          message: "Order Success",
-                          description: "Order successfully placed.",
-                        });
-                      } else {
-                        notification.error({
-                          message: "Order Failed",
-                          description: "Order placing failed.",
-                        });
-                      }
-                    }}
-                    okText="Yes"
-                    cancelText="No"
-                    okButtonProps={{ size: "large" }}
-                    cancelButtonProps={{ size: "large" }}
-                  >
-                    <Button type="text" size="small">
-                      Sell
+              <>
+                <Row justify="space-between">
+                  <span>
+                    <Button
+                      loading={loading}
+                      type="text"
+                      size="small"
+                      onClick={() => setIsModalVisible(true)}
+                      style={{
+                        background: techColor,
+                      }}
+                    >
+                      <BarChartOutlined /> {techIndex}
                     </Button>
-                  </Popconfirm>
-                </span>
-              </Row>
+                    {"   "}
+                    {data.symbol} <small>{data.last_price}</small>
+                  </span>
+                  <span
+                    style={{ color: data["pnl"] > 0 ? "#73d13d" : "#ff4d4f" }}
+                  >
+                    <Button
+                      type="text"
+                      size="large"
+                      target="_blank"
+                      href={`https://in.tradingview.com/chart/i6VwIssE/?symbol=NSE%3A${data.symbol}`}
+                    >
+                      <LineChartOutlined />
+                    </Button>
+                    {data.pnl.toFixed(2)}
+
+                    <Popconfirm
+                      placement="bottomRight"
+                      title={"Are you sure?"}
+                      onConfirm={async () => {
+                        const order = await axios.get(
+                          `${serverUrl}/sell/${data.symbol}`
+                        );
+
+                        if (
+                          order.data &&
+                          order.data.status === "order_completed"
+                        ) {
+                          notification.success({
+                            message: "Order Success",
+                            description: "Order successfully placed.",
+                          });
+                        } else {
+                          notification.error({
+                            message: "Order Failed",
+                            description: "Order placing failed.",
+                          });
+                        }
+                      }}
+                      okText="Yes"
+                      cancelText="No"
+                      okButtonProps={{ size: "large" }}
+                      cancelButtonProps={{ size: "large" }}
+                    >
+                      <Button type="text" size="small">
+                        Sell
+                      </Button>
+                    </Popconfirm>
+                  </span>
+                </Row>
+              </>
             }
             bordered={false}
             size="small"
             style={{ marginBottom: 20 }}
           >
-            {data["pnl"] > 0 ? (
-              <Progress
-                percent={+data["progress"].toFixed(1)}
-                status="active"
-                strokeColor="#73d13d"
-              />
-            ) : (
-              <Progress
-                percent={+Math.abs(data["progress"]).toFixed(1)}
-                status="active"
-                strokeColor="#ff4d4f"
-              />
-            )}
+            <Row justify="space-around">
+              <Col lg={17} xs={17} sm={17} md={17}>
+                {data["pnl"] > 0 ? (
+                  <Progress
+                    size="small"
+                    percent={+data["progress"].toFixed(1)}
+                    status="active"
+                    strokeColor="#73d13d"
+                  />
+                ) : (
+                  <Progress
+                    percent={+Math.abs(data["progress"]).toFixed(1)}
+                    status="active"
+                    strokeColor="#ff4d4f"
+                  />
+                )}
+              </Col>
+              <Col lg={5}>
+                <Progress
+                  // type="circle"
+                  percent={data.timePer}
+                  steps={10}
+                  size="small"
+                  status={
+                    data["pnl"] < 0 && data.timePer >= 100
+                      ? "exception"
+                      : data.timePer > 100
+                      ? "success"
+                      : "active"
+                  }
+                  strokeColor={data["pnl"] > 0 ? "#73d13d" : "#ff4d4f"}
+                />
+              </Col>
+            </Row>
 
             <Descriptions bordered size="small">
               <Descriptions.Item label="Buy Date" span={4}>
