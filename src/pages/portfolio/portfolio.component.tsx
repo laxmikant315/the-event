@@ -19,6 +19,8 @@ import { useEffect, useRef, useState } from "react";
 import { Descriptions } from "antd";
 import Title from "antd/lib/typography/Title";
 import BarChartOutlined from "@ant-design/icons/lib/icons/BarChartOutlined";
+import SyncOutlined from "@ant-design/icons/lib/icons/SyncOutlined";
+
 import { LineChartOutlined } from "@ant-design/icons";
 import ReloadOutlined from "@ant-design/icons/lib/icons/ReloadOutlined";
 const serverUrl = process.env.REACT_APP_SERVER_URL;
@@ -214,20 +216,31 @@ const Alerts = () => {
   const [index, setIndex] = useState(0);
   const [loading, setLoading] = useState(false);
   const [refresh, setRefresh] = useState(0);
+  const [refreshAll, setRefreshAll] = useState(0);
   const btnRefresh = useRef<any>();
+  const btnRefreshAll = useRef<any>();
 
-  const [isUpdate, setIsUpdate] = useState(false);
+  // const [isUpdate, setIsUpdate] = useState(true);
 
   useEffect(() => {
     (async () => {
       setLoading(true);
-      const alerts = await axios.get(
-        `${serverUrl}/portfolio/${isUpdate ? "True" : "False"}`
-      );
+      const alerts = await axios.get(`${serverUrl}/portfolio/False`);
       setData(alerts.data);
       setLoading(false);
     })();
-  }, [index, refresh, isUpdate]);
+  }, [index, refresh]);
+
+  useEffect(() => {
+    if (refreshAll) {
+      (async () => {
+        setLoading(true);
+        const alerts = await axios.get(`${serverUrl}/portfolio/True`);
+        setData(alerts.data);
+        setLoading(false);
+      })();
+    }
+  }, [index, refreshAll]);
 
   useEffect(() => {
     setInterval(() => {
@@ -235,15 +248,14 @@ const Alerts = () => {
       if (btnRefresh && btnRefresh.current) {
         btnRefresh.current.click();
       }
-    }, 60000);
+    }, 11160000);
 
     setInterval(() => {
       // setRefresh(refresh + 1);
-      setIsUpdate(true);
-      if (btnRefresh && btnRefresh.current) {
-        btnRefresh.current.click();
+
+      if (btnRefreshAll && btnRefreshAll.current) {
+        btnRefreshAll.current.click();
       }
-      setIsUpdate(false);
     }, 300000);
   }, []);
   return (
@@ -263,13 +275,20 @@ const Alerts = () => {
             ref={btnRefresh}
             onClick={() => setRefresh(refresh + 1)}
           />
-          <Switch
+          <Button
+            type="primary"
+            icon={<SyncOutlined />}
+            loading={loading}
+            ref={btnRefreshAll}
+            onClick={() => setRefreshAll(refreshAll + 1)}
+          />
+          {/* <Switch
             checkedChildren="Sync On"
             unCheckedChildren="Sync Off"
             defaultChecked={isUpdate}
             loading={loading}
             onClick={() => setIsUpdate(!isUpdate)}
-          />
+          /> */}
         </Col>
       </Row>
       <Spin spinning={loading} size="large" style={{ color: "green" }}>
@@ -282,8 +301,8 @@ const Alerts = () => {
             .sort(
               (x: any, y: any) => Math.abs(y.progress) - Math.abs(x.progress)
             )
-            .map((item) => (
-              <StockCard data={item} />
+            .map((item: any) => (
+              <StockCard id={item.symbol} data={item} />
             ))}
         </Row>{" "}
       </Spin>
