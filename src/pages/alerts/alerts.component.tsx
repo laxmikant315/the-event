@@ -206,20 +206,40 @@ const StockCard = ({
           size="small"
           style={{ marginBottom: 20 }}
         >
-          {progress > 0 && (
-            <Progress
-              percent={+progress.toFixed(1)}
-              status="active"
-              strokeColor="#73d13d"
-            />
-          )}
-          {progress < 0 && (
-            <Progress
-              percent={+Math.abs(progress).toFixed(1)}
-              status="active"
-              strokeColor="#ff4d4f"
-            />
-          )}
+          <Row justify="space-around">
+            <Col lg={17} xs={17} sm={17} md={17}>
+              {progress > 0 && (
+                <Progress
+                  percent={+progress.toFixed(1)}
+                  status="active"
+                  strokeColor="#73d13d"
+                />
+              )}
+              {progress < 0 && (
+                <Progress
+                  percent={+Math.abs(progress).toFixed(1)}
+                  status="active"
+                  strokeColor="#ff4d4f"
+                />
+              )}
+            </Col>
+            <Col lg={5}>
+              <Progress
+                // type="circle"
+                percent={data.timePer}
+                steps={10}
+                size="small"
+                status={
+                  data["pnl"] < 0 && data.timePer >= 100
+                    ? "exception"
+                    : data.timePer > 100
+                    ? "success"
+                    : "active"
+                }
+                strokeColor={data["pnl"] > 0 ? "#73d13d" : "#ff4d4f"}
+              />
+            </Col>
+          </Row>
           <Descriptions bordered size="small">
             <Descriptions.Item label="Volume Date" span={4}>
               {moment(data.tradeDate).format("D MMM h:mm a")}

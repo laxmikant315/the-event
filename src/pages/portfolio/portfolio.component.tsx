@@ -298,9 +298,14 @@ const Alerts = () => {
           style={{ overflow: "auto", height: "100%" }}
         >
           {data
-            .sort(
-              (x: any, y: any) => Math.abs(y.progress) - Math.abs(x.progress)
-            )
+            .map((x: any) => ({
+              ...x,
+              max:
+                Math.abs(x.progress) > Math.abs(x.timePer)
+                  ? Math.abs(x.progress)
+                  : Math.abs(x.timePer),
+            }))
+            .sort((x: any, y: any) => y.max - x.max)
             .map((item: any) => (
               <StockCard id={item.symbol} data={item} />
             ))}
