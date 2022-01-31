@@ -1,13 +1,12 @@
 import "./App.css";
-import { Alert, Layout, Menu } from "antd";
+import { Layout, Menu } from "antd";
 import {
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
+  NotificationOutlined,
+  EyeOutlined,
+  DollarCircleOutlined,
 } from "@ant-design/icons";
 import Alerts from "./pages/alerts/alerts.component";
 import Portfolio from "./pages/portfolio/portfolio.component";
-import { useState } from "react";
 
 import {
   BrowserRouter as Router,
@@ -16,6 +15,7 @@ import {
   Switch,
   NavLink,
 } from "react-router-dom";
+import Notifications from "./pages/notifications/notifications.component";
 const { Header, Content, Footer, Sider } = Layout;
 
 const App = () => {
@@ -34,16 +34,21 @@ const App = () => {
         >
           <div className="logo" />
           <Menu theme="dark" mode="inline">
-            <Menu.Item key="3" icon={<UploadOutlined />}>
+            <Menu.Item key="3" icon={<DollarCircleOutlined />}>
               <NavLink to="/portfolio" activeClassName="active">
                 {" "}
                 Portfolio{" "}
               </NavLink>
             </Menu.Item>
 
-            <Menu.Item key="4" icon={<UserOutlined />}>
-              <NavLink to="/alerts" activeClassName="active">
-                Alerts
+            <Menu.Item key="4" icon={<EyeOutlined />}>
+              <NavLink to="/watchlist" activeClassName="active">
+                Watchlist
+              </NavLink>
+            </Menu.Item>
+            <Menu.Item key="5" icon={<NotificationOutlined />}>
+              <NavLink to="/notifications" activeClassName="active">
+                Notifications
               </NavLink>
             </Menu.Item>
           </Menu>
@@ -60,8 +65,13 @@ const App = () => {
             >
               <Switch>
                 <Route exact path="/" component={Portfolio}></Route>
-                <Route exact path="/alerts" component={Alerts}></Route>
+                <Route exact path="/watchlist" component={Alerts}></Route>
                 <Route exact path="/portfolio" component={Portfolio}></Route>
+                <Route
+                  exact
+                  path="/notifications"
+                  component={Notifications}
+                ></Route>
               </Switch>
             </div>
           </Content>

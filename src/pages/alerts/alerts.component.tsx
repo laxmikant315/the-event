@@ -303,7 +303,7 @@ const Alerts = () => {
     >
       <Row justify="space-between" style={{ marginBottom: 20 }}>
         <Col>
-          <Title level={3}>Alerts</Title>
+          <Title level={3}>Watchlist</Title>
         </Col>
         <Col>
           <Space>
