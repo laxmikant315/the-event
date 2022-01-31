@@ -6,6 +6,7 @@ import {
   Modal,
   notification,
   Popconfirm,
+  Popover,
   Progress,
   Row,
   Skeleton,
@@ -23,6 +24,8 @@ import SyncOutlined from "@ant-design/icons/lib/icons/SyncOutlined";
 
 import { LineChartOutlined } from "@ant-design/icons";
 import ReloadOutlined from "@ant-design/icons/lib/icons/ReloadOutlined";
+import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
+import TechIndexChart from "../../components/tech-index-chart.component";
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 
 const StockCard = ({ data: dataFromProps }: any) => {
@@ -78,17 +81,22 @@ const StockCard = ({ data: dataFromProps }: any) => {
               <>
                 <Row justify="space-between">
                   <span>
-                    <Button
-                      loading={loading}
-                      type="text"
-                      size="small"
-                      onClick={() => setIsModalVisible(true)}
-                      style={{
-                        background: techColor,
-                      }}
+                    <Popover
+                      content={<TechIndexChart data={data.indexProgress} />}
+                      title="Tech Index Journey"
                     >
-                      <BarChartOutlined /> {techIndex}
-                    </Button>
+                      <Button
+                        loading={loading}
+                        type="text"
+                        size="small"
+                        onClick={() => setIsModalVisible(true)}
+                        style={{
+                          background: techColor,
+                        }}
+                      >
+                        <BarChartOutlined /> {techIndex}
+                      </Button>
+                    </Popover>
                     {"   "}
                     {data.symbol} <small>{data.last_price}</small>
                   </span>

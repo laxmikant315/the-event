@@ -7,6 +7,7 @@ import {
   Modal,
   notification,
   Popconfirm,
+  Popover,
   Progress,
   Row,
   Skeleton,
@@ -22,7 +23,10 @@ import Title from "antd/lib/typography/Title";
 import { ReloadOutlined } from "@ant-design/icons";
 import LineChartOutlined from "@ant-design/icons/lib/icons/LineChartOutlined";
 import BarChartOutlined from "@ant-design/icons/lib/icons/BarChartOutlined";
+import { LineChart, Line, CartesianGrid, XAxis, YAxis } from "recharts";
+import TechIndexChart from "../../components/tech-index-chart.component";
 const serverUrl = process.env.REACT_APP_SERVER_URL;
+
 const StockCard = ({
   data: dataFromProps,
   index,
@@ -82,17 +86,22 @@ const StockCard = ({
           title={
             <Row justify="space-between">
               <span>
-                <Button
-                  type="text"
-                  size="small"
-                  loading={loading}
-                  onClick={() => setIsModalVisible(true)}
-                  style={{
-                    background: techColor,
-                  }}
+                <Popover
+                  content={<TechIndexChart data={data.indexProgress} />}
+                  title="Tech Index Journey"
                 >
-                  <BarChartOutlined /> {techIndex}
-                </Button>
+                  <Button
+                    type="text"
+                    size="small"
+                    loading={loading}
+                    onClick={() => setIsModalVisible(true)}
+                    style={{
+                      background: techColor,
+                    }}
+                  >
+                    <BarChartOutlined /> {techIndex}
+                  </Button>
+                </Popover>
                 {"   "}
                 {data.symbol} @{data.buyPrice}
               </span>
