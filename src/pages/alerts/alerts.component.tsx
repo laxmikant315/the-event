@@ -25,6 +25,7 @@ import LineChartOutlined from "@ant-design/icons/lib/icons/LineChartOutlined";
 import BarChartOutlined from "@ant-design/icons/lib/icons/BarChartOutlined";
 import { LineChart, Line, CartesianGrid, XAxis, YAxis } from "recharts";
 import TechIndexChart from "../../components/tech-index-chart.component";
+import Indicator from "../indicator/indicator.component";
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 
 const StockCard = ({
@@ -249,6 +250,7 @@ const StockCard = ({
               />
             </Col>
           </Row>
+
           <Descriptions bordered size="small">
             <Descriptions.Item label="Volume Date" span={4}>
               {moment(data.tradeDate).format("D MMM h:mm a")}
@@ -256,18 +258,22 @@ const StockCard = ({
             <Descriptions.Item label="Buy Date" span={4}>
               {moment(data.buyDate).format("D MMM h:mm a")}
             </Descriptions.Item>
-            <Descriptions.Item label="Target" span={4}>
-              {data.target} ({data.targetPer}%)
-            </Descriptions.Item>
-            <Descriptions.Item label="Stoploss" span={4}>
-              {data.stopLoss} ({data.stopLossPer}%)
-            </Descriptions.Item>
-            {last_price && (
-              <Descriptions.Item label="Current Price" span={4}>
-                {last_price}
-              </Descriptions.Item>
-            )}
           </Descriptions>
+          <Row>
+            <Col lg={24} xs={24} sm={24} xl={24}>
+              <Indicator
+                data={{
+                  stoplossPer: data.stopLossPer,
+                  targetPer: data.targetPer,
+
+                  buyPrice: data.buyPrice,
+                  target: data.target,
+                  stoploss: data.stopLoss,
+                  currentPrice: last_price,
+                }}
+              />
+            </Col>
+          </Row>
         </Card>
       </Col>
     </>
