@@ -82,24 +82,25 @@ const StockCard = ({ data: dataFromProps }: any) => {
               <>
                 <Row justify="space-between">
                   <span>
+                    <Button
+                      loading={loading}
+                      type="text"
+                      size="small"
+                      onClick={() => setIsModalVisible(true)}
+                      style={{
+                        background: techColor,
+                      }}
+                    >
+                      <BarChartOutlined /> {techIndex}
+                    </Button>
+
+                    {"   "}
                     <Popover
                       content={<TechIndexChart data={data.indexProgress} />}
                       title="Tech Index Journey"
                     >
-                      <Button
-                        loading={loading}
-                        type="text"
-                        size="small"
-                        onClick={() => setIsModalVisible(true)}
-                        style={{
-                          background: techColor,
-                        }}
-                      >
-                        <BarChartOutlined /> {techIndex}
-                      </Button>
+                      <span style={{ cursor: "pointer" }}>{data.symbol} </span>
                     </Popover>
-                    {"   "}
-                    {data.symbol} <small>{data.last_price}</small>
                   </span>
                   <span
                     style={{ color: data["pnl"] > 0 ? "#73d13d" : "#ff4d4f" }}

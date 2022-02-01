@@ -87,24 +87,24 @@ const StockCard = ({
           title={
             <Row justify="space-between">
               <span>
+                <Button
+                  type="text"
+                  size="small"
+                  loading={loading}
+                  onClick={() => setIsModalVisible(true)}
+                  style={{
+                    background: techColor,
+                  }}
+                >
+                  <BarChartOutlined /> {techIndex}
+                </Button>
+
                 <Popover
                   content={<TechIndexChart data={data.indexProgress} />}
                   title="Tech Index Journey"
                 >
-                  <Button
-                    type="text"
-                    size="small"
-                    loading={loading}
-                    onClick={() => setIsModalVisible(true)}
-                    style={{
-                      background: techColor,
-                    }}
-                  >
-                    <BarChartOutlined /> {techIndex}
-                  </Button>
+                  <span style={{ cursor: "pointer" }}> {data.symbol}</span>
                 </Popover>
-                {"   "}
-                {data.symbol} @{data.buyPrice}
               </span>
               <span>
                 <Button
