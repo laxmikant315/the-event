@@ -264,8 +264,8 @@ const Alerts = () => {
     setInterval(() => {
       // setRefresh(refresh + 1);
 
-      if (btnRefreshAll && btnRefreshAll.current) {
-        btnRefreshAll.current.click();
+      if (btnRefresh && btnRefresh.current) {
+        btnRefresh.current.click();
       }
     }, 300000);
   }, []);

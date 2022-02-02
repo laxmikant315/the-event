@@ -18,22 +18,22 @@ const LineIndicator = ({ data, type }: any) => {
       left = "auto";
       right = 0;
       backgroundColor = "#30ec30";
-      value = data.target.toFixed(2);
+      value = data.target && data.target.toFixed(2);
     } else if (type === "stoploss") {
       left = 0;
       right = "auto";
       backgroundColor = "#d94b4b";
-      value = data.stoploss.toFixed(2);
+      value = data.stoploss && data.stoploss.toFixed(2);
     } else if (type === "buy") {
       left = 0;
       right = "auto";
       backgroundColor = "white";
-      value = data.buyPrice.toFixed(2);
+      value = data.buyPrice && data.buyPrice.toFixed(2);
     } else if (type === "current") {
       left = (per < -100 ? -101 : per > 100 ? 101 : per) + "%";
       right = "auto";
       backgroundColor = "#ffe549";
-      value = data.currentPrice.toFixed(2);
+      value = data.currentPrice && data.currentPrice.toFixed(2);
       top = 35;
     }
     setState({ left, right, backgroundColor, value, top, height });
