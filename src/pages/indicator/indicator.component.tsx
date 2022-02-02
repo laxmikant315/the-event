@@ -126,7 +126,7 @@ const Indicator = ({ data }: any) => {
   return (
     <div>
       <Row
-        style={{ margin: "0px 10px 60px 10px" }}
+        style={{ margin: "0px 10px 30px 10px" }}
         justify={data.stoplossIsLarge ? "start" : "end"}
       >
         <Col

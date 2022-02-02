@@ -212,11 +212,12 @@ const StockCard = ({ data: dataFromProps }: any) => {
             </Row>
 
             <Row gutter={16} style={{ marginBottom: 10 }}>
-              <Col span={8}>
+              <Col span={3}>
                 <Statistic
-                  title="Quantity"
+                  title="QTY"
                   value={data.quantity}
                   precision={0}
+                  valueStyle={{ fontSize: 16 }}
                   // valueStyle={{ color: "#3f8600" }}
                 />
               </Col>
@@ -226,31 +227,33 @@ const StockCard = ({ data: dataFromProps }: any) => {
                   title="Invested"
                   value={(data.buy_price * data.quantity).toFixed(2)}
                   precision={0}
+                  valueStyle={{ fontSize: 16 }}
                   // valueStyle={{ color: "#3f8600" }}
                   prefix={"₹"}
                 />
               </Col>
               <Col span={8}>
                 <Statistic
-                  title="Current Value"
+                  title="Value"
                   value={(data.last_price * data.quantity).toFixed(2)}
                   precision={0}
                   prefix={"₹"}
+                  valueStyle={{ fontSize: 16 }}
                   // valueStyle={{ color: "#3f8600" }}
                 />
               </Col>
-              <Col span={8}></Col>
-              <Col span={8}>
+              {/* <Col span={8}></Col> */}
+              <Col span={5}>
                 <Statistic
-                  title="Buy Date"
+                  title="Buy on"
                   value={moment(data.buy_date).format("D MMM h:mm a")}
                   precision={0}
                   valueStyle={{ fontSize: 14 }}
                 />
               </Col>
-              <Col span={8}></Col>
+              {/* <Col span={8}></Col> */}
             </Row>
-            <Row>
+            <Row style={{ width: "368px" }}>
               <Col lg={24} xs={24} sm={24} xl={24}>
                 <Indicator
                   data={{
