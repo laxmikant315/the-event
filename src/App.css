@@ -58,3 +58,6 @@
 .ant-layout-has-sider {
   height: 100vh;
 }
+.ant-card-head-title {
+  padding: 0 !important;
+}

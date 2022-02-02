@@ -12,6 +12,7 @@ import {
   Skeleton,
   Space,
   Spin,
+  Statistic,
   Switch,
 } from "antd";
 import axios from "axios";
@@ -32,6 +33,7 @@ const serverUrl = process.env.REACT_APP_SERVER_URL;
 const StockCard = ({ data: dataFromProps }: any) => {
   const [data, setData] = useState(dataFromProps);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isTechIndexVisible, setIsTechIndexVisible] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const { techIndex } = data;
@@ -41,6 +43,9 @@ const StockCard = ({ data: dataFromProps }: any) => {
     techIndex > 50 ? techIndex / 100 : (100 - techIndex) / 100
   })`;
 
+  const isMobile = window.matchMedia(
+    "only screen and (max-width: 760px)"
+  ).matches;
   useEffect(() => {
     if (isModalVisible) {
       (async () => {
@@ -78,10 +83,11 @@ const StockCard = ({ data: dataFromProps }: any) => {
           style={{ display: data.isInPositions ? "block" : "none" }}
         >
           <Card
+            headStyle={{ padding: 0 }}
             title={
-              <>
+              <span style={{ margin: 0 }}>
                 <Row justify="space-between">
-                  <span>
+                  <span style={{ display: "flex", alignItems: "center" }}>
                     <Button
                       loading={loading}
                       type="text"
@@ -95,11 +101,26 @@ const StockCard = ({ data: dataFromProps }: any) => {
                     </Button>
 
                     {"   "}
+                    <Modal
+                      title="Tech Index Journey"
+                      visible={isTechIndexVisible}
+                      onCancel={() => setIsTechIndexVisible(false)}
+                    >
+                      <TechIndexChart data={data.indexProgress} />
+                    </Modal>
                     <Popover
+                      popupVisible={!isMobile}
                       content={<TechIndexChart data={data.indexProgress} />}
                       title="Tech Index Journey"
                     >
-                      <span style={{ cursor: "pointer" }}>{data.symbol} </span>
+                      <span
+                        style={{ cursor: "pointer" }}
+                        onClick={() => {
+                          if (isMobile) setIsTechIndexVisible(true);
+                        }}
+                      >
+                        &nbsp;{data.symbol}{" "}
+                      </span>
                     </Popover>
                   </span>
                   <span
@@ -149,11 +170,11 @@ const StockCard = ({ data: dataFromProps }: any) => {
                     </Popconfirm>
                   </span>
                 </Row>
-              </>
+              </span>
             }
             bordered={false}
             size="small"
-            style={{ marginBottom: 20 }}
+            style={{ marginBottom: 10 }}
           >
             <Row justify="space-around">
               <Col lg={17} xs={17} sm={17} md={17}>
@@ -190,16 +211,45 @@ const StockCard = ({ data: dataFromProps }: any) => {
               </Col>
             </Row>
 
-            <Descriptions bordered size="small">
-              <Descriptions.Item label="Buy Date" span={4}>
-                {moment(data.buy_date).format("D MMM h:mm a")}
-              </Descriptions.Item>
+            <Row gutter={16} style={{ marginBottom: 10 }}>
+              <Col span={8}>
+                <Statistic
+                  title="Quantity"
+                  value={data.quantity}
+                  precision={0}
+                  // valueStyle={{ color: "#3f8600" }}
+                />
+              </Col>
 
-              <Descriptions.Item label="Value" span={4}>
-                x{data.quantity} = {(data.buy_price * data.quantity).toFixed(2)}{" "}
-                & Now {(data.last_price * data.quantity).toFixed(2)}
-              </Descriptions.Item>
-            </Descriptions>
+              <Col span={8}>
+                <Statistic
+                  title="Invested"
+                  value={(data.buy_price * data.quantity).toFixed(2)}
+                  precision={0}
+                  // valueStyle={{ color: "#3f8600" }}
+                  prefix={"₹"}
+                />
+              </Col>
+              <Col span={8}>
+                <Statistic
+                  title="Current Value"
+                  value={(data.last_price * data.quantity).toFixed(2)}
+                  precision={0}
+                  prefix={"₹"}
+                  // valueStyle={{ color: "#3f8600" }}
+                />
+              </Col>
+              <Col span={8}></Col>
+              <Col span={8}>
+                <Statistic
+                  title="Buy Date"
+                  value={moment(data.buy_date).format("D MMM h:mm a")}
+                  precision={0}
+                  valueStyle={{ fontSize: 14 }}
+                />
+              </Col>
+              <Col span={8}></Col>
+            </Row>
             <Row>
               <Col lg={24} xs={24} sm={24} xl={24}>
                 <Indicator

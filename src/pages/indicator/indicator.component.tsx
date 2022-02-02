@@ -1,5 +1,5 @@
 import { Col, Row } from "antd";
-
+import "./indicator.css";
 import { useEffect, useState } from "react";
 
 const LineIndicator = ({ data, type }: any) => {
@@ -17,22 +17,22 @@ const LineIndicator = ({ data, type }: any) => {
     if (type === "target") {
       left = "auto";
       right = 0;
-      backgroundColor = "#30ec30";
+      backgroundColor = "#6fca3b";
       value = data.target && data.target.toFixed(2);
     } else if (type === "stoploss") {
       left = 0;
       right = "auto";
-      backgroundColor = "#d94b4b";
+      backgroundColor = "#ff4d4f";
       value = data.stoploss && data.stoploss.toFixed(2);
     } else if (type === "buy") {
       left = 0;
       right = "auto";
-      backgroundColor = "white";
+      backgroundColor = "#dadacc";
       value = data.buyPrice && data.buyPrice.toFixed(2);
     } else if (type === "current") {
       left = (per < -100 ? -101 : per > 100 ? 101 : per) + "%";
       right = "auto";
-      backgroundColor = "#ffe549";
+      backgroundColor = "#ffe549c7";
       value = data.currentPrice && data.currentPrice.toFixed(2);
       top = 35;
     }
@@ -41,8 +41,8 @@ const LineIndicator = ({ data, type }: any) => {
   return (
     <>
       <span
+        className="value"
         style={{
-          position: "absolute",
           top: state.top,
           left: state.left,
           right: state.right,
@@ -52,12 +52,12 @@ const LineIndicator = ({ data, type }: any) => {
         {state.value}
       </span>
       <span
+        className="line"
         style={{
-          position: "absolute",
           left: state.left,
           right: state.right,
           height: state.height + "%",
-          width: "3px",
+
           backgroundColor: state.backgroundColor,
         }}
       ></span>
@@ -130,38 +130,16 @@ const Indicator = ({ data }: any) => {
         justify={data.stoplossIsLarge ? "start" : "end"}
       >
         <Col
+          className="block stoploss"
           style={{
-            backgroundColor: "#FF9A8B",
-
-            backgroundImage:
-              "linear-gradient(90deg, #c01f2b 0%, #FF6A88 55%, #FF99AC 100%)",
-
-            height: 15,
             width: data.xPer + "%",
-            justifyContent: "center",
-            display: "flex",
-            alignItems: "center",
           }}
         >
-          <span style={{ color: "#444", fontWeight: "bold" }}>
-            {data.stoplossPer}%
-          </span>
+          <span className="percent stoploss">{data.stoplossPer}%</span>
           <LineIndicator data={data} type="stoploss" />
         </Col>
-        <Col
-          style={{
-            backgroundColor: "#85FFBD",
-            backgroundImage: "linear-gradient(45deg, #85FFBD 0%, #39e62e 100%)",
-            height: 15,
-            width: data.yPer + "%",
-            justifyContent: "center",
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <span style={{ color: "#444", fontWeight: "bold" }}>
-            {data.targetPer}%
-          </span>
+        <Col className="block target" style={{ width: data.yPer + "%" }}>
+          <span className="percent target">{data.targetPer}%</span>
           {/* <span style={{ position: "absolute", top: "100px", left: -15 }}>
                 {data.buyPrice}
               </span> */}
