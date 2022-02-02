@@ -61,7 +61,7 @@ const App = () => {
           <Content style={{ margin: "24px 16px 0" }}>
             <div
               className="site-layout-background"
-              style={{ padding: 24, minHeight: 360 }}
+              style={{ padding: 0, minHeight: 360 }}
             >
               <Switch>
                 <Route exact path="/" component={Portfolio}></Route>

@@ -22,7 +22,7 @@ import { Descriptions } from "antd";
 import Title from "antd/lib/typography/Title";
 import BarChartOutlined from "@ant-design/icons/lib/icons/BarChartOutlined";
 import SyncOutlined from "@ant-design/icons/lib/icons/SyncOutlined";
-
+import StarTwoTone from "@ant-design/icons/lib/icons/StarTwoTone";
 import { LineChartOutlined } from "@ant-design/icons";
 import ReloadOutlined from "@ant-design/icons/lib/icons/ReloadOutlined";
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
@@ -77,199 +77,199 @@ const StockCard = ({ data: dataFromProps }: any) => {
         />
       </Modal>
       <Col xs={24} sm={12} md={12} lg={12} xl={6} span={8}>
-        <Badge
-          status="warning"
-          count="P"
-          style={{ display: data.isInPositions ? "block" : "none" }}
-        >
-          <Card
-            headStyle={{ padding: 0 }}
-            title={
-              <span style={{ margin: 0 }}>
-                <Row justify="space-between">
-                  <span style={{ display: "flex", alignItems: "center" }}>
-                    <Button
-                      loading={loading}
-                      type="text"
-                      size="small"
-                      onClick={() => setIsModalVisible(true)}
-                      style={{
-                        background: techColor,
-                      }}
-                    >
-                      <BarChartOutlined /> {techIndex}
-                    </Button>
-
-                    {"   "}
-                    <Modal
-                      title="Tech Index Journey"
-                      visible={isTechIndexVisible}
-                      onCancel={() => setIsTechIndexVisible(false)}
-                    >
-                      <TechIndexChart data={data.indexProgress} />
-                    </Modal>
-                    <Popover
-                      popupVisible={!isMobile}
-                      content={<TechIndexChart data={data.indexProgress} />}
-                      title="Tech Index Journey"
-                    >
-                      <span
-                        style={{ cursor: "pointer" }}
-                        onClick={() => {
-                          if (isMobile) setIsTechIndexVisible(true);
-                        }}
-                      >
-                        &nbsp;{data.symbol}{" "}
-                      </span>
-                    </Popover>
-                  </span>
-                  <span
-                    style={{ color: data["pnl"] > 0 ? "#73d13d" : "#ff4d4f" }}
-                  >
-                    <Button
-                      type="text"
-                      size="large"
-                      target="_blank"
-                      href={`https://in.tradingview.com/chart/i6VwIssE/?symbol=NSE%3A${data.symbol}`}
-                    >
-                      <LineChartOutlined />
-                    </Button>
-                    {data.pnl.toFixed(2)}
-
-                    <Popconfirm
-                      placement="bottomRight"
-                      title={"Are you sure?"}
-                      onConfirm={async () => {
-                        const order = await axios.get(
-                          `${serverUrl}/sell/${data.symbol}`
-                        );
-
-                        if (
-                          order.data &&
-                          order.data.status === "order_completed"
-                        ) {
-                          notification.success({
-                            message: "Order Success",
-                            description: "Order successfully placed.",
-                          });
-                        } else {
-                          notification.error({
-                            message: "Order Failed",
-                            description: "Order placing failed.",
-                          });
-                        }
-                      }}
-                      okText="Yes"
-                      cancelText="No"
-                      okButtonProps={{ size: "large" }}
-                      cancelButtonProps={{ size: "large" }}
-                    >
-                      <Button type="text" size="small">
-                        Sell
-                      </Button>
-                    </Popconfirm>
-                  </span>
-                </Row>
-              </span>
-            }
-            bordered={false}
-            size="small"
-            style={{ marginBottom: 10 }}
-          >
-            <Row justify="space-around">
-              <Col lg={17} xs={17} sm={17} md={17}>
-                {data["pnl"] > 0 ? (
-                  <Progress
+        <Card
+          headStyle={{ padding: 0 }}
+          title={
+            <span style={{ margin: 0 }}>
+              <Row justify="space-between">
+                <span style={{ display: "flex", alignItems: "center" }}>
+                  <Button
+                    loading={loading}
+                    type="text"
                     size="small"
-                    percent={+data["progress"].toFixed(1)}
-                    status="active"
-                    strokeColor="#73d13d"
-                  />
-                ) : (
-                  <Progress
-                    percent={+Math.abs(data["progress"]).toFixed(1)}
-                    status="active"
-                    strokeColor="#ff4d4f"
-                  />
-                )}
-              </Col>
-              <Col lg={5}>
+                    onClick={() => setIsModalVisible(true)}
+                    style={{
+                      background: techColor,
+                    }}
+                  >
+                    <BarChartOutlined /> {techIndex}
+                  </Button>
+
+                  {"   "}
+                  <Modal
+                    title="Tech Index Journey"
+                    visible={isTechIndexVisible}
+                    onCancel={() => setIsTechIndexVisible(false)}
+                  >
+                    <TechIndexChart data={data.indexProgress} />
+                  </Modal>
+                  <Popover
+                    popupVisible={!isMobile}
+                    content={<TechIndexChart data={data.indexProgress} />}
+                    title="Tech Index Journey"
+                  >
+                    <span
+                      style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        if (isMobile) setIsTechIndexVisible(true);
+                      }}
+                    >
+                      &nbsp;{data.symbol}{" "}
+                      {data.isInPositions && (
+                        <StarTwoTone
+                          twoToneColor="#ecd620  "
+                          style={{ fontSize: "24px" }}
+                        />
+                      )}
+                    </span>
+                  </Popover>
+                </span>
+                <span
+                  style={{ color: data["pnl"] > 0 ? "#73d13d" : "#ff4d4f" }}
+                >
+                  <Button
+                    type="text"
+                    size="large"
+                    target="_blank"
+                    href={`https://in.tradingview.com/chart/i6VwIssE/?symbol=NSE%3A${data.symbol}`}
+                  >
+                    <LineChartOutlined />
+                  </Button>
+                  {data.pnl.toFixed(2)}
+
+                  <Popconfirm
+                    placement="bottomRight"
+                    title={"Are you sure?"}
+                    onConfirm={async () => {
+                      const order = await axios.get(
+                        `${serverUrl}/sell/${data.symbol}`
+                      );
+
+                      if (
+                        order.data &&
+                        order.data.status === "order_completed"
+                      ) {
+                        notification.success({
+                          message: "Order Success",
+                          description: "Order successfully placed.",
+                        });
+                      } else {
+                        notification.error({
+                          message: "Order Failed",
+                          description: "Order placing failed.",
+                        });
+                      }
+                    }}
+                    okText="Yes"
+                    cancelText="No"
+                    okButtonProps={{ size: "large" }}
+                    cancelButtonProps={{ size: "large" }}
+                  >
+                    <Button type="text" size="small">
+                      Sell
+                    </Button>
+                  </Popconfirm>
+                </span>
+              </Row>
+            </span>
+          }
+          bordered={false}
+          size="small"
+          style={{ marginBottom: 10 }}
+        >
+          <Row justify="space-around">
+            <Col lg={17} xs={17} sm={17} md={17}>
+              {data["pnl"] > 0 ? (
                 <Progress
-                  // type="circle"
-                  percent={data.timePer}
-                  steps={10}
                   size="small"
-                  status={
-                    data["pnl"] < 0 && data.timePer >= 100
-                      ? "exception"
-                      : data.timePer > 100
-                      ? "success"
-                      : "active"
-                  }
-                  strokeColor={data["pnl"] > 0 ? "#73d13d" : "#ff4d4f"}
+                  percent={+data["progress"].toFixed(1)}
+                  status="active"
+                  strokeColor="#73d13d"
                 />
-              </Col>
-            </Row>
+              ) : (
+                <Progress
+                  percent={+Math.abs(data["progress"]).toFixed(1)}
+                  status="active"
+                  strokeColor="#ff4d4f"
+                />
+              )}
+            </Col>
+            <Col lg={5}>
+              <Progress
+                // type="circle"
+                percent={data.timePer}
+                steps={10}
+                size="small"
+                status={
+                  data["pnl"] < 0 && data.timePer >= 100
+                    ? "exception"
+                    : data.timePer > 100
+                    ? "success"
+                    : "active"
+                }
+                strokeColor={data["pnl"] > 0 ? "#73d13d" : "#ff4d4f"}
+              />
+            </Col>
+          </Row>
 
-            <Row gutter={16} style={{ marginBottom: 10 }}>
-              <Col span={3}>
-                <Statistic
-                  title="QTY"
-                  value={data.quantity}
-                  precision={0}
-                  valueStyle={{ fontSize: 16 }}
-                  // valueStyle={{ color: "#3f8600" }}
-                />
-              </Col>
+          <Row gutter={16} style={{ marginBottom: 10 }}>
+            <Col span={3}>
+              <Statistic
+                title="QTY"
+                value={data.quantity}
+                precision={0}
+                valueStyle={{ fontSize: 16 }}
+                // valueStyle={{ color: "#3f8600" }}
+              />
+            </Col>
 
-              <Col span={8}>
-                <Statistic
-                  title="Invested"
-                  value={(data.buy_price * data.quantity).toFixed(2)}
-                  precision={0}
-                  valueStyle={{ fontSize: 16 }}
-                  // valueStyle={{ color: "#3f8600" }}
-                  prefix={"₹"}
-                />
-              </Col>
-              <Col span={8}>
-                <Statistic
-                  title="Value"
-                  value={(data.last_price * data.quantity).toFixed(2)}
-                  precision={0}
-                  prefix={"₹"}
-                  valueStyle={{ fontSize: 16 }}
-                  // valueStyle={{ color: "#3f8600" }}
-                />
-              </Col>
-              {/* <Col span={8}></Col> */}
-              <Col span={5}>
-                <Statistic
-                  title="Buy on"
-                  value={moment(data.buy_date).format("D MMM h:mm a")}
-                  precision={0}
-                  valueStyle={{ fontSize: 14 }}
-                />
-              </Col>
-              {/* <Col span={8}></Col> */}
-            </Row>
-            <Row style={{ width: "368px" }}>
-              <Col lg={24} xs={24} sm={24} xl={24}>
-                <Indicator
-                  data={{
-                    stoplossPer: data.stopLossPer,
-                    targetPer: data.targetPer,
+            <Col span={8}>
+              <Statistic
+                title="Invested"
+                value={(data.buy_price * data.quantity).toFixed(2)}
+                precision={0}
+                valueStyle={{ fontSize: 16 }}
+                // valueStyle={{ color: "#3f8600" }}
+                prefix={"₹"}
+              />
+            </Col>
+            <Col span={8}>
+              <Statistic
+                title="Value"
+                value={(data.last_price * data.quantity).toFixed(2)}
+                precision={0}
+                prefix={"₹"}
+                valueStyle={{ fontSize: 16 }}
+                // valueStyle={{ color: "#3f8600" }}
+              />
+            </Col>
+            {/* <Col span={8}></Col> */}
+            <Col span={5}>
+              <Statistic
+                title="Buy on"
+                value={moment(data.buy_date).format("D MMM h:mm a")}
+                precision={0}
+                valueStyle={{ fontSize: 14 }}
+              />
+            </Col>
+            {/* <Col span={8}></Col> */}
+          </Row>
+          <Row>
+            <Col lg={24} xs={24} sm={24} xl={24}>
+              <Indicator
+                data={{
+                  stoplossPer: data.stopLossPer,
+                  targetPer: data.targetPer,
 
-                    buyPrice: data.buy_price,
-                    target: data.target,
-                    stoploss: data.stopLoss,
-                    currentPrice: data.last_price,
-                  }}
-                />
-              </Col>
-            </Row>
-          </Card>
-        </Badge>
+                  buyPrice: data.buy_price,
+                  target: data.target,
+                  stoploss: data.stopLoss,
+                  currentPrice: data.last_price,
+                }}
+              />
+            </Col>
+          </Row>
+        </Card>
       </Col>
     </>
   );
@@ -357,8 +357,8 @@ const Alerts = () => {
       </Row>
       <Spin spinning={loading} size="large" style={{ color: "green" }}>
         <Row
-          gutter={16}
-          justify="start"
+          justify="center"
+          gutter={20}
           style={{ overflow: "auto", height: "100%" }}
         >
           {data

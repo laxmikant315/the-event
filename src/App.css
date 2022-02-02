@@ -61,3 +61,7 @@
 .ant-card-head-title {
   padding: 0 !important;
 }
+
+.ant-layout-sider-zero-width-trigger {
+  top: 52px;
+}
