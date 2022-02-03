@@ -361,7 +361,7 @@ const Alerts = () => {
                       justify="center"
                       style={{
                         margin: 20,
-                        background: "#030303",
+                        background: "#00000047",
                         borderRadius: 10,
                       }}
                     >

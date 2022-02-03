@@ -164,7 +164,8 @@ const StockCard = ({
           size="small"
           style={{
             marginBottom: 10,
-            backgroundColor: data["progress"] > 0 ? "#003a2d" : "#421d1d",
+            backgroundColor: data["progress"] > 0 ? "#003a2d5c" : "#7a282842",
+            borderRadius: 10,
           }}
         >
           <Row justify="space-around">
