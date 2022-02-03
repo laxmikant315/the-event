@@ -1,9 +1,9 @@
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 
-const TechIndexChart = ({ data }: any) => (
+const TechIndexChart = ({ data, isMobile }: any) => (
   <LineChart
-    width={400}
-    height={200}
+    width={isMobile ? 350 : 500}
+    height={isMobile ? 200 : 250}
     data={
       data &&
       data.split(",").map((x: any, i: number) => ({
