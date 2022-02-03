@@ -162,7 +162,10 @@ const StockCard = ({
           }
           bordered={false}
           size="small"
-          style={{ marginBottom: 10 }}
+          style={{
+            marginBottom: 10,
+            backgroundColor: data["progress"] > 0 ? "#003a2d" : "#421d1d",
+          }}
         >
           <Row justify="space-around">
             <Col lg={17} xs={17} sm={17} md={17}>
