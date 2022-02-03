@@ -65,3 +65,12 @@
 .ant-layout-sider-zero-width-trigger {
   top: 52px;
 }
+.ant-popover-inner {
+  background-color: #0c172d66;
+}
+.ant-popover-inner-content {
+  backdrop-filter: blur(30px);
+}
+.ant-popover-title {
+  backdrop-filter: blur(30px);
+}

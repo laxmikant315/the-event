@@ -68,7 +68,7 @@ const Notifications = () => {
                       justify="center"
                       style={{
                         margin: 20,
-                        background: "#030303",
+                        background: "#0303037a",
                         borderRadius: 10,
                       }}
                     >

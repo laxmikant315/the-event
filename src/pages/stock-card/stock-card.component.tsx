@@ -118,6 +118,7 @@ const StockCard = ({
                   <Popover
                     overlayInnerStyle={{ display: isMobile ? "none" : "block" }}
                     popupVisible={!isMobile}
+                    // visible={true}
                     content={
                       <TechIndexChart
                         data={data.indexProgress}
