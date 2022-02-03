@@ -13,6 +13,7 @@ import {
   Skeleton,
   Space,
   Spin,
+  Statistic,
   Switch,
 } from "antd";
 import axios from "axios";
@@ -26,257 +27,261 @@ import BarChartOutlined from "@ant-design/icons/lib/icons/BarChartOutlined";
 import { LineChart, Line, CartesianGrid, XAxis, YAxis } from "recharts";
 import TechIndexChart from "../../components/tech-index-chart.component";
 import Indicator from "../indicator/indicator.component";
+import StockCard from "../stock-card/stock-card.component";
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 
-const StockCard = ({
-  data: dataFromProps,
-  index,
-  refresh,
-  setRefresh,
-}: any) => {
+// const StockCard1 = ({
+//   data: dataFromProps,
+//   index,
+//   refresh,
+//   setRefresh,
+// }: any) => {
+//   const [data, setData] = useState(dataFromProps);
+//   const { progress, last_price, techIndex } = JSON.parse(
+//     data.additionalInfo || "{}"
+//   );
+//   const [isModalVisible, setIsModalVisible] = useState(false);
+//   const techColor = `rgba(${techIndex > 50 ? 115 : 255}, ${
+//     techIndex > 50 ? 209 : 77
+//   }, ${techIndex > 50 ? 60 : 79}, ${
+//     techIndex > 50 ? techIndex / 100 : (100 - techIndex) / 100
+//   })`;
+//   const [refreshCard, setRefreshCard] = useState(0);
+
+//   useEffect(() => {
+//     if (refreshCard || isModalVisible) {
+//       (async () => {
+//         setLoading(true);
+//         const alerts = await axios.get(
+//           `${serverUrl}/alerts/${index}/True/${data.id}`
+//         );
+//         if (alerts.data && alerts.data.length) {
+//           setData(alerts.data[0]);
+//         }
+//         setLoading(false);
+//       })();
+//     }
+//   }, [refreshCard, isModalVisible]);
+
+//   const [loading, setLoading] = useState(false);
+
+//   return (
+//     <>
+//       <Modal
+//         title="Technical"
+//         footer=""
+//         width={800}
+//         bodyStyle={{ height: 400 }}
+//         visible={isModalVisible}
+//         onCancel={() => setIsModalVisible(false)}
+//       >
+//         <iframe
+//           src={`https://mo.streak.tech/?utm_source=context-menu&utm_medium=kite&stock=NSE:${data.symbol}&theme=dark`}
+//           style={{ height: "100%", width: "100%", border: 0 }}
+//         />
+//       </Modal>
+//       <Col xs={24} sm={12} md={12} lg={8} xl={6} span={8}>
+//         <Card
+//           title={
+//             <Row justify="space-between">
+//               <span>
+//                 <Button
+//                   type="text"
+//                   size="small"
+//                   loading={loading}
+//                   onClick={() => setIsModalVisible(true)}
+//                   style={{
+//                     background: techColor,
+//                   }}
+//                 >
+//                   <BarChartOutlined /> {techIndex}
+//                 </Button>
+
+//                 <Popover
+//                   content={<TechIndexChart data={data.indexProgress} />}
+//                   title="Tech Index Journey"
+//                 >
+//                   <span style={{ cursor: "pointer" }}> {data.symbol}</span>
+//                 </Popover>
+//               </span>
+//               <span>
+//                 <Button
+//                   type="text"
+//                   icon={<ReloadOutlined />}
+//                   loading={loading}
+//                   onClick={() => setRefreshCard(refreshCard + 1)}
+//                 />
+//                 <Button
+//                   type="text"
+//                   size="small"
+//                   target="_blank"
+//                   href={`https://in.tradingview.com/chart/i6VwIssE/?symbol=NSE%3A${data.symbol}`}
+//                 >
+//                   <LineChartOutlined />
+//                 </Button>
+//               </span>
+//             </Row>
+//           }
+//           bordered={false}
+//           size="small"
+//           style={{ marginBottom: 20 }}
+//         >
+//           <Row justify="space-around">
+//             <Col lg={17} xs={17} sm={17} md={17}>
+//               {progress > 0 && (
+//                 <Progress
+//                   percent={+progress.toFixed(1)}
+//                   status="active"
+//                   strokeColor="#73d13d"
+//                 />
+//               )}
+//               {progress < 0 && (
+//                 <Progress
+//                   percent={+Math.abs(progress).toFixed(1)}
+//                   status="active"
+//                   strokeColor="#ff4d4f"
+//                 />
+//               )}
+//             </Col>
+//             <Col lg={5}>
+//               <Progress
+//                 // type="circle"
+//                 percent={data.timePer}
+//                 steps={10}
+//                 size="small"
+//                 status={
+//                   data["pnl"] < 0 && data.timePer >= 100
+//                     ? "exception"
+//                     : data.timePer > 100
+//                     ? "success"
+//                     : "active"
+//                 }
+//                 strokeColor={data["pnl"] > 0 ? "#73d13d" : "#ff4d4f"}
+//               />
+//             </Col>
+//           </Row>
+
+//           <Row>
+//             <Col lg={24} xs={24} sm={24} xl={24}>
+//               <Indicator
+//                 data={{
+//                   stoplossPer: data.stopLossPer,
+//                   targetPer: data.targetPer,
+
+//                   buyPrice: data.buyPrice,
+//                   target: data.target,
+//                   stoploss: data.stopLoss,
+//                   currentPrice: last_price,
+//                 }}
+//               />
+//             </Col>
+//           </Row>
+//         </Card>
+//       </Col>
+//     </>
+//   );
+// };
+const TopLetControls = ({ data: dataFromProps, refresh, setRefresh }: any) => {
   const [data, setData] = useState(dataFromProps);
   const { progress, last_price, techIndex } = JSON.parse(
     data.additionalInfo || "{}"
   );
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const techColor = `rgba(${techIndex > 50 ? 115 : 255}, ${
-    techIndex > 50 ? 209 : 77
-  }, ${techIndex > 50 ? 60 : 79}, ${
-    techIndex > 50 ? techIndex / 100 : (100 - techIndex) / 100
-  })`;
-  const [refreshCard, setRefreshCard] = useState(0);
-
-  useEffect(() => {
-    if (refreshCard || isModalVisible) {
-      (async () => {
-        setLoading(true);
-        const alerts = await axios.get(
-          `${serverUrl}/alerts/${index}/True/${data.id}`
-        );
-        if (alerts.data && alerts.data.length) {
-          setData(alerts.data[0]);
-        }
-        setLoading(false);
-      })();
-    }
-  }, [refreshCard, isModalVisible]);
-
-  const [loading, setLoading] = useState(false);
   const [orderLoading, setOrderLoading] = useState(false);
   const [orderInfo, setOrderInfo] = useState({
     orderType: "MARKET",
     price: data.buyPrice,
   });
+  const techColor = `rgba(${techIndex > 50 ? 115 : 255}, ${
+    techIndex > 50 ? 209 : 77
+  }, ${techIndex > 50 ? 60 : 79}, ${
+    techIndex > 50 ? techIndex / 100 : (100 - techIndex) / 100
+  })`;
   return (
-    <>
-      <Modal
-        title="Technical"
-        footer=""
-        width={800}
-        bodyStyle={{ height: 400 }}
-        visible={isModalVisible}
-        onCancel={() => setIsModalVisible(false)}
+    <Popconfirm
+      disabled={data.orderExecuting}
+      placement="bottomRight"
+      title={
+        <Row justify="space-between">
+          <Space>
+            <Switch
+              checkedChildren="Limit"
+              unCheckedChildren="Market"
+              onChange={(checked) => {
+                setOrderInfo({
+                  ...orderInfo,
+                  orderType: checked ? "LIMIT" : "MARKET",
+                });
+              }}
+            />
+
+            <InputNumber<string>
+              min="0"
+              step="0.05"
+              value={orderInfo.price}
+              disabled={orderInfo.orderType === "MARKET"}
+              onChange={(newPrice) => {
+                setOrderInfo({
+                  ...orderInfo,
+                  price: newPrice,
+                });
+              }}
+              stringMode
+            />
+          </Space>
+        </Row>
+      }
+      onConfirm={async () => {
+        let price = 0;
+        if (orderInfo.orderType === "LIMIT") {
+          price = orderInfo.price;
+        }
+        setOrderLoading(true);
+        const order = await axios.get(
+          `${serverUrl}/buy/${orderInfo.orderType}/${data.id}/${price}`
+        );
+
+        if (order.data && order.data.status === "order_completed") {
+          notification.success({
+            message: "Order Success",
+            description: "Order successfully placed.",
+          });
+          setRefresh(refresh + 1);
+        } else if (order.data && order.data.status === "open_order_placed") {
+          notification.warning({
+            message: "Order Success",
+            description: "Order placed but not executed yet",
+          });
+          setData({ ...data, orderExecuting: true });
+        } else {
+          notification.error({
+            message: "Order Failed",
+            description:
+              order.data.reason == "low_margin"
+                ? "Due to unsuffiecient margin, please add funds."
+                : "Order placing failed.",
+          });
+        }
+        setOrderLoading(false);
+      }}
+      okText="Submit"
+      cancelText="Cancel"
+      okButtonProps={{ size: "large" }}
+      cancelButtonProps={{ size: "large" }}
+      icon={null}
+    >
+      <Button
+        type="text"
+        size="small"
+        disabled={data.orderExecuting}
+        loading={orderLoading}
+        style={{
+          background: data.orderExecuting ? "#fa8c16" : techColor,
+          color: "#fff",
+        }}
       >
-        <iframe
-          src={`https://mo.streak.tech/?utm_source=context-menu&utm_medium=kite&stock=NSE:${data.symbol}&theme=dark`}
-          style={{ height: "100%", width: "100%", border: 0 }}
-        />
-      </Modal>
-      <Col xs={24} sm={12} md={12} lg={8} xl={6} span={8}>
-        <Card
-          title={
-            <Row justify="space-between">
-              <span>
-                <Button
-                  type="text"
-                  size="small"
-                  loading={loading}
-                  onClick={() => setIsModalVisible(true)}
-                  style={{
-                    background: techColor,
-                  }}
-                >
-                  <BarChartOutlined /> {techIndex}
-                </Button>
-
-                <Popover
-                  content={<TechIndexChart data={data.indexProgress} />}
-                  title="Tech Index Journey"
-                >
-                  <span style={{ cursor: "pointer" }}> {data.symbol}</span>
-                </Popover>
-              </span>
-              <span>
-                <Button
-                  type="text"
-                  icon={<ReloadOutlined />}
-                  loading={loading}
-                  onClick={() => setRefreshCard(refreshCard + 1)}
-                />
-                <Button
-                  type="text"
-                  size="small"
-                  target="_blank"
-                  href={`https://in.tradingview.com/chart/i6VwIssE/?symbol=NSE%3A${data.symbol}`}
-                >
-                  <LineChartOutlined />
-                </Button>
-                <Popconfirm
-                  disabled={data.orderExecuting}
-                  placement="bottomRight"
-                  title={
-                    <Row justify="space-between">
-                      <Space>
-                        <Switch
-                          checkedChildren="Limit"
-                          unCheckedChildren="Market"
-                          onChange={(checked) => {
-                            setOrderInfo({
-                              ...orderInfo,
-                              orderType: checked ? "LIMIT" : "MARKET",
-                            });
-                          }}
-                        />
-
-                        <InputNumber<string>
-                          min="0"
-                          step="0.05"
-                          value={orderInfo.price}
-                          disabled={orderInfo.orderType === "MARKET"}
-                          onChange={(newPrice) => {
-                            setOrderInfo({
-                              ...orderInfo,
-                              price: newPrice,
-                            });
-                          }}
-                          stringMode
-                        />
-                      </Space>
-                    </Row>
-                  }
-                  onConfirm={async () => {
-                    let price = 0;
-                    if (orderInfo.orderType === "LIMIT") {
-                      price = orderInfo.price;
-                    }
-                    setOrderLoading(true);
-                    const order = await axios.get(
-                      `${serverUrl}/buy/${orderInfo.orderType}/${data.id}/${price}`
-                    );
-
-                    if (order.data && order.data.status === "order_completed") {
-                      notification.success({
-                        message: "Order Success",
-                        description: "Order successfully placed.",
-                      });
-                      setRefresh(refresh + 1);
-                    } else if (
-                      order.data &&
-                      order.data.status === "open_order_placed"
-                    ) {
-                      notification.warning({
-                        message: "Order Success",
-                        description: "Order placed but not executed yet",
-                      });
-                      setData({ ...data, orderExecuting: true });
-                    } else {
-                      notification.error({
-                        message: "Order Failed",
-                        description:
-                          order.data.reason == "low_margin"
-                            ? "Due to unsuffiecient margin, please add funds."
-                            : "Order placing failed.",
-                      });
-                    }
-                    setOrderLoading(false);
-                  }}
-                  okText="Submit"
-                  cancelText="Cancel"
-                  okButtonProps={{ size: "large" }}
-                  cancelButtonProps={{ size: "large" }}
-                  icon={null}
-                >
-                  <Button
-                    type="text"
-                    size="small"
-                    disabled={data.orderExecuting}
-                    loading={orderLoading}
-                    style={{
-                      background: data.orderExecuting ? "#fa8c16" : techColor,
-                      color: "#fff",
-                    }}
-                  >
-                    {data.orderExecuting ? "Buying..." : "Buy"}
-                  </Button>
-                </Popconfirm>
-              </span>
-            </Row>
-          }
-          bordered={false}
-          size="small"
-          style={{ marginBottom: 20 }}
-        >
-          <Row justify="space-around">
-            <Col lg={17} xs={17} sm={17} md={17}>
-              {progress > 0 && (
-                <Progress
-                  percent={+progress.toFixed(1)}
-                  status="active"
-                  strokeColor="#73d13d"
-                />
-              )}
-              {progress < 0 && (
-                <Progress
-                  percent={+Math.abs(progress).toFixed(1)}
-                  status="active"
-                  strokeColor="#ff4d4f"
-                />
-              )}
-            </Col>
-            <Col lg={5}>
-              <Progress
-                // type="circle"
-                percent={data.timePer}
-                steps={10}
-                size="small"
-                status={
-                  data["pnl"] < 0 && data.timePer >= 100
-                    ? "exception"
-                    : data.timePer > 100
-                    ? "success"
-                    : "active"
-                }
-                strokeColor={data["pnl"] > 0 ? "#73d13d" : "#ff4d4f"}
-              />
-            </Col>
-          </Row>
-
-          <Descriptions bordered size="small">
-            <Descriptions.Item label="Volume Date" span={4}>
-              {moment(data.tradeDate).format("D MMM h:mm a")}
-            </Descriptions.Item>
-            <Descriptions.Item label="Buy Date" span={4}>
-              {moment(data.buyDate).format("D MMM h:mm a")}
-            </Descriptions.Item>
-          </Descriptions>
-          <Row>
-            <Col lg={24} xs={24} sm={24} xl={24}>
-              <Indicator
-                data={{
-                  stoplossPer: data.stopLossPer,
-                  targetPer: data.targetPer,
-
-                  buyPrice: data.buyPrice,
-                  target: data.target,
-                  stoploss: data.stopLoss,
-                  currentPrice: last_price,
-                }}
-              />
-            </Col>
-          </Row>
-        </Card>
-      </Col>
-    </>
+        {data.orderExecuting ? "Buying..." : "Buy"}
+      </Button>
+    </Popconfirm>
   );
 };
 
@@ -309,7 +314,9 @@ const Alerts = () => {
     >
       <Row justify="space-between" style={{ marginBottom: 20 }}>
         <Col>
-          <Title level={3}>Watchlist</Title>
+          <Title level={3} style={{ marginLeft: 20 }}>
+            Watchlist
+          </Title>
         </Col>
         <Col>
           <Space>
@@ -334,7 +341,11 @@ const Alerts = () => {
           </Space>
         </Col>
       </Row>
-      <Row gutter={16} style={{ overflow: "auto", height: "100%" }}>
+      <Row
+        justify="center"
+        gutter={20}
+        style={{ overflow: "auto", height: "100%" }}
+      >
         <Col lg={24}>
           {loading ? (
             <Skeleton />
@@ -366,12 +377,55 @@ const Alerts = () => {
                           justify="center"
                           style={{ overflow: "auto", height: "100%" }}
                         >
-                          {filtered.map((item) => (
+                          {filtered.map((item: any) => (
+                            // <StockCard
+                            //   index={index}
+                            //   data={item}
+                            //   setRefresh={setRefresh}
+                            //   refresh={refresh}
+                            // />
                             <StockCard
-                              index={index}
+                              id={item.symbol}
                               data={item}
-                              setRefresh={setRefresh}
-                              refresh={refresh}
+                              onfetch={() =>
+                                axios.get(
+                                  `${serverUrl}/alerts/${index}/True/${item.id}`
+                                )
+                              }
+                              topLeftControls={
+                                <TopLetControls
+                                  data={item}
+                                  refresh={refresh}
+                                  setRefresh={setRefresh}
+                                />
+                              }
+                              descriptions={
+                                <Row gutter={16} style={{ marginBottom: 10 }}>
+                                  {/* <Col span={8}></Col> */}
+                                  <Col span={12}>
+                                    <Statistic
+                                      title="Volumed on"
+                                      value={moment(item.tradeDate).format(
+                                        "D MMM h:mm a"
+                                      )}
+                                      precision={0}
+                                      valueStyle={{ fontSize: 14 }}
+                                    />
+                                  </Col>
+                                  <Col span={12}>
+                                    <Statistic
+                                      title="Buy Signal on"
+                                      value={moment(item.buyDate).format(
+                                        "D MMM h:mm a"
+                                      )}
+                                      precision={0}
+                                      valueStyle={{ fontSize: 14 }}
+                                    />
+                                  </Col>
+
+                                  {/* <Col span={8}></Col> */}
+                                </Row>
+                              }
                             />
                           ))}
                         </Row>

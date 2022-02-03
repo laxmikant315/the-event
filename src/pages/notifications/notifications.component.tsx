@@ -32,7 +32,9 @@ const Notifications = () => {
     >
       <Row justify="space-between" style={{ marginBottom: 20 }}>
         <Col>
-          <Title level={3}>Notification Center</Title>
+          <Title level={3} style={{ marginLeft: 20 }}>
+            Notification Center
+          </Title>
         </Col>
         <Col>
           <Space>
