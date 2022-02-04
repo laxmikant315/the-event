@@ -109,7 +109,7 @@ const Notifications = () => {
                                 title={
                                   <Popover
                                     trigger={"click"}
-                                    title={
+                                    content={
                                       <AlertStockCard alertId={item.alert_id} />
                                     }
                                   >
