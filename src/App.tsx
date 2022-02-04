@@ -72,6 +72,8 @@ const App = () => {
                 minHeight: 360,
                 backdropFilter:
                   "brightness(1.5) saturate(2) hue-rotate(370deg) blur(10px)",
+                WebkitBackdropFilter:
+                  "brightness(1.5) saturate(2) hue-rotate(370deg) blur(10px)",
               }}
             >
               <Switch>

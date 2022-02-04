@@ -70,7 +70,9 @@
 }
 .ant-popover-inner-content {
   backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
 }
 .ant-popover-title {
   backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
 }

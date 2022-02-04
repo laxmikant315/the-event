@@ -1,5 +1,5 @@
 .block {
-  height: 15;
+  height: 15px;
   justify-content: center;
   display: flex;
   align-items: center;
@@ -21,6 +21,7 @@
 }
 .percent {
   font-weight: bold;
+  font-size: 12px;
 }
 .percent.stoploss {
   color: rgb(255 170 170);
@@ -37,7 +38,7 @@
 
 .value {
   margin-left: -12px;
-  margin-top: 3px;
+  margin-top: 0px;
   position: absolute;
   font-weight: bold;
   font-size: 12px;

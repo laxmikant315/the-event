@@ -1,9 +1,22 @@
-import { Avatar, Button, Col, List, Row, Skeleton, Space, Switch } from "antd";
+import {
+  Avatar,
+  Button,
+  Col,
+  List,
+  Popconfirm,
+  Popover,
+  Row,
+  Skeleton,
+  Space,
+  Switch,
+} from "antd";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Title from "antd/lib/typography/Title";
 import { ReloadOutlined, NotificationOutlined } from "@ant-design/icons";
 import moment from "moment";
+import StockCard from "../stock-card/stock-card.component";
+import AlertStockCard from "../alerts/alerts-stock-card.component";
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 const Notifications = () => {
   const [data, setData] = useState([]);
@@ -94,9 +107,14 @@ const Notifications = () => {
                                   />
                                 }
                                 title={
-                                  <a href="https://ant.design">
-                                    {item.heading}
-                                  </a>
+                                  <Popover
+                                    trigger={"click"}
+                                    title={
+                                      <AlertStockCard alertId={item.alert_id} />
+                                    }
+                                  >
+                                    <a>{item.heading}</a>
+                                  </Popover>
                                 }
                                 description={item.contents}
                               />

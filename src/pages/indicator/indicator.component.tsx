@@ -8,7 +8,8 @@ const LineIndicator = ({ data, type }: any) => {
     let left: any = 0,
       right: any = 0,
       backgroundColor = "",
-      value = 0;
+      value = 0,
+      currentPer = 0;
     const diff = data.currentPrice - data.buyPrice;
     const total =
       diff > 0 ? data.target - data.buyPrice : data.buyPrice - data.stoploss;
@@ -31,13 +32,33 @@ const LineIndicator = ({ data, type }: any) => {
       backgroundColor = "#dadacc";
       value = data.buyPrice && data.buyPrice.toFixed(2);
     } else if (type === "current") {
-      left = (per < -100 ? -101 : per > 100 ? 101 : per) + "%";
-      right = "auto";
+      if (diff < 0) {
+        left = "auto";
+        right = per < -100 ? 101 : per > 100 ? -101 : -per;
+      } else {
+        left = per < -100 ? -101 : per > 100 ? 101 : per;
+        right = "auto";
+      }
+
+      if (diff > 0) {
+        currentPer = Math.abs(100 - (data.currentPrice * 100) / data.buyPrice);
+      } else {
+        currentPer = -(100 - (data.currentPrice * 100) / data.buyPrice);
+      }
+
       backgroundColor = "#ffe549c7";
       value = data.currentPrice && data.currentPrice.toFixed(2);
-      top = 35;
+      top = -17;
     }
-    setState({ left, right, backgroundColor, value, top, height });
+    setState({
+      left,
+      right,
+      backgroundColor,
+      value,
+      top,
+      height,
+      currentPer,
+    });
   }, []);
   return (
     <>
@@ -45,18 +66,37 @@ const LineIndicator = ({ data, type }: any) => {
         className="value"
         style={{
           top: state.top,
-          left: state.left,
-          right: state.right,
+          left:
+            (type === "current"
+              ? data.currentPer < 0
+                ? state.left
+                : state.left > 53
+                ? 53
+                : state.left - 15
+              : state.left) + "%",
+          right:
+            (type === "current"
+              ? data.currentPer > 0
+                ? state.right
+                : state.right > 31
+                ? 31
+                : state.right - 25
+              : state.right) + "%",
           color: state.backgroundColor,
         }}
       >
         {state.value}
+        {type === "current" && state.currentPer && (
+          <span style={{ color: state.currentPer > 0 ? "#83e44c" : "#ff6163" }}>
+            {" (" + state.currentPer.toFixed(2) + "%)"}
+          </span>
+        )}
       </span>
       <span
         className="line"
         style={{
-          left: state.left,
-          right: state.right,
+          left: state.left + "%",
+          right: state.right + "%",
           height: state.height + "%",
 
           backgroundColor: state.backgroundColor,
@@ -110,20 +150,13 @@ const Indicator = ({ data }: any) => {
   } else {
     maxLength = 100 / data.targetPer;
   }
+  const isInProfit = data.currentPrice > data.buyPrice;
+  // console.log({ isInProfit, data });
   data.xPer = (data.stoplossPer * maxLength) / 2;
   data.yPer = (data.targetPer * maxLength) / 2;
   data.stoplossIsLarge = stoplossIsLarge;
   // });
-  if (data.targetPer === "9.91") {
-    console.log({
-      stoplossPer: data.stoplossPer,
-      targetPer: data.targetPer,
-      stoplossIsLarge,
-      maxLength,
-      xPer: data.xPer,
-      yPer: data.yPer,
-    });
-  }
+
   return (
     <div>
       <Row
@@ -138,6 +171,7 @@ const Indicator = ({ data }: any) => {
         >
           <span className="percent stoploss">{data.stoplossPer}%</span>
           <LineIndicator data={data} type="stoploss" />
+          {!isInProfit && <LineIndicator data={data} type="current" />}
         </Col>
         <Col className="block target" style={{ width: data.yPer + "%" }}>
           <span className="percent target">{data.targetPer}%</span>
@@ -145,8 +179,9 @@ const Indicator = ({ data }: any) => {
                 {data.buyPrice}
               </span> */}
           <LineIndicator data={data} type="buy" />
-          <LineIndicator data={data} type="current" />
+
           <LineIndicator data={data} type="target" />
+          {isInProfit && <LineIndicator data={data} type="current" />}
         </Col>
       </Row>
     </div>
