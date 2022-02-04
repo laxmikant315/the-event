@@ -10,7 +10,8 @@ const LineIndicator = ({ data, type }: any) => {
       backgroundColor = "",
       value = 0;
     const diff = data.currentPrice - data.buyPrice;
-    const total = data.buyPrice - data.stoploss;
+    const total =
+      diff > 0 ? data.target - data.buyPrice : data.buyPrice - data.stoploss;
     const per = (diff * 100) / total;
     let top = 20;
     let height = 120;
