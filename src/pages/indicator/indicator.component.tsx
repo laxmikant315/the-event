@@ -78,8 +78,8 @@ const LineIndicator = ({ data, type }: any) => {
             (type === "current"
               ? data.currentPer > 0
                 ? state.right
-                : state.right > 31
-                ? 31
+                : state.right > 29
+                ? 29
                 : state.right - 25
               : state.right) + "%",
           color: state.backgroundColor,
