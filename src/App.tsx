@@ -16,6 +16,7 @@ import {
   NavLink,
 } from "react-router-dom";
 import Notifications from "./pages/notifications/notifications.component";
+import NiftyRenko from "./pages/nifty-renko/nifty-renko.component";
 const { Header, Content, Footer, Sider } = Layout;
 
 const App = () => {
@@ -80,6 +81,7 @@ const App = () => {
                 <Route exact path="/" component={Portfolio}></Route>
                 <Route exact path="/watchlist" component={Alerts}></Route>
                 <Route exact path="/portfolio" component={Portfolio}></Route>
+                <Route exact path="/test" component={NiftyRenko}></Route>
                 <Route
                   exact
                   path="/notifications"

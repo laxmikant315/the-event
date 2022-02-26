@@ -14,6 +14,8 @@ import SyncOutlined from "@ant-design/icons/lib/icons/SyncOutlined";
 import ReloadOutlined from "@ant-design/icons/lib/icons/ReloadOutlined";
 import StockCard from "../stock-card/stock-card.component";
 import moment from "moment";
+import NiftyRenko from "../nifty-renko/nifty-renko.component";
+
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 
 const Alerts = () => {
@@ -79,7 +81,9 @@ const Alerts = () => {
             Portfolio
           </Title>
         </Col>
+
         <Col>
+          <NiftyRenko />
           <Button
             type="text"
             icon={<ReloadOutlined />}
