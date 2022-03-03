@@ -1,4 +1,4 @@
-import { Button, Card, Col, Modal, Row, Statistic } from "antd";
+import { Button, Card, Col, Modal, Radio, Row, Statistic, Switch } from "antd";
 import axios from "axios";
 import moment from "moment";
 import { useEffect, useState } from "react";
@@ -36,6 +36,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return <></>;
 };
 const NiftyRenko = () => {
+  const [allData, setAllData] = useState<any>([]);
   const [data, setData] = useState<any>([]);
   const [off, setOff] = useState();
   const [latestRenko, setLatestRenko] = useState(0);
@@ -45,15 +46,24 @@ const NiftyRenko = () => {
       // setLoading(true);
       const alerts = await axios.get(`${serverUrl}/scan`);
       const rawData = alerts.data;
-      const data: any = Object.keys(rawData).map((x) => ({
+      const allData: any = Object.keys(rawData).map((x) => ({
         name: moment.unix(+x / 1000).format("DD/MM/YYYY"),
         value: rawData[x],
       }));
       console.log("data", data);
-      setData(data);
+      setAllData(allData);
       // setLoading(false);
     })();
   }, []);
+
+  const [selectedValue, setSelectedValue] = useState("60");
+  useEffect(() => {
+    if (selectedValue === "max") {
+      setData(allData);
+    } else {
+      setData(allData.slice(-+selectedValue));
+    }
+  }, [selectedValue, allData]);
 
   const gradientOffset = (data: any) => {
     const dataMax = Math.max(...data.map((i: any) => i.value));
@@ -79,6 +89,14 @@ const NiftyRenko = () => {
     }
   }, [data]);
   const [visible, setVisible] = useState(false);
+  const options = [
+    { label: "30 days", value: "30" },
+    { label: "60 days", value: "60" },
+    { label: "90 days", value: "90" },
+    { label: "365 days", value: "365" },
+    { label: "Max", value: "max" },
+  ];
+
   return (
     <>
       {/* <Card size="small"> */}
@@ -96,7 +114,17 @@ const NiftyRenko = () => {
       {/* </Card> */}
 
       <Modal
-        title="Nifty Renko"
+        title={
+          <>
+            Nifty Renko{" "}
+            <Radio.Group
+              options={options}
+              onChange={(e) => setSelectedValue(e.target.value)}
+              value={selectedValue}
+              optionType="button"
+            />
+          </>
+        }
         centered
         footer={false}
         visible={visible}
