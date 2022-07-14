@@ -19,6 +19,7 @@ import TechIndexChart from "../../components/tech-index-chart.component";
 import Indicator from "../indicator/indicator.component";
 import moment from "moment";
 import StarTwoTone from "@ant-design/icons/lib/icons/StarTwoTone";
+import BoxPlotTwoTone from "@ant-design/icons/lib/icons/BoxPlotTwoTone";
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 
 const StockCard = ({
@@ -143,6 +144,12 @@ const StockCard = ({
                     &nbsp;{data.symbol}{" "}
                     {data.isInPositions && (
                       <StarTwoTone
+                        twoToneColor="#ecd620  "
+                        style={{ fontSize: "24px" }}
+                      />
+                    )}
+                    {data.t1_quantity && data.t1_quantity > 0 && (
+                      <BoxPlotTwoTone
                         twoToneColor="#ecd620  "
                         style={{ fontSize: "24px" }}
                       />
