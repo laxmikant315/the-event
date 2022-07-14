@@ -141,14 +141,15 @@ const StockCard = ({
                       if (isMobile) setIsTechIndexVisible(true);
                     }}
                   >
-                    &nbsp;{data.symbol}{" "}
+                    &nbsp;{data.symbol}
+                    {"  "}
                     {data.isInPositions && (
                       <StarTwoTone
                         twoToneColor="#ecd620  "
                         style={{ fontSize: "24px" }}
                       />
                     )}
-                    {data.t1_quantity && data.t1_quantity > 0 && (
+                    {data.t1_quantity > 0 && (
                       <BoxPlotTwoTone
                         twoToneColor="#ecd620  "
                         style={{ fontSize: "24px" }}
