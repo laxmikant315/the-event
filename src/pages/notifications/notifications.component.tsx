@@ -76,6 +76,33 @@ const Notifications = () => {
                   const filtered = data.filter(
                     (x: any) => x["date_created"].slice(0, 10) === date
                   );
+                  const soldItems: any = filtered.filter((x: any) =>
+                    x.heading.toLowerCase().includes("sold")
+                  );
+                  const sum: any = soldItems.reduce(
+                    (x: any, y: any) => {
+                      const xAmount =
+                        (x.heading &&
+                          parseFloat(
+                            x.heading.split(" ")[
+                              x.heading.split(" ").indexOf("₹") + 1
+                            ]
+                          )) ||
+                        0;
+                      const yAmount =
+                        (y.heading &&
+                          parseFloat(
+                            y.heading.split(" ")[
+                              y.heading.split(" ").indexOf("₹") + 1
+                            ]
+                          )) ||
+                        0;
+                      return { heading: "₹ " + (xAmount + yAmount) };
+                    },
+                    { heading: "₹ 0" }
+                  );
+                  const sumAmount = +sum.heading.split(" ")[1];
+
                   return (
                     <Row
                       justify="center"
@@ -89,6 +116,17 @@ const Notifications = () => {
                         <Title level={5}>
                           {" "}
                           {moment(date).format("DD MMM YYYY")}
+                          {sumAmount ? (
+                            <span
+                              style={{
+                                color: sumAmount > 0 ? "#73d13d" : "#ff4d4f",
+                              }}
+                            >
+                              {"  ₹ " + sumAmount.toFixed(2)}
+                            </span>
+                          ) : (
+                            ""
+                          )}
                         </Title>
                       </Col>
                       <Col lg={24} xs={24} sm={24} xl={24}>
