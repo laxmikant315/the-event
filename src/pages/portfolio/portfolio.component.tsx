@@ -104,7 +104,7 @@ const Alerts = () => {
         flexDirection: "column",
       }}
     >
-      <Row justify="space-between" style={{ marginLeft: 20, padding: 3 }}>
+      <Row justify="space-between" style={{ marginLeft: 25, padding: 3 }}>
         <Col className="hidden-xs">
           <Title level={4} style={{ margin: "10px 30px" }}>
             {"  "}
@@ -114,7 +114,7 @@ const Alerts = () => {
         {details && (
           <Col span={9} xs={24} sm={24} lg={12}>
             <Row gutter={50}>
-              <Col span={6}>
+              <Col xs={12} sm={6}>
                 <Statistic
                   title="Total investment"
                   valueStyle={{
@@ -125,7 +125,7 @@ const Alerts = () => {
                   prefix="₹"
                 />
               </Col>
-              <Col span={6}>
+              <Col xs={12} sm={6}>
                 <Statistic
                   title="Current value"
                   valueStyle={{
@@ -136,7 +136,7 @@ const Alerts = () => {
                   prefix="₹"
                 />
               </Col>
-              <Col span={6}>
+              <Col xs={12} sm={6}>
                 <Statistic
                   title="Day's P&L"
                   valueStyle={{
@@ -151,7 +151,7 @@ const Alerts = () => {
                   }
                 />
               </Col>
-              <Col span={6}>
+              <Col xs={12} sm={6}>
                 <Statistic
                   title="Total P&L"
                   value={details.totalPnl?.toFixed(2)}

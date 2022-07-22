@@ -61,7 +61,7 @@ const App = () => {
       /> */}
           <Content
             style={{
-              margin: "24px 16px 0",
+              margin: "4px 10px 0px",
               background:
                 "url(https://images.unsplash.com/photo-1524334228333-0f6db392f8a1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8ZGFyayUyMHNwYWNlfGVufDB8fDB8fA%3D%3D&w=1000&q=80)",
             }}
