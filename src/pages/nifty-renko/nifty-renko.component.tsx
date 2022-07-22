@@ -107,7 +107,7 @@ const NiftyRenko = () => {
           type="text"
           shape="round"
           icon={latestRenko > 0 ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
-          size={"large"}
+          size={"small"}
           style={{ backgroundColor: latestRenko > 0 ? "#3f8600" : "#cf1322" }}
         >
           {latestRenko}

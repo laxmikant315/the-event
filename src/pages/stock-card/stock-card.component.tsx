@@ -123,6 +123,7 @@ const StockCard = ({
                     isMobile={isMobile}
                   />
                 </Modal>
+
                 <Popover
                   overlayInnerStyle={{ display: isMobile ? "none" : "block" }}
                   popupVisible={!isMobile}
@@ -158,7 +159,21 @@ const StockCard = ({
                   </span>
                 </Popover>
               </span>
-              <span style={{ color: data["pnl"] > 0 ? "#73d13d" : "#ff4d4f" }}>
+
+              <span>
+                {data.day_change && (
+                  <span
+                    style={{
+                      fontSize: 11,
+                      color: data.day_change > 0 ? "#73d13d" : "#ff4d4f",
+                    }}
+                  >
+                    {data.day_change.toFixed(2)}
+                    <small>{` (${data.day_change_percentage.toFixed(
+                      2
+                    )}%)`}</small>
+                  </span>
+                )}
                 <Button
                   type="text"
                   size="small"
@@ -167,7 +182,14 @@ const StockCard = ({
                 >
                   <LineChartOutlined />
                 </Button>
-                {data.pnl && data.pnl.toFixed(2)}
+                {data.pnl && (
+                  <span
+                    style={{ color: data["pnl"] > 0 ? "#73d13d" : "#ff4d4f" }}
+                  >
+                    {data.pnl.toFixed(2)}
+                    <small>{` (${data.change_percentage.toFixed(2)}%)`}</small>
+                  </span>
+                )}
 
                 {topLeftControls}
               </span>

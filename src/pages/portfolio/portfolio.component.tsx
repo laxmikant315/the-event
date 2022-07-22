@@ -28,12 +28,42 @@ const Alerts = () => {
   const btnRefreshAll = useRef<any>();
 
   // const [isUpdate, setIsUpdate] = useState(true);
-
+  const [details, setDetails] = useState<any>(null);
   useEffect(() => {
     (async () => {
       setLoading(true);
       const alerts = await axios.get(`${serverUrl}/portfolio/False`);
       setData(alerts.data);
+      const totalInvestment = parseFloat(
+        alerts.data
+          .map((x: any) => x.buy_price * x.quantity)
+          .reduce((x: any, y: any) => x + y)
+      );
+      const currentValue = parseFloat(
+        alerts.data
+          .map((x: any) => x.last_price * x.quantity)
+          .reduce((x: any, y: any) => x + y)
+      );
+      const dayPnl = parseFloat(
+        alerts.data
+          .map((x: any) => x.day_change)
+          .reduce((x: any, y: any) => x + y)
+      );
+      const totalPnl = parseFloat(
+        alerts.data.map((x: any) => x.pnl).reduce((x: any, y: any) => x + y)
+      );
+      const dayPnlPer = (dayPnl / totalInvestment) * 100;
+      const totalPnlPer = (totalPnl / totalInvestment) * 100;
+
+      setDetails({
+        totalInvestment,
+        currentValue,
+        dayPnl,
+        totalPnl,
+        dayPnlPer,
+        totalPnlPer,
+      });
+      console.log(details);
       setLoading(false);
     })();
   }, [index, refresh]);
@@ -74,18 +104,76 @@ const Alerts = () => {
         flexDirection: "column",
       }}
     >
-      <Row justify="space-between" style={{ marginLeft: 20 }}>
-        <Col>
-          <Title level={3} style={{ margin: "10px 30px" }}>
+      <Row justify="space-between" style={{ marginLeft: 20, padding: 3 }}>
+        <Col className="hidden-xs">
+          <Title level={4} style={{ margin: "10px 30px" }}>
             {"  "}
             Portfolio
           </Title>
         </Col>
-
-        <Col>
+        {details && (
+          <Col span={9} xs={24} sm={24} lg={12}>
+            <Row gutter={50}>
+              <Col span={6}>
+                <Statistic
+                  title="Total investment"
+                  valueStyle={{
+                    fontSize: 14,
+                  }}
+                  value={details.totalInvestment}
+                  precision={2}
+                  prefix="₹"
+                />
+              </Col>
+              <Col span={6}>
+                <Statistic
+                  title="Current value"
+                  valueStyle={{
+                    fontSize: 14,
+                  }}
+                  value={details.currentValue}
+                  precision={2}
+                  prefix="₹"
+                />
+              </Col>
+              <Col span={6}>
+                <Statistic
+                  title="Day's P&L"
+                  valueStyle={{
+                    color: details.dayPnl > 0 ? "#5b9a5d" : "#e25f5b",
+                    fontSize: 14,
+                  }}
+                  value={details.dayPnl?.toFixed(2)}
+                  precision={2}
+                  prefix="₹"
+                  suffix={
+                    <small>{`(${details.dayPnlPer?.toFixed(2)}%)`}</small>
+                  }
+                />
+              </Col>
+              <Col span={6}>
+                <Statistic
+                  title="Total P&L"
+                  value={details.totalPnl?.toFixed(2)}
+                  valueStyle={{
+                    color: details.totalPnl > 0 ? "#5b9a5d" : "#e25f5b",
+                    fontSize: 14,
+                  }}
+                  prefix="₹"
+                  suffix={
+                    <small>{`(${details.totalPnlPer?.toFixed(2)}%)`}</small>
+                  }
+                  precision={2}
+                />
+              </Col>
+            </Row>
+          </Col>
+        )}
+        <Col xs={24} sm={24} lg={2}>
           <NiftyRenko />
           <Button
             type="text"
+            size="small"
             icon={<ReloadOutlined />}
             loading={loading}
             ref={btnRefresh}
@@ -93,6 +181,7 @@ const Alerts = () => {
           />
           <Button
             type="primary"
+            size="small"
             icon={<SyncOutlined />}
             loading={loading}
             ref={btnRefreshAll}

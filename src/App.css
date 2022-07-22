@@ -53,6 +53,7 @@
   background: #fff;
   background: #11111154;
   height: 100%;
+  border-radius: 10px;
 }
 
 .ant-layout-has-sider {
