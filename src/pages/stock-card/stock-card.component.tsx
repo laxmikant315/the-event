@@ -81,7 +81,9 @@ const StockCard = ({
         onCancel={() => setIsModalVisible(false)}
       >
         <iframe
-          src={`https://mo.streak.tech/?utm_source=context-menu&utm_medium=kite&stock=NSE:${data.symbol}&theme=dark`}
+          src={`https://mo.streak.tech/?utm_source=context-menu&utm_medium=kite&stock=NSE:${encodeURIComponent(
+            data.symbol
+          )}&theme=dark`}
           style={{ height: "100%", width: "100%", border: 0 }}
         />
       </Modal>
