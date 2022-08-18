@@ -249,6 +249,8 @@ const StockCard = ({
           <Col lg={24} xs={24} sm={24} xl={24}>
             <Indicator
               data={{
+                trailStopLossPer: data.trail_stop_loss_per,
+                trailStopLoss: data.trail_stop_loss,
                 stoplossPer: data.stopLossPer,
                 targetPer: data.targetPer,
 

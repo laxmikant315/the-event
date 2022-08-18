@@ -1,19 +1,36 @@
-import { Col, Row } from "antd";
+import { Col, Row, Tooltip } from "antd";
 import "./indicator.css";
 import { useEffect, useState } from "react";
 
 const LineIndicator = ({ data, type }: any) => {
   const [state, setState] = useState<any>({});
+
+  const getValues = (diff: any, per: any, currentPrice: any, buyPrice: any) => {
+    let left: any = 0,
+      right: any = 0;
+    if (diff < 0) {
+      left = "auto";
+      right = per < -100 ? 101 : per > 100 ? -101 : -per;
+    } else {
+      left = per < -100 ? -101 : per > 100 ? 101 : per;
+      right = "auto";
+    }
+
+    if (diff > 0) {
+      per = Math.abs(100 - (currentPrice * 100) / buyPrice);
+    } else {
+      per = -(100 - (currentPrice * 100) / buyPrice);
+    }
+    return { left, right, per };
+  };
+
   useEffect(() => {
     let left: any = 0,
       right: any = 0,
       backgroundColor = "",
       value = 0,
       currentPer = 0;
-    const diff = data.currentPrice - data.buyPrice;
-    const total =
-      diff > 0 ? data.target - data.buyPrice : data.buyPrice - data.stoploss;
-    const per = (diff * 100) / total;
+
     let top = 20;
     let height = 120;
     if (type === "target") {
@@ -26,26 +43,34 @@ const LineIndicator = ({ data, type }: any) => {
       right = "auto";
       backgroundColor = "#ff4d4f";
       value = data.stoploss && data.stoploss.toFixed(2);
+    } else if (type === "trail_stoploss") {
+      const diff = data.trailStopLoss - data.stoploss;
+
+      const total = data.buyPrice - data.stoploss;
+      const per = (diff * 100) / total;
+
+      const values = getValues(diff, per, data.trailStopLoss, data.stoploss);
+      console.log("ccc", diff, total, per, values);
+      left = values.left;
+      right = values.right;
+      currentPer = values.per;
+
+      backgroundColor = "#fd1f89";
+      value = data.trailStopLoss && data.trailStopLoss.toFixed(2);
     } else if (type === "buy") {
       left = 0;
       right = "auto";
       backgroundColor = "#dadacc";
       value = data.buyPrice && data.buyPrice.toFixed(2);
     } else if (type === "current") {
-      if (diff < 0) {
-        left = "auto";
-        right = per < -100 ? 101 : per > 100 ? -101 : -per;
-      } else {
-        left = per < -100 ? -101 : per > 100 ? 101 : per;
-        right = "auto";
-      }
-
-      if (diff > 0) {
-        currentPer = Math.abs(100 - (data.currentPrice * 100) / data.buyPrice);
-      } else {
-        currentPer = -(100 - (data.currentPrice * 100) / data.buyPrice);
-      }
-
+      const diff = data.currentPrice - data.buyPrice;
+      const total =
+        diff > 0 ? data.target - data.buyPrice : data.buyPrice - data.stoploss;
+      const per = (diff * 100) / total;
+      const values = getValues(diff, per, data.currentPrice, data.buyPrice);
+      left = values.left;
+      right = values.right;
+      currentPer = values.per;
       backgroundColor = "#ffe549c7";
       value = data.currentPrice && data.currentPrice.toFixed(2);
       top = -17;
@@ -62,36 +87,42 @@ const LineIndicator = ({ data, type }: any) => {
   }, []);
   return (
     <>
-      <span
-        className="value"
-        style={{
-          top: state.top,
-          left:
-            (type === "current"
-              ? data.currentPer < 0
-                ? state.left
-                : state.left > 53
-                ? 53
-                : state.left - 15
-              : state.left) + "%",
-          right:
-            (type === "current"
-              ? data.currentPer > 0
-                ? state.right
-                : state.right > 29
-                ? 29
-                : state.right - 25
-              : state.right) + "%",
-          color: state.backgroundColor,
-        }}
-      >
-        {state.value}
-        {type === "current" && state.currentPer && (
-          <span style={{ color: state.currentPer > 0 ? "#83e44c" : "#ff6163" }}>
-            {" (" + state.currentPer.toFixed(2) + "%)"}
-          </span>
-        )}
-      </span>
+      <Tooltip placement="topLeft" title={state.value}>
+        <span
+          className="value"
+          style={{
+            top: state.top,
+            backgroundColor: "#181818",
+            borderRadius: 5,
+            left:
+              (type === "current"
+                ? data.currentPer < 0
+                  ? state.left
+                  : state.left > 53
+                  ? 53
+                  : state.left - 15
+                : state.left) + "%",
+            right:
+              (type === "current"
+                ? data.currentPer > 0
+                  ? state.right
+                  : state.right > 29
+                  ? 29
+                  : state.right - 25
+                : state.right) + "%",
+            color: state.backgroundColor,
+          }}
+        >
+          {state.value}
+          {type === "current" && state.currentPer && (
+            <span
+              style={{ color: state.currentPer > 0 ? "#83e44c" : "#ff6163" }}
+            >
+              {" (" + state.currentPer.toFixed(2) + "%)"}
+            </span>
+          )}
+        </span>
+      </Tooltip>
       <span
         className="line"
         style={{
@@ -171,6 +202,7 @@ const Indicator = ({ data }: any) => {
         >
           <span className="percent stoploss">{data.stoplossPer}%</span>
           <LineIndicator data={data} type="stoploss" />
+          <LineIndicator data={data} type="trail_stoploss" />
           {!isInProfit && <LineIndicator data={data} type="current" />}
         </Col>
         <Col className="block target" style={{ width: data.yPer + "%" }}>
