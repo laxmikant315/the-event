@@ -27,9 +27,17 @@ const LineIndicator = ({ data, type }: any) => {
   useEffect(() => {
     let left: any = 0,
       right: any = 0,
+      zIndex: any = 0,
+      width: any = 1,
       backgroundColor = "",
+      className = "",
+      borderColor = "",
+      fontColor = "",
+      border = "",
       value = 0,
-      currentPer = 0;
+      currentPer = 0,
+      marginLeft = 0,
+      marginRight = 0;
 
     let top = 20;
     let height = 120;
@@ -57,6 +65,9 @@ const LineIndicator = ({ data, type }: any) => {
 
       backgroundColor = "#fd1f89";
       value = data.trailStopLoss && data.trailStopLoss.toFixed(2);
+      top = 32;
+      width = 5;
+      height = 160;
     } else if (type === "buy") {
       left = 0;
       right = "auto";
@@ -71,9 +82,58 @@ const LineIndicator = ({ data, type }: any) => {
       left = values.left;
       right = values.right;
       currentPer = values.per;
-      backgroundColor = "#ffe549c7";
+      fontColor = "#ffe549c7";
       value = data.currentPrice && data.currentPrice.toFixed(2);
-      top = -17;
+      top = -22;
+      className =
+        "in_progress " +
+        (diff > 0 ? "in_progress_positive" : "in_progress_negative");
+      if (diff > 0) {
+        left = 0;
+        width = values.left;
+        backgroundColor = "#73d13d";
+      } else {
+        right = 0;
+        width = values.right;
+        backgroundColor = "#f1494b";
+      }
+      height = 140;
+    } else if (type === "high_moment") {
+      const diff = data.high_moment - data.buyPrice;
+      const total = data.target - data.buyPrice;
+      const per = (diff * 100) / total;
+      const values = getValues(diff, per, data.high_moment, data.buyPrice);
+      left = 0;
+      right = values.right;
+      width = values.left;
+      currentPer = values.per;
+      fontColor = "#73d13da3";
+      backgroundColor = "#73d13da3";
+      borderColor = "#73d13da3";
+      zIndex = -1;
+      value = data.high_moment && data.high_moment.toFixed(2);
+      top = -34;
+      // border = "5px solid";
+      height = 170;
+      marginLeft = 10;
+    } else if (type === "low_moment") {
+      const diff = data.low_moment - data.buyPrice;
+      const total = data.buyPrice - data.stoploss;
+      const per = (diff * 100) / total;
+      const values = getValues(diff, per, data.buyPrice, data.low_moment);
+      left = values.left;
+      right = 0;
+      width = values.right;
+      currentPer = values.per;
+      borderColor = "#ff4d4f6b";
+      fontColor = "#ff4d4f6b";
+      backgroundColor = "#ff4d4f6b";
+      zIndex = -1;
+      value = data.low_moment && data.low_moment.toFixed(2);
+      top = -34;
+      // border = "5px solid";
+      height = 170;
+      marginRight = 10;
     }
     setState({
       left,
@@ -83,6 +143,14 @@ const LineIndicator = ({ data, type }: any) => {
       top,
       height,
       currentPer,
+      width,
+      zIndex,
+      borderColor,
+      fontColor,
+      border,
+      className,
+      marginLeft,
+      marginRight,
     });
   }, []);
   return (
@@ -92,8 +160,10 @@ const LineIndicator = ({ data, type }: any) => {
           className="value"
           style={{
             top: state.top,
-            backgroundColor: "#181818",
+            // backgroundColor: "#181818",
             borderRadius: 5,
+            marginLeft: state.marginLeft,
+            marginRight: state.marginRight,
             left:
               (type === "current"
                 ? data.currentPer < 0
@@ -110,7 +180,7 @@ const LineIndicator = ({ data, type }: any) => {
                   ? 29
                   : state.right - 25
                 : state.right) + "%",
-            color: state.backgroundColor,
+            color: state.fontColor || state.backgroundColor,
           }}
         >
           {state.value}
@@ -124,13 +194,17 @@ const LineIndicator = ({ data, type }: any) => {
         </span>
       </Tooltip>
       <span
-        className="line"
+        className={`line ${state.className}`}
         style={{
           left: state.left + "%",
           right: state.right + "%",
           height: state.height + "%",
-
+          width: state.width + "%",
           backgroundColor: state.backgroundColor,
+          border: state.border,
+          borderColor: state.borderColor,
+          borderRadius: 0,
+          zIndex: state.zIndex,
         }}
       ></span>
     </>
@@ -203,6 +277,7 @@ const Indicator = ({ data }: any) => {
           <span className="percent stoploss">{data.stoplossPer}%</span>
           <LineIndicator data={data} type="stoploss" />
           <LineIndicator data={data} type="trail_stoploss" />
+          <LineIndicator data={data} type="low_moment" />
           {!isInProfit && <LineIndicator data={data} type="current" />}
         </Col>
         <Col className="block target" style={{ width: data.yPer + "%" }}>
@@ -210,6 +285,7 @@ const Indicator = ({ data }: any) => {
           {/* <span style={{ position: "absolute", top: "100px", left: -15 }}>
                 {data.buyPrice}
               </span> */}
+          <LineIndicator data={data} type="high_moment" />
           <LineIndicator data={data} type="buy" />
 
           <LineIndicator data={data} type="target" />

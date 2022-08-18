@@ -251,6 +251,8 @@ const StockCard = ({
               data={{
                 trailStopLossPer: data.trail_stop_loss_per,
                 trailStopLoss: data.trail_stop_loss,
+                high_moment: data.high_moment,
+                low_moment: data.low_moment,
                 stoplossPer: data.stopLossPer,
                 targetPer: data.targetPer,
 
