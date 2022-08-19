@@ -28,7 +28,7 @@ const LineIndicator = ({ data, type }: any) => {
     let left: any = 0,
       right: any = 0,
       zIndex: any = 0,
-      width: any = 1,
+      width: any = "1px",
       backgroundColor = "",
       className = "",
       borderColor = "",
@@ -66,7 +66,7 @@ const LineIndicator = ({ data, type }: any) => {
       backgroundColor = "#f1494b";
       value = data.trailStopLoss && data.trailStopLoss.toFixed(2);
       top = 32;
-      width = 2;
+      width = "2px";
       height = 160;
     } else if (type === "buy") {
       left = 0;
@@ -90,11 +90,11 @@ const LineIndicator = ({ data, type }: any) => {
         (diff > 0 ? "in_progress_positive" : "in_progress_negative");
       if (diff > 0) {
         left = 0;
-        width = values.left;
+        width = values.left + "%";
         backgroundColor = "#73d13d";
       } else {
         right = 0;
-        width = values.right;
+        width = values.right + "%";
         backgroundColor = "#f1494b";
       }
       height = 140;
@@ -105,7 +105,7 @@ const LineIndicator = ({ data, type }: any) => {
       const values = getValues(diff, per, data.high_moment, data.buyPrice);
       left = 0;
       right = values.right;
-      width = values.left;
+      width = values.left + "%";
       currentPer = values.per;
       fontColor = "#73d13da3";
       backgroundColor = "#73d13da3";
@@ -123,7 +123,7 @@ const LineIndicator = ({ data, type }: any) => {
       const values = getValues(diff, per, data.buyPrice, data.low_moment);
       left = values.left;
       right = 0;
-      width = values.right;
+      width = values.right + "%";
       currentPer = values.per;
       borderColor = "#ff4d4f6b";
       fontColor = "#ff4d4f6b";
@@ -199,7 +199,7 @@ const LineIndicator = ({ data, type }: any) => {
           left: state.left + "%",
           right: state.right + "%",
           height: state.height + "%",
-          width: state.width + "%",
+          width: state.width,
           backgroundColor: state.backgroundColor,
           border: state.border,
           borderColor: state.borderColor,
