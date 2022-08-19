@@ -66,7 +66,7 @@ const LineIndicator = ({ data, type }: any) => {
       backgroundColor = "#f1494b";
       value = data.trailStopLoss && data.trailStopLoss.toFixed(2);
       top = 32;
-      width = 5;
+      width = 2;
       height = 160;
     } else if (type === "buy") {
       left = 0;
