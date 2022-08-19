@@ -49,7 +49,7 @@ const LineIndicator = ({ data, type }: any) => {
     } else if (type === "stoploss") {
       left = 0;
       right = "auto";
-      backgroundColor = "#ff4d4f";
+      backgroundColor = "#f46d6f";
       value = data.stoploss && data.stoploss.toFixed(2);
     } else if (type === "trail_stoploss") {
       const diff = data.trailStopLoss - data.stoploss;
@@ -63,7 +63,7 @@ const LineIndicator = ({ data, type }: any) => {
       right = values.right;
       currentPer = values.per;
 
-      backgroundColor = "#fd1f89";
+      backgroundColor = "#f1494b";
       value = data.trailStopLoss && data.trailStopLoss.toFixed(2);
       top = 32;
       width = 5;
