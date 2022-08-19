@@ -20,6 +20,7 @@ import Indicator from "../indicator/indicator.component";
 import moment from "moment";
 import StarTwoTone from "@ant-design/icons/lib/icons/StarTwoTone";
 import BoxPlotTwoTone from "@ant-design/icons/lib/icons/BoxPlotTwoTone";
+import TechIndicator from "../../components/tech-indicator.component";
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 
 const StockCard = ({
@@ -72,22 +73,6 @@ const StockCard = ({
   const isMobile = mobileCheck();
   return (
     <>
-      <Modal
-        title="Technical"
-        footer=""
-        width={800}
-        bodyStyle={{ height: 400 }}
-        visible={isModalVisible}
-        onCancel={() => setIsModalVisible(false)}
-      >
-        <iframe
-          src={`https://mo.streak.tech/?utm_source=context-menu&utm_medium=kite&stock=NSE:${encodeURIComponent(
-            data.symbol
-          )}&theme=dark`}
-          style={{ height: "100%", width: "100%", border: 0 }}
-        />
-      </Modal>
-
       <Card
         headStyle={{ padding: 0, minHeight: 0 }}
         bodyStyle={{ padding: "0px 10px" }}
@@ -101,18 +86,15 @@ const StockCard = ({
                   fontSize: 12,
                 }}
               >
-                <Button
-                  loading={loading}
-                  type="text"
-                  size="small"
+                <TechIndicator
+                  symbol={data.symbol}
+                  visible={isModalVisible}
+                  onCancel={() => setIsModalVisible(false)}
                   onClick={() => setIsModalVisible(true)}
-                  style={{
-                    background: techColor,
-                  }}
-                >
-                  <BarChartOutlined /> {techIndex}
-                </Button>
-
+                  loading={loading}
+                  buttonText={techIndex}
+                  techColor={techColor}
+                />
                 {"   "}
                 <Modal
                   title="Tech Index Journey"

@@ -16,6 +16,8 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
+import TechIndicator from "../../components/tech-indicator.component";
+import { getTechColor } from "../alerts/alerts-stock-card.component";
 
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 
@@ -42,17 +44,19 @@ const NiftyRenko = () => {
   const [data, setData] = useState<any>([]);
   const [off, setOff] = useState();
   const [latestRenko, setLatestRenko] = useState(0);
+  const [techIndex, setTechIndex] = useState(null);
 
   useEffect(() => {
     (async () => {
       // setLoading(true);
       const alerts = await axios.get(`${serverUrl}/scan`);
-      const rawData = alerts.data;
+      const rawData = alerts.data.nifty_renko;
       const allData: any = Object.keys(rawData).map((x) => ({
         name: moment.unix(+x / 1000).format("DD/MM/YYYY"),
         value: rawData[x],
       }));
       console.log("data", data);
+      setTechIndex(alerts.data.nifty_tech_index);
       setAllData(allData);
       // setLoading(false);
     })();
@@ -99,84 +103,101 @@ const NiftyRenko = () => {
     { label: "Max", value: "max" },
   ];
 
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const techColor = getTechColor(techIndex!);
   return (
-    <>
-      {/* <Card size="small"> */}
-      <span onClick={() => setVisible(true)} style={{ cursor: "pointer" }}>
-        <Button
-          type="text"
-          shape="round"
-          icon={latestRenko > 0 ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
-          size={"small"}
-          style={{ backgroundColor: latestRenko > 0 ? "#3f8600" : "#cf1322" }}
-        >
-          {latestRenko}
-        </Button>
-      </span>
-      {/* </Card> */}
+    techIndex && (
+      <>
+        {/* <Card size="small"> */}
+        <span onClick={() => setVisible(true)} style={{ cursor: "pointer" }}>
+          <Button
+            type="text"
+            shape="round"
+            icon={
+              <>
+                R{latestRenko > 0 ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
+              </>
+            }
+            size={"small"}
+            style={{ backgroundColor: latestRenko > 0 ? "#3f8600" : "#cf1322" }}
+          >
+            {latestRenko}
+          </Button>
+        </span>
+        {/* </Card> */}
+        <TechIndicator
+          symbol={"NIFTY 500"}
+          buttonText={techIndex!}
+          techColor={techColor}
+          category="INDICES"
+          visible={isModalVisible}
+          onCancel={() => setIsModalVisible(false)}
+          onClick={() => setIsModalVisible(true)}
+        />
 
-      <Modal
-        title={
-          <>
-            Nifty Renko{" "}
-            <Button
-              type="text"
-              size="small"
-              target="_blank"
-              href={`https://in.tradingview.com/chart/i6VwIssE/?symbol=NSE%3A${"NIFTY"}`}
-            >
-              <LineChartOutlined />
-            </Button>
-            <Radio.Group
-              options={options}
-              onChange={(e) => setSelectedValue(e.target.value)}
-              value={selectedValue}
-              optionType="button"
-            />
-          </>
-        }
-        centered
-        footer={false}
-        visible={visible}
-        onOk={() => setVisible(false)}
-        onCancel={() => setVisible(false)}
-        width={1000}
-      >
-        <div style={{ width: "100%", height: "300px" }}>
-          <ResponsiveContainer width="100%" height="100%">
-            <AreaChart
-              width={500}
-              height={400}
-              data={data}
-              margin={{
-                top: 10,
-                right: 30,
-                left: 0,
-                bottom: 0,
-              }}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip content={<CustomTooltip />} />
-              <Legend />
-              <defs>
-                <linearGradient id="splitColor" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset={off} stopColor="green" stopOpacity={1} />
-                  <stop offset={off} stopColor="red" stopOpacity={1} />
-                </linearGradient>
-              </defs>
-              <Area
-                type="monotone"
-                dataKey="value"
-                stroke="#000"
-                fill="url(#splitColor)"
+        <Modal
+          title={
+            <>
+              Nifty Renko{" "}
+              <Button
+                type="text"
+                size="small"
+                target="_blank"
+                href={`https://in.tradingview.com/chart/i6VwIssE/?symbol=NSE%3A${"NIFTY"}`}
+              >
+                <LineChartOutlined />
+              </Button>
+              <Radio.Group
+                options={options}
+                onChange={(e) => setSelectedValue(e.target.value)}
+                value={selectedValue}
+                optionType="button"
               />
-            </AreaChart>
-          </ResponsiveContainer>
-        </div>
-      </Modal>
-    </>
+            </>
+          }
+          centered
+          footer={false}
+          visible={visible}
+          onOk={() => setVisible(false)}
+          onCancel={() => setVisible(false)}
+          width={1000}
+        >
+          <div style={{ width: "100%", height: "300px" }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart
+                width={500}
+                height={400}
+                data={data}
+                margin={{
+                  top: 10,
+                  right: 30,
+                  left: 0,
+                  bottom: 0,
+                }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip content={<CustomTooltip />} />
+                <Legend />
+                <defs>
+                  <linearGradient id="splitColor" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset={off} stopColor="green" stopOpacity={1} />
+                    <stop offset={off} stopColor="red" stopOpacity={1} />
+                  </linearGradient>
+                </defs>
+                <Area
+                  type="monotone"
+                  dataKey="value"
+                  stroke="#000"
+                  fill="url(#splitColor)"
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+        </Modal>
+      </>
+    )
   );
 };
 export default NiftyRenko;

@@ -17,6 +17,11 @@ import StockCard from "../stock-card/stock-card.component";
 
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 
+export const getTechColor = (techIndex: number) => {
+  return `rgba(${techIndex > 50 ? 115 : 255}, ${techIndex > 50 ? 209 : 77}, ${
+    techIndex > 50 ? 60 : 79
+  }, ${techIndex > 50 ? techIndex / 100 : (100 - techIndex) / 100})`;
+};
 const TopLetControls = ({ data: dataFromProps, refresh, setRefresh }: any) => {
   const [data, setData] = useState(dataFromProps);
   const { progress, last_price, techIndex } = JSON.parse(
@@ -27,11 +32,8 @@ const TopLetControls = ({ data: dataFromProps, refresh, setRefresh }: any) => {
     orderType: "MARKET",
     price: data.buyPrice,
   });
-  const techColor = `rgba(${techIndex > 50 ? 115 : 255}, ${
-    techIndex > 50 ? 209 : 77
-  }, ${techIndex > 50 ? 60 : 79}, ${
-    techIndex > 50 ? techIndex / 100 : (100 - techIndex) / 100
-  })`;
+  const techColor = getTechColor(techIndex);
+
   return (
     <Popconfirm
       disabled={data.orderExecuting}
