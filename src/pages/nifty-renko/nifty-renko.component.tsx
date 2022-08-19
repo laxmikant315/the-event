@@ -109,7 +109,10 @@ const NiftyRenko = () => {
     techIndex && (
       <>
         {/* <Card size="small"> */}
-        <span onClick={() => setVisible(true)} style={{ cursor: "pointer" }}>
+        <span
+          onClick={() => setVisible(true)}
+          style={{ cursor: "pointer", marginRight: 5 }}
+        >
           <Button
             type="text"
             shape="round"

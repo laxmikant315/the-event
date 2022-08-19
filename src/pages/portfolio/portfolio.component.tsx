@@ -179,14 +179,14 @@ const Alerts = () => {
             ref={btnRefresh}
             onClick={() => setRefresh(refresh + 1)}
           />
-          <Button
+          {/* <Button
             type="primary"
             size="small"
             icon={<SyncOutlined />}
             loading={loading}
             ref={btnRefreshAll}
             onClick={() => setRefreshAll(refreshAll + 1)}
-          />
+          /> */}
           {/* <Switch
             checkedChildren="Sync On"
             unCheckedChildren="Sync Off"
