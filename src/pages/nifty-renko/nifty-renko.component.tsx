@@ -108,6 +108,14 @@ const NiftyRenko = () => {
   return (
     techIndex && (
       <>
+        <Button
+          type="text"
+          size="small"
+          target="_blank"
+          href={`https://in.tradingview.com/chart/i6VwIssE/?symbol=NSE%3A${"NIFTY"}`}
+        >
+          <LineChartOutlined />
+        </Button>
         {/* <Card size="small"> */}
         <span
           onClick={() => setVisible(true)}
@@ -142,14 +150,6 @@ const NiftyRenko = () => {
           title={
             <>
               Nifty Renko{" "}
-              <Button
-                type="text"
-                size="small"
-                target="_blank"
-                href={`https://in.tradingview.com/chart/i6VwIssE/?symbol=NSE%3A${"NIFTY"}`}
-              >
-                <LineChartOutlined />
-              </Button>
               <Radio.Group
                 options={options}
                 onChange={(e) => setSelectedValue(e.target.value)}

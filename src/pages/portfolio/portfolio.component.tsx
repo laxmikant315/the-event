@@ -169,7 +169,12 @@ const Alerts = () => {
             </Row>
           </Col>
         )}
-        <Col xs={24} sm={24} lg={2}>
+        <Col
+          xs={24}
+          sm={24}
+          lg={4}
+          style={{ display: "flex", justifyContent: "flex-end" }}
+        >
           <NiftyRenko />
           <Button
             type="text"
