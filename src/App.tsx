@@ -18,10 +18,23 @@ import {
 } from "react-router-dom";
 import Notifications from "./pages/notifications/notifications.component";
 import NiftyRenko from "./pages/nifty-renko/nifty-renko.component";
+import { useEffect } from "react";
 const { Header, Content, Footer, Sider } = Layout;
 
-OneSignal.init({ appId: "ff0db6eb-ee23-4970-8f1d-57bba758bed6" });
+async function runOneSignal() {
+  await OneSignal.init({
+    appId: "ff0db6eb-ee23-4970-8f1d-57bba758bed6",
+  });
+  OneSignal.showSlidedownPrompt();
+}
+OneSignal.on("subscriptionChange", function (isSubscribed) {
+  console.log("The user's subscription state is now:", isSubscribed);
+});
 const App = () => {
+  useEffect(() => {
+    runOneSignal();
+  });
+
   return (
     <Router>
       <Layout>
