@@ -7,6 +7,7 @@ import {
 } from "@ant-design/icons";
 import Alerts from "./pages/alerts/alerts.component";
 import Portfolio from "./pages/portfolio/portfolio.component";
+import OneSignal from "react-onesignal";
 
 import {
   BrowserRouter as Router,
@@ -19,6 +20,7 @@ import Notifications from "./pages/notifications/notifications.component";
 import NiftyRenko from "./pages/nifty-renko/nifty-renko.component";
 const { Header, Content, Footer, Sider } = Layout;
 
+OneSignal.init({ appId: "ff0db6eb-ee23-4970-8f1d-57bba758bed6" });
 const App = () => {
   return (
     <Router>
