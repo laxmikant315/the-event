@@ -82,7 +82,6 @@ const App = () => {
                 <Route exact path="/" component={Portfolio}></Route>
                 <Route exact path="/watchlist" component={Alerts}></Route>
                 <Route exact path="/portfolio" component={Portfolio}></Route>
-                <Route exact path="/test" component={NiftyRenko}></Route>
                 <Route
                   exact
                   path="/notifications"
