@@ -15,7 +15,7 @@ import moment from "moment";
 import { useEffect, useState } from "react";
 import StockCard from "../stock-card/stock-card.component";
 
-const serverUrl = process.env.REACT_APP_SERVER_URL;
+const serverUrl = process.env.REACT_APP_SERVER_URL + "/main";
 
 export const getTechColor = (techIndex: number) => {
   return `rgba(${techIndex > 50 ? 115 : 255}, ${techIndex > 50 ? 209 : 77}, ${

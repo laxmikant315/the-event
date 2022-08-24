@@ -16,7 +16,7 @@ import StockCard from "../stock-card/stock-card.component";
 import moment from "moment";
 import NiftyRenko from "../nifty-renko/nifty-renko.component";
 
-const serverUrl = process.env.REACT_APP_SERVER_URL;
+const serverUrl = process.env.REACT_APP_SERVER_URL + "/main";
 
 const Alerts = () => {
   const [data, setData] = useState([]);

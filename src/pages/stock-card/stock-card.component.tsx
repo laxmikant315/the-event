@@ -22,7 +22,7 @@ import StarTwoTone from "@ant-design/icons/lib/icons/StarTwoTone";
 import BoxPlotTwoTone from "@ant-design/icons/lib/icons/BoxPlotTwoTone";
 import TechIndicator from "../../components/tech-indicator.component";
 import { mobileCheck } from "../../helpers/util";
-const serverUrl = process.env.REACT_APP_SERVER_URL;
+const serverUrl = process.env.REACT_APP_SERVER_URL + "/main";
 
 const StockCard = ({
   data: dataFromProps,

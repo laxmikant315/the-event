@@ -17,7 +17,7 @@ import { ReloadOutlined, NotificationOutlined } from "@ant-design/icons";
 import moment from "moment";
 import StockCard from "../stock-card/stock-card.component";
 import AlertStockCard from "../alerts/alerts-stock-card.component";
-const serverUrl = process.env.REACT_APP_SERVER_URL;
+const serverUrl = process.env.REACT_APP_SERVER_URL + "/main";
 const Notifications = () => {
   const [data, setData] = useState([]);
   const [index, setIndex] = useState(0);

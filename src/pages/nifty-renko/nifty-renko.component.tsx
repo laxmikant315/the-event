@@ -35,7 +35,7 @@ import { getTechColor } from "../alerts/alerts-stock-card.component";
 import TechIndexChart from "../../components/tech-index-chart.component";
 import { mobileCheck } from "../../helpers/util";
 
-const serverUrl = process.env.REACT_APP_SERVER_URL;
+const serverUrl = process.env.REACT_APP_SERVER_URL + "/main";
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (payload && payload.length) {
