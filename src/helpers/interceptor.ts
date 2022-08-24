@@ -40,7 +40,6 @@ export const LoadInterceptor = () => {
 
       if (error.response.status === 401 && !originalRequest._retry) {
         originalRequest._retry = true;
-        const token = localStorage.getItem("machine_refresh_token");
         return axios.get(serverUrl + "/token/refresh").then((res) => {
           if (res.status === 200) {
             localStorage.setItem("machine_token", res.data.access);
