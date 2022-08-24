@@ -14,33 +14,29 @@ import {
   Link,
   Switch,
   NavLink,
+  useHistory,
 } from "react-router-dom";
 import Notifications from "./pages/notifications/notifications.component";
 import NiftyRenko from "./pages/nifty-renko/nifty-renko.component";
 import { useEffect, useState } from "react";
 import Login from "./pages/login/login.component";
 import AppProvider from "./providers/app.provider";
-import { loadInterceptor } from "./helpers/interceptor";
+import { LoadInterceptor } from "./helpers/interceptor";
 const { Header, Content, Footer, Sider } = Layout;
-loadInterceptor();
 const App = () => {
-  const [token, setToken] = useState("");
-  useEffect(() => {
-    const token: string = localStorage.getItem("machine_token")!;
-    setToken(token);
-  }, []);
   return (
-    <AppProvider>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
-      >
-        <Router>
-          {" "}
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+      }}
+    >
+      <LoadInterceptor />
+      <Router>
+        {" "}
+        <AppProvider>
           <Switch>
             <Route exact path="/login" component={Login}></Route>
             <Router>
@@ -124,9 +120,9 @@ const App = () => {
               </Layout>
             </Router>
           </Switch>
-        </Router>
-      </div>
-    </AppProvider>
+        </AppProvider>
+      </Router>
+    </div>
   );
 };
 

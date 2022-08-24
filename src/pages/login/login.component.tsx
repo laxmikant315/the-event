@@ -21,6 +21,11 @@ const Login: React.FC = () => {
         console.log("loginRes", loginRes);
         setToken(loginRes.data.user.access);
         localStorage.setItem("machine_token", loginRes.data.user.access);
+        localStorage.setItem(
+          "machine_refresh_token",
+          loginRes.data.user.refresh
+        );
+
         history.push("/portfolio");
       }
     } catch (error: any) {
