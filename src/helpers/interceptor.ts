@@ -42,7 +42,7 @@ export const LoadInterceptor = () => {
           })
           .then((res) => {
             if (res.status === 201) {
-              localStorage.setItem("machine_token", res.data);
+              localStorage.setItem("machine_token", res.data.access);
               axios.defaults.headers.common["Authorization"] =
                 "Bearer " + localStorage.getItem("machine_token");
               return axios(originalRequest);

@@ -15,7 +15,6 @@ const AppProvider = ({ children }: any) => {
   const history = useHistory();
   useEffect(() => {
     const token: string = localStorage.getItem("machine_token")!;
-    alert(token);
     if (!token) {
       history.push("/login");
     }
