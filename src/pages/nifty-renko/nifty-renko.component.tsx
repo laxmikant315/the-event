@@ -146,6 +146,7 @@ const NiftyRenko = () => {
       >
         <LineChartOutlined />
       </Button>
+
       {/* <Card size="small"> */}
       <span
         onClick={() => setVisible(true)}
@@ -196,6 +197,15 @@ const NiftyRenko = () => {
         title={
           <>
             Nifty Renko{" "}
+            <Button
+              type="ghost"
+              size="small"
+              target="_blank"
+              style={{ margin: "0 10px" }}
+              href={`https://trademachine.herokuapp.com/api/v1/main/scanNifty`}
+            >
+              Scan
+            </Button>
             <Radio.Group
               options={options}
               onChange={(e) => setSelectedValue(e.target.value)}
