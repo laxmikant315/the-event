@@ -204,7 +204,40 @@ const NiftyRenko = () => {
               style={{ margin: "0 10px" }}
               href={`https://trademachine.herokuapp.com/api/v1/main/scanNifty`}
             >
-              Scan
+              Scan Nifty
+            </Button><Button
+              type="ghost"
+              size="small"
+              target="_blank"
+              style={{ margin: "0 10px" }}
+              href={`https://trademachine.herokuapp.com/api/v1/main/scanforMl`}
+            >
+              Scan Stocks
+            </Button><Button
+              type="ghost"
+              size="small"
+              target="_blank"
+              style={{ margin: "0 10px" }}
+              href={`https://trademachine.herokuapp.com/api/v1/main/updateStocks/PORTFOLIO`}
+            >
+              Update Portfolio
+            </Button><Button
+              type="ghost"
+              size="small"
+              target="_blank"
+              style={{ margin: "0 10px" }}
+              href={`https://trademachine.herokuapp.com/api/v1/main/updateStocks/ALERT`}
+            >
+              Update Alerts
+            </Button>
+<Button
+              type="ghost"
+              size="small"
+              target="_blank"
+              style={{ margin: "0 10px" }}
+              href={`https://trademachine.herokuapp.com/api/v1/main/updateStocks/BUY`}
+            >
+              Look for buy
             </Button>
             <Radio.Group
               options={options}
