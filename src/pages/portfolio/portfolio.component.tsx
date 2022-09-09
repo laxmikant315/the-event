@@ -114,7 +114,7 @@ const Alerts = () => {
           </Title>
         </Col>
         {details && (
-          <Col span={9} xs={24} sm={24} lg={12}>
+          <Col span={9} xs={24} sm={24} lg={16}>
             <Row gutter={50}>
               <Col xs={12} sm={4}>
                 <Statistic
