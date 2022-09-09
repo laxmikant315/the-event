@@ -116,7 +116,7 @@ const Alerts = () => {
         {details && (
           <Col span={9} xs={24} sm={24} lg={12}>
             <Row gutter={50}>
-              <Col xs={12} sm={6}>
+              <Col xs={12} sm={4}>
                 <Statistic
                   title="Total investment"
                   valueStyle={{
@@ -127,7 +127,7 @@ const Alerts = () => {
                   prefix="₹"
                 />
               </Col>
-              <Col xs={12} sm={6}>
+              <Col xs={12} sm={4}>
                 <Statistic
                   title="Current value"
                   valueStyle={{
@@ -138,7 +138,7 @@ const Alerts = () => {
                   prefix="₹"
                 />
               </Col>
-              <Col xs={12} sm={6}>
+              <Col xs={12} sm={4}>
                 <Statistic
                   title="Day's P&L"
                   valueStyle={{
@@ -153,7 +153,7 @@ const Alerts = () => {
                   }
                 />
               </Col>
-              <Col xs={12} sm={6}>
+              <Col xs={12} sm={4}>
                 <Statistic
                   title="Total P&L"
                   value={details.totalPnl?.toFixed(2)}
@@ -168,12 +168,11 @@ const Alerts = () => {
                   precision={2}
                 />
               </Col>
-              <Col xs={12} sm={6}>
+              <Col xs={12} sm={4}>
                 <Statistic
                   title="Available Fund"
                   value={availableMargin?.toFixed(2)}
                   valueStyle={{
-                    color: availableMargin > 0 ? "#5b9a5d" : "#e25f5b",
                     fontSize: 14,
                   }}
                   prefix="₹"
