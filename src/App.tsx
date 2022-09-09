@@ -17,6 +17,7 @@ import {
   useHistory,
 } from "react-router-dom";
 import Notifications from "./pages/notifications/notifications.component";
+import Report from "./pages/report/report.component";
 import NiftyRenko from "./pages/nifty-renko/nifty-renko.component";
 import { useEffect, useState } from "react";
 import Login from "./pages/login/login.component";
@@ -70,6 +71,11 @@ const App = () => {
                         Notifications
                       </NavLink>
                     </Menu.Item>
+                    <Menu.Item key="6" icon={<NotificationOutlined />}>
+                      <NavLink to="/report" activeClassName="active">
+                        Report
+                      </NavLink>
+                    </Menu.Item>
                   </Menu>
                 </Sider>
                 <Layout>
@@ -112,6 +118,7 @@ const App = () => {
                           path="/notifications"
                           component={Notifications}
                         ></Route>
+                        <Route exact path="/report" component={Report}></Route>
                       </Switch>
                     </div>
                   </Content>

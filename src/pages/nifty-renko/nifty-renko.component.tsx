@@ -11,7 +11,7 @@ import {
 } from "antd";
 import axios from "axios";
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { LineChartOutlined } from "@ant-design/icons";
 
@@ -34,6 +34,7 @@ import TechIndicator from "../../components/tech-indicator.component";
 import { getTechColor } from "../alerts/alerts-stock-card.component";
 import TechIndexChart from "../../components/tech-index-chart.component";
 import { mobileCheck } from "../../helpers/util";
+import { AppContext } from "../../providers/app.provider";
 
 const serverUrl = process.env.REACT_APP_SERVER_URL + "/main";
 
@@ -61,6 +62,7 @@ const NiftyRenko = () => {
   const [off, setOff] = useState();
   const [latestRenko, setLatestRenko] = useState(0);
   const [techIndex, setTechIndex] = useState("");
+  const { setAvailableMargin } = useContext(AppContext);
 
   useEffect(() => {
     (async () => {
@@ -73,6 +75,7 @@ const NiftyRenko = () => {
       }));
       console.log("data", data);
       setTechIndex(alerts.data.nifty_tech_index);
+      setAvailableMargin(alerts.data.availableMargin);
       setAllData(allData);
       // setLoading(false);
     })();

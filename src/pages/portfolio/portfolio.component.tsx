@@ -8,13 +8,14 @@ import {
   Statistic,
 } from "antd";
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import Title from "antd/lib/typography/Title";
 import SyncOutlined from "@ant-design/icons/lib/icons/SyncOutlined";
 import ReloadOutlined from "@ant-design/icons/lib/icons/ReloadOutlined";
 import StockCard from "../stock-card/stock-card.component";
 import moment from "moment";
 import NiftyRenko from "../nifty-renko/nifty-renko.component";
+import { AppContext } from "../../providers/app.provider";
 
 const serverUrl = process.env.REACT_APP_SERVER_URL + "/main";
 
@@ -29,6 +30,7 @@ const Alerts = () => {
 
   // const [isUpdate, setIsUpdate] = useState(true);
   const [details, setDetails] = useState<any>(null);
+  const { availableMargin } = useContext(AppContext);
   useEffect(() => {
     (async () => {
       setLoading(true);
@@ -163,6 +165,18 @@ const Alerts = () => {
                   suffix={
                     <small>{`(${details.totalPnlPer?.toFixed(2)}%)`}</small>
                   }
+                  precision={2}
+                />
+              </Col>
+              <Col xs={12} sm={6}>
+                <Statistic
+                  title="Available Fund"
+                  value={availableMargin?.toFixed(2)}
+                  valueStyle={{
+                    color: availableMargin > 0 ? "#5b9a5d" : "#e25f5b",
+                    fontSize: 14,
+                  }}
+                  prefix="₹"
                   precision={2}
                 />
               </Col>
