@@ -17,19 +17,29 @@ import { ReloadOutlined, NotificationOutlined } from "@ant-design/icons";
 import moment from "moment";
 import StockCard from "../stock-card/stock-card.component";
 import AlertStockCard from "../alerts/alerts-stock-card.component";
+import { Input } from "antd";
 const serverUrl = process.env.REACT_APP_SERVER_URL + "/main";
+
+const { Search } = Input;
+
 const Notifications = () => {
   const [data, setData] = useState([]);
   const [index, setIndex] = useState(0);
   const [refresh, setRefresh] = useState(0);
   const [loading, setLoading] = useState(false);
   const [dates, setDates] = useState<any>([]);
+  const [searchInput, setSearchInput] = useState("");
   useEffect(() => {
     (async () => {
       setLoading(true);
-      const alerts = await axios.get(`${serverUrl}/notifications/${index}`, {
-        timeout: 100000,
-      });
+      const alerts = await axios.get(
+        `${serverUrl}/notifications/${index}${
+          searchInput ? "/" + searchInput : ""
+        }`,
+        {
+          timeout: 100000,
+        }
+      );
       const datesSet: any = new Set(
         alerts.data.map((x: any) => x["date_created"].slice(0, 10))
       );
@@ -37,7 +47,9 @@ const Notifications = () => {
       setData(alerts.data);
       setLoading(false);
     })();
-  }, [index, refresh]);
+  }, [index, refresh, searchInput]);
+
+  const onSearch = (value: string) => setSearchInput(value);
   return (
     <div
       className="site-card-wrapper"
@@ -48,6 +60,13 @@ const Notifications = () => {
           <Title level={3} style={{ marginLeft: 20 }}>
             Notification Center
           </Title>
+          <Search
+            placeholder="Search"
+            allowClear
+            enterButton="Search"
+            size="large"
+            onSearch={onSearch}
+          />
         </Col>
         <Col>
           <Space>
