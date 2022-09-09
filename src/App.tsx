@@ -4,6 +4,7 @@ import {
   NotificationOutlined,
   EyeOutlined,
   DollarCircleOutlined,
+  DotChartOutlined,
 } from "@ant-design/icons";
 import Alerts from "./pages/alerts/alerts.component";
 import Portfolio from "./pages/portfolio/portfolio.component";
@@ -71,7 +72,7 @@ const App = () => {
                         Notifications
                       </NavLink>
                     </Menu.Item>
-                    <Menu.Item key="6" icon={<NotificationOutlined />}>
+                    <Menu.Item key="6" icon={<DotChartOutlined />}>
                       <NavLink to="/report" activeClassName="active">
                         Report
                       </NavLink>

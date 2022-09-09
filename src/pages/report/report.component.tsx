@@ -23,6 +23,7 @@ import moment from "moment";
 import StockCard from "../stock-card/stock-card.component";
 import AlertStockCard from "../alerts/alerts-stock-card.component";
 import type { RadioChangeEvent } from "antd";
+import Chart from "./chart.component";
 const serverUrl = process.env.REACT_APP_SERVER_URL + "/main";
 const Report = () => {
   const [data, setData] = useState<any>({});
@@ -75,6 +76,7 @@ const Report = () => {
           <Space></Space>
         </Col>
       </Row>
+
       <Row gutter={16} style={{ overflow: "auto", height: "100%" }}>
         <Col lg={24} xs={24} sm={24} xl={24}>
           {loading ? (
@@ -90,7 +92,6 @@ const Report = () => {
               >
                 <div
                   style={{
-                    flex: 1,
                     display: "flex",
                     flexDirection: "column",
                     gap: "1rem",
@@ -105,42 +106,45 @@ const Report = () => {
                       buttonStyle="solid"
                     />
                   </div>
-                  <Table
-                    size="small"
-                    pagination={{ pageSize: 15 }}
-                    dataSource={
-                      data[selected] &&
-                      data[selected].map((x: any) => ({
-                        date:
-                          selected === "month"
-                            ? moment(x[0]).format("MMM YYYY")
-                            : selected === "year"
-                            ? moment(x[0]).format("YYYY")
-                            : moment(x[0]).format("DD MMM YYYY"),
-                        pl: "₹ " + x[1],
-                      }))
-                    }
-                    columns={[
-                      {
-                        title: "Date",
-                        dataIndex: "date",
-                        key: "date",
-                      },
-                      {
-                        title: "Profit Loss (₹)",
-                        dataIndex: "pl",
-                        key: "pl",
-                        render: (text) => {
-                          let color = +text.split(" ")[1] > 0 ? "green" : "red";
-                          return (
-                            <Tag color={color} key={text}>
-                              {text}
-                            </Tag>
-                          );
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                    <Table
+                      size="small"
+                      pagination={{ pageSize: 15 }}
+                      dataSource={
+                        data[selected] &&
+                        data[selected].map((x: any) => ({
+                          date:
+                            selected === "month"
+                              ? moment(x[0]).format("MMM YYYY")
+                              : selected === "year"
+                              ? moment(x[0]).format("YYYY")
+                              : moment(x[0]).format("DD MMM YYYY"),
+                          pl: "₹ " + x[1],
+                        }))
+                      }
+                      columns={[
+                        {
+                          title: "Date",
+                          dataIndex: "date",
+                          key: "date",
                         },
-                      },
-                    ]}
-                  />
+                        {
+                          title: "Profit Loss (₹)",
+                          dataIndex: "pl",
+                          key: "pl",
+                          render: (text) => {
+                            let color =
+                              +text.split(" ")[1] > 0 ? "green" : "red";
+                            return (
+                              <Tag color={color} key={text}>
+                                {text}
+                              </Tag>
+                            );
+                          },
+                        },
+                      ]}
+                    />
+                  </div>
                 </div>
                 <div
                   style={{
@@ -198,6 +202,17 @@ const Report = () => {
                       precision={2}
                     />
                   </Card>{" "} */}
+                </div>
+                <div
+                  style={{
+                    flex: 1,
+                  }}
+                >
+                  <Chart
+                    data={data[selected]}
+                    selected={selected}
+                    style={{ height: 100 }}
+                  />
                 </div>
               </div>
             </>
