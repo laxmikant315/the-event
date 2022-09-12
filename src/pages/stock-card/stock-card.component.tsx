@@ -53,14 +53,20 @@ const StockCard = ({ data, onfetch, descriptions, topLeftControls }: any) => {
   }, [isModalVisible]);
   const [totalPnl, setTotalPnl] = useState(0);
   useEffect(() => {
-    if (orginalDetails.dayPnlList && orginalDetails.dayPnlList.length) {
-      const original_day_change = orginalDetails.dayPnlList.find(
+    if (
+      orginalDetails &&
+      orginalDetails.dayPnlList &&
+      orginalDetails.dayPnlList.length
+    ) {
+      const original_day_change_Stock = orginalDetails.dayPnlList.find(
         (x: any) => x.symbol === data.symbol
-      ).day_change;
-
-      const diff = data.day_change - original_day_change;
-
-      setTotalPnl(data.pnl + diff);
+      );
+      if (original_day_change_Stock) {
+        const diff = data.day_change - original_day_change_Stock.day_change;
+        setTotalPnl(data.pnl + diff);
+      } else {
+        setTotalPnl(data.pnl);
+      }
     }
   }, [data]);
   const isMobile = mobileCheck();
