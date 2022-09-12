@@ -1,204 +1,72 @@
 export class A {
   constructor(e) {
-    (this.mSubscribe = "subscribe"),
-      (this.mUnSubscribe = "unsubscribe"),
-      (this.mSetMode = "mode"),
-      (this.mGetQuote = "quote"),
-      (this.mAlert = 10),
-      (this.mOrderStr = "order"),
-      (this.mMessage = 11),
-      (this.mMessageStr = "message"),
-      (this.mLogout = 12),
-      (this.mLogoutStr = "logout"),
-      (this.mReload = 13),
-      (this.mReloadStr = "reload"),
-      (this.mClearCache = 14),
-      (this.mClearCacheStr = "clear_cache"),
-      (this.modeLTP = "ltp"),
-      (this.modeLTPC = "ltpc"),
-      (this.modeFull = "full"),
-      (this.modeQuote = "quote"),
-      (this.modeWeights = {
-        [this.modeFull]: 1,
-        [this.modeQuote]: 2,
-        [this.modeLTPC]: 3,
-        [this.modeLTP]: 4,
-      }),
-      (this.weightModeMap = {
-        1: this.modeFull,
-        2: this.modeQuote,
-        3: this.modeLTPC,
-        4: this.modeLTP,
-      }),
-      (this.segmentNseCM = 1),
-      (this.segmentNseFO = 2),
-      (this.segmentNseCD = 3),
-      (this.segmentBseCM = 4),
-      (this.segmentBseFO = 5),
-      (this.segmentBseCD = 6),
-      (this.segmentMcxFO = 7),
-      (this.segmentMcxSX = 8),
-      (this.segmentNseIndices = 9),
-      (this.segmentUS = 11),
-      (this.noReplyTimeout = 5),
-      (this.lazyDisconnectTimeout = 10),
-      (this.reconnectInterval = 5),
-      (this.reconnectTries = 300),
-      (this.isAutoReconnect = !0),
-      (this.reconnectionsCount = 0),
-      (this.currentWsUrl = null),
-      (this.tokenTags = {}),
-      (this.subscribedTokens = []),
-      (this.defaultTokenTag = "_"),
-      (this.version = "1.0.0"),
-      (this.userAgent = "kite3-web"),
-      (this.quoteMap = {}),
-      (this.getQuoteTimeout = 5),
-      (this.isLazy = !1),
-      (this.isLazyInitialConnect = !1),
-      (this.lazyPayload = []);
+    this.mSubscribe = "subscribe";
+    this.mUnSubscribe = "unsubscribe";
+    this.mSetMode = "mode";
+    this.mGetQuote = "quote";
+    this.mAlert = 10;
+    this.mOrderStr = "order";
+    this.mMessage = 11;
+    this.mMessageStr = "message";
+    this.mLogout = 12;
+    this.mLogoutStr = "logout";
+    this.mReload = 13;
+    this.mReloadStr = "reload";
+    this.mClearCache = 14;
+    this.mClearCacheStr = "clear_cache";
+    this.modeLTP = "ltp";
+    this.modeLTPC = "ltpc";
+    this.modeFull = "full";
+    this.modeQuote = "quote";
+    this.modeWeights = {
+      [this.modeFull]: 1,
+      [this.modeQuote]: 2,
+      [this.modeLTPC]: 3,
+      [this.modeLTP]: 4,
+    };
+    this.weightModeMap = {
+      1: this.modeFull,
+      2: this.modeQuote,
+      3: this.modeLTPC,
+      4: this.modeLTP,
+    };
+    this.segmentNseCM = 1;
+    this.segmentNseFO = 2;
+    this.segmentNseCD = 3;
+    this.segmentBseCM = 4;
+    this.segmentBseFO = 5;
+    this.segmentBseCD = 6;
+    this.segmentMcxFO = 7;
+    this.segmentMcxSX = 8;
+    this.segmentNseIndices = 9;
+    this.segmentUS = 11;
+    this.noReplyTimeout = 5;
+    this.lazyDisconnectTimeout = 10;
+    this.reconnectInterval = 5;
+    this.reconnectTries = 300;
+    this.isAutoReconnect = !0;
+    this.reconnectionsCount = 0;
+    this.currentWsUrl = null;
+    this.tokenTags = {};
+    this.subscribedTokens = [];
+    this.defaultTokenTag = "_";
+    this.version = "1.0.0";
+    this.userAgent = "kite3-web";
+    this.quoteMap = {};
+    this.getQuoteTimeout = 5;
+    this.isLazy = !1;
+    this.isLazyInitialConnect = !1;
+    this.lazyPayload = [];
   }
   setParams(e) {
-    (this.address = e.address),
-      (this.apiKey = e.apiKey),
-      (this.encToken = e.encToken),
-      (this.userId = e.userId),
-      (this.debug = e.debug),
-      e.version && (this.version = e.version),
-      e.lazyDisconnectTimeout &&
-        (this.lazyDisconnectTimeout = e.lazyDisconnectTimeout);
-  }
-  isConnected() {
-    return !(!this.ws || this.ws.readyState !== this.ws.OPEN);
-  }
-  setAutoReconnect(e, t) {
-    (this.isAutoReconnect = e), (this.reconnectTries = t);
-  }
-  getsubscribedTokens() {
-    return this.subscribedTokens;
-  }
-  lazyConnect() {
-    this.isLazy = !0;
-  }
-  processLazyPayload() {
-    if (this.isConnected())
-      for (let e of this.lazyPayload) this._send(e), this.lazyPayload.shift();
-    else
-      this.ws &&
-        this.ws.readyState === this.ws.CONNECTING &&
-        setTimeout(() => {
-          this.processLazyPayload();
-        }, 500),
-        this.isLazyInitialConnect ||
-          ((this.isAutoReconnect = !0),
-          (this.isLazyInitialConnect = !0),
-          this.connect(),
-          this.processLazyPayload());
-  }
-
-  isElementInArray(e, t) {
-    let s = e.filter((e) => e === t);
-    return s.length > 0;
-  }
-  deleteSubscriptionToken(e) {
-    let t = this.subscribedTokens.indexOf(e);
-    t > -1 && this.subscribedTokens.splice(t, 1);
-  }
-  getTag(e) {
-    return e && "string" === typeof e ? e : this.defaultTokenTag;
-  }
-  updateTokenTags(e, t, s) {
-    s !== this.defaultTokenTag &&
-      (this.tokenTags[e] || (this.tokenTags[e] = { mode: t, tags: {} }),
-      (this.tokenTags[e]["tags"][s] = this.modeWeights[t]));
-  }
-  deleteTokenTags(e, t) {
-    this.tokenTags[e] &&
-      this.tokenTags[e].tags &&
-      this.tokenTags[e].tags[t] &&
-      delete this.tokenTags[e].tags[t];
-  }
-  getBestMode(e, t, s) {
-    if (s === this.defaultTokenTag) return t;
-    let i = Math.min.apply(
-      Math,
-      Object.keys(this.tokenTags[e].tags).map((t) => this.tokenTags[e].tags[t])
-    );
-    return i ? this.weightModeMap[i] : t;
-  }
-  canUnsubscribe(e, t) {
-    if (!this.isElementInArray(this.subscribedTokens, e)) return !1;
-    if (t === this.defaultTokenTag) return !0;
-    if (!this.tokenTags[e]) return !0;
-    let s = Object.keys(this.tokenTags[e].tags).filter((e) => e !== t);
-    return !(s.length > 0);
-  }
-  triggerDisconnect() {
-    this.eventDisconnect.trigger(),
-      this.isAutoReconnect
-        ? this.attemptReconnection()
-        : this.eventNoReconnect.trigger();
-  }
-  setConnectionTimer() {
-    clearInterval(this.connectionTimer),
-      (this.lastDataReceivedTime = new Date()),
-      (this.connectionTimer = setInterval(() => {
-        (new Date().getTime() - this.lastDataReceivedTime.getTime()) / 1e3 >=
-          this.noReplyTimeout &&
-          ((this.currentWsUrl = null),
-          this.ws && this.ws.close(),
-          clearInterval(this.connectionTimer),
-          this.triggerDisconnect());
-      }, 1e3 * this.noReplyTimeout));
-  }
-  setLazyDisconnect() {
-    clearInterval(this.lazyDisconnectTimer),
-      (this.lazyDisconnectTimer = setInterval(() => {
-        let e = 0 === this.subscribedTokens.length;
-        e &&
-          ((this.currentWsUrl = null),
-          (this.isLazyInitialConnect = !1),
-          this.ws && this.ws.close(),
-          clearInterval(this.lazyDisconnectTimer),
-          (this.isAutoReconnect = !1),
-          this.triggerDisconnect());
-      }, 1e3 * this.lazyDisconnectTimeout));
-  }
-  attemptReconnection() {
-    this.reconnectionsCount > this.reconnectTries
-      ? this.eventNoReconnect.trigger()
-      : (this.eventReconnect.trigger(this.reconnectInterval),
-        setTimeout(() => {
-          this.connect(!0);
-        }, 1e3 * this.reconnectInterval),
-        this.reconnectionsCount++);
-  }
-  _send(e) {
-    try {
-      this.ws.send(JSON.stringify(e));
-    } catch (t) {
-      this.ws.close();
-    }
-  }
-  send(e) {
-    this.isConnected()
-      ? this._send(e)
-      : this.isLazy && (this.lazyPayload.push(e), this.processLazyPayload());
-  }
-  dateToString(e) {
-    let t = e.getFullYear().toString(),
-      s = (e.getMonth() + 1).toString(),
-      i = e.getDate().toString(),
-      n = e.getMinutes().toString(),
-      r = e.getHours().toString(),
-      o = e.getSeconds().toString();
-    s.length < 2 && (s = "0" + s),
-      i.length < 2 && (i = "0" + i),
-      r.length < 2 && (r = "0" + r),
-      n.length < 2 && (n = "0" + n),
-      o.length < 2 && (o = "0" + o);
-    let a = `${t}-${s}-${i} ${r}:${n}:${o}`;
-    return a;
+    this.address = e.address;
+    this.apiKey = e.apiKey;
+    this.encToken = e.encToken;
+    this.userId = e.userId;
+    this.debug = e.debug;
+    if (e.version) this.version = e.version;
+    if (e.lazyDisconnectTimeout)
+      this.lazyDisconnectTimeout = e.lazyDisconnectTimeout;
   }
   calculateChange(e) {
     let t = 0,
@@ -246,18 +114,18 @@ export class A {
               token: t,
               lastPrice: this.buf2long(i.slice(4, 8)) / r,
             });
-          else if (12 === i.byteLength)
-            (e = {
+          else if (12 === i.byteLength) {
+            e = {
               mode: this.modeLTPC,
               isTradeable: !0,
               token: t,
               lastPrice: this.buf2long(i.slice(4, 8)) / r,
               closePrice: this.buf2long(i.slice(8, 12)) / r,
-            }),
-              (e = Object.assign(e, this.calculateChange(e))),
-              s.push(e);
-          else if (28 === i.byteLength || 32 === i.byteLength)
-            (e = {
+            };
+            e = Object.assign(e, this.calculateChange(e));
+            s.push(e);
+          } else if (28 === i.byteLength || 32 === i.byteLength) {
+            e = {
               mode: this.modeFull,
               isTradeable: !1,
               token: t,
@@ -266,10 +134,10 @@ export class A {
               lowPrice: this.buf2long(i.slice(12, 16)) / r,
               openPrice: this.buf2long(i.slice(16, 20)) / r,
               closePrice: this.buf2long(i.slice(20, 24)) / r,
-            }),
-              (e = Object.assign(e, this.calculateChange(e))),
-              s.push(e);
-          else if (492 === i.byteLength) {
+            };
+            e = Object.assign(e, this.calculateChange(e));
+            s.push(e);
+          } else if (492 === i.byteLength) {
             let e = {
                 mode: this.modeFull,
                 token: t,
@@ -277,14 +145,15 @@ export class A {
               },
               n = 0,
               o = i.slice(12, 492);
-            for (let t = 0; t < 40; t++)
-              (n = 12 * t),
-                e.extendedDepth[t < 20 ? "buy" : "sell"].push({
-                  quantity: this.buf2long(o.slice(n, n + 4)),
-                  price: this.buf2long(o.slice(n + 4, n + 8)) / r,
-                  orders: this.buf2long(o.slice(n + 8, n + 12)),
-                });
-            s.push(e);
+            for (let t = 0; t < 40; t++) {
+              n = 12 * t;
+              e.extendedDepth[t < 20 ? "buy" : "sell"].push({
+                quantity: this.buf2long(o.slice(n, n + 4)),
+                price: this.buf2long(o.slice(n + 4, n + 8)) / r,
+                orders: this.buf2long(o.slice(n + 8, n + 12)),
+              });
+              s.push(e);
+            }
           } else {
             if (
               ((e = {
@@ -314,21 +183,22 @@ export class A {
                 184 === i.byteLength)
               ) {
                 let t = this.buf2long(i.slice(44, 48));
-                (e.lastTradedTime =
-                  t && t > 0 ? this.dateToString(new Date(1e3 * t)) : null),
-                  (e.oi = this.buf2long(i.slice(48, 52))),
-                  (e.oiDayHigh = this.buf2long(i.slice(52, 56))),
-                  (e.oiDayLow = this.buf2long(i.slice(56, 60)));
+                e.lastTradedTime =
+                  t && t > 0 ? this.dateToString(new Date(1e3 * t)) : null;
+                e.oi = this.buf2long(i.slice(48, 52));
+                e.oiDayHigh = this.buf2long(i.slice(52, 56));
+                e.oiDayLow = this.buf2long(i.slice(56, 60));
               }
               let n = 0,
                 o = i.slice(t, s);
-              for (let i = 0; i < 10; i++)
-                (n = 12 * i),
-                  e.depth[i < 5 ? "buy" : "sell"].push({
-                    price: this.buf2long(o.slice(n + 4, n + 8)) / r,
-                    orders: this.buf2long(o.slice(n + 8, n + 10)),
-                    quantity: this.buf2long(o.slice(n, n + 4)),
-                  });
+              for (let i = 0; i < 10; i++) {
+                n = 12 * i;
+                e.depth[i < 5 ? "buy" : "sell"].push({
+                  price: this.buf2long(o.slice(n + 4, n + 8)) / r,
+                  orders: this.buf2long(o.slice(n + 8, n + 10)),
+                  quantity: this.buf2long(o.slice(n, n + 4)),
+                });
+              }
             }
             s.push(e);
           }
@@ -343,7 +213,8 @@ export class A {
     for (let o = 0; o < t; o++) {
       var n = this.buf2long(e.slice(s, s + 2)),
         r = e.slice(s + 2, s + 2 + n);
-      i.push(r), (s += 2 + n);
+      i.push(r);
+      s += 2 + n;
     }
     return i;
   }
@@ -389,7 +260,10 @@ export class A {
   }
   processQuoteMessage(e, t) {
     let s = this.quoteMap[e];
-    s && (s.resolve(t), delete this.quoteMap[e]);
+    if (s) {
+      s.resolve(t);
+      delete this.quoteMap[e];
+    }
   }
   buf2long(e) {
     let t = new Uint8Array(e),
