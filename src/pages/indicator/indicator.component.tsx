@@ -155,7 +155,6 @@ const LineIndicator = ({ data, type }: any) => {
   return (
     <>
       <Tooltip placement="topLeft" title={state.value}>
-        ;
         <span
           className="value"
           style={{
