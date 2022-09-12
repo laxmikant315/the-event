@@ -11,7 +11,7 @@ import {
   Statistic,
 } from "antd";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { LineChartOutlined } from "@ant-design/icons";
 import BarChartOutlined from "@ant-design/icons/lib/icons/BarChartOutlined";
@@ -22,18 +22,15 @@ import StarTwoTone from "@ant-design/icons/lib/icons/StarTwoTone";
 import BoxPlotTwoTone from "@ant-design/icons/lib/icons/BoxPlotTwoTone";
 import TechIndicator from "../../components/tech-indicator.component";
 import { mobileCheck } from "../../helpers/util";
+import { AppContext } from "../../providers/app.provider";
 const serverUrl = process.env.REACT_APP_SERVER_URL + "/main";
 
-const StockCard = ({
-  data: dataFromProps,
-  onfetch,
-  descriptions,
-  topLeftControls,
-}: any) => {
-  const [data, setData] = useState(dataFromProps);
+const StockCard = ({ data, onfetch, descriptions, topLeftControls }: any) => {
+  // const [data, setData] = useState(dataFromProps);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isTechIndexVisible, setIsTechIndexVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { orginalDetails } = useContext(AppContext);
 
   const { techIndex } = data;
   const techColor = `rgba(${techIndex > 50 ? 115 : 255}, ${
@@ -48,12 +45,24 @@ const StockCard = ({
         setLoading(true);
         const portfolio = await onfetch();
         if (portfolio.data && portfolio.data.length) {
-          setData(portfolio.data[0]);
+          // setData(portfolio.data[0]);
         }
         setLoading(false);
       })();
     }
   }, [isModalVisible]);
+  const [totalPnl, setTotalPnl] = useState(0);
+  useEffect(() => {
+    if (orginalDetails.dayPnlList && orginalDetails.dayPnlList.length) {
+      const original_day_change = orginalDetails.dayPnlList.find(
+        (x: any) => x.symbol === data.symbol
+      ).day_change;
+
+      const diff = data.day_change - original_day_change;
+
+      setTotalPnl(data.pnl + diff);
+    }
+  }, [data]);
   const isMobile = mobileCheck();
   return (
     <>
@@ -150,11 +159,9 @@ const StockCard = ({
                 >
                   <LineChartOutlined />
                 </Button>
-                {data.pnl && (
-                  <span
-                    style={{ color: data["pnl"] > 0 ? "#73d13d" : "#ff4d4f" }}
-                  >
-                    {data.pnl.toFixed(2)}
+                {totalPnl && (
+                  <span style={{ color: totalPnl > 0 ? "#73d13d" : "#ff4d4f" }}>
+                    {totalPnl.toFixed(2)}
                     <small>{` (${data.change_percentage.toFixed(2)}%)`}</small>
                   </span>
                 )}
@@ -215,6 +222,7 @@ const StockCard = ({
           <Col lg={24} xs={24} sm={24} xl={24}>
             <Indicator
               data={{
+                symbol: data.symbol,
                 trailStopLossPer: data.trail_stop_loss_per,
                 trailStopLoss: data.trail_stop_loss,
                 high_moment: data.high_moment,

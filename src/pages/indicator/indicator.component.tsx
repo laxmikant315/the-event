@@ -58,7 +58,6 @@ const LineIndicator = ({ data, type }: any) => {
       const per = (diff * 100) / total;
 
       const values = getValues(diff, per, data.trailStopLoss, data.stoploss);
-      console.log("ccc", diff, total, per, values);
       left = values.left;
       right = values.right;
       currentPer = values.per;
@@ -152,10 +151,11 @@ const LineIndicator = ({ data, type }: any) => {
       marginLeft,
       marginRight,
     });
-  }, []);
+  }, [data]);
   return (
     <>
       <Tooltip placement="topLeft" title={state.value}>
+        ;
         <span
           className="value"
           style={{
@@ -256,7 +256,6 @@ const Indicator = ({ data }: any) => {
     maxLength = 100 / data.targetPer;
   }
   const isInProfit = data.currentPrice > data.buyPrice;
-  // console.log({ isInProfit, data });
   data.xPer = (data.stoplossPer * maxLength) / 2;
   data.yPer = (data.targetPer * maxLength) / 2;
   data.stoplossIsLarge = stoplossIsLarge;

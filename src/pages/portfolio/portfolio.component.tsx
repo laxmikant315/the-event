@@ -20,7 +20,7 @@ import { AppContext } from "../../providers/app.provider";
 const serverUrl = process.env.REACT_APP_SERVER_URL + "/main";
 
 const Alerts = () => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<any>([]);
   const [index, setIndex] = useState(0);
   const [loading, setLoading] = useState(false);
   const [refresh, setRefresh] = useState(0);
@@ -30,30 +30,71 @@ const Alerts = () => {
 
   // const [isUpdate, setIsUpdate] = useState(true);
   const [details, setDetails] = useState<any>(null);
-  const { availableMargin } = useContext(AppContext);
+  const {
+    availableMargin,
+    wsData,
+    setInstrumentTokens,
+    orginalDetails,
+    setOriginalDetails,
+  } = useContext(AppContext);
+  const [niftyValues, setNiftyValues] = useState<any>(null);
+  const [nifty500Values, setNifty500Values] = useState<any>(null);
   useEffect(() => {
-    (async () => {
-      setLoading(true);
-      const alerts = await axios.get(`${serverUrl}/portfolio/False`);
-      setData(alerts.data);
+    const niftyWsData = wsData && wsData.find((x: any) => x.token === 256265);
+    if (niftyWsData) {
+      setNiftyValues(niftyWsData);
+    }
+    const nifty500WsData =
+      wsData && wsData.find((x: any) => x.token === 268041);
+    if (nifty500WsData) {
+      setNifty500Values(nifty500WsData);
+    }
+
+    if (data && data.length) {
+      for (let item of wsData) {
+        const selected: any = data.find(
+          (x: any) => x.instrument_token === item.token
+        );
+
+        if (selected) {
+          const index = data.findIndex(
+            (x: any) => x.instrument_token === item.token
+          );
+          selected.last_price = item.lastPrice;
+          if (!selected.isInPositions) {
+            selected.day_change = item.absoluteChange * selected.quantity;
+            selected.day_change_percentage = item.change;
+          }
+          const newData: any = [...data];
+          newData[index] = selected;
+          setData(newData);
+
+          // setData([...data, selected]);
+        }
+      }
+    }
+  }, [wsData]);
+  useEffect(() => {
+    if (data && data.length) {
       const totalInvestment = parseFloat(
-        alerts.data
+        data
           .map((x: any) => x.buy_price * x.quantity)
           .reduce((x: any, y: any) => x + y)
       );
       const currentValue = parseFloat(
-        alerts.data
+        data
           .map((x: any) => x.last_price * x.quantity)
           .reduce((x: any, y: any) => x + y)
       );
       const dayPnl = parseFloat(
-        alerts.data
-          .map((x: any) => x.day_change)
-          .reduce((x: any, y: any) => x + y)
+        data.map((x: any) => x.day_change).reduce((x: any, y: any) => x + y)
       );
-      const totalPnl = parseFloat(
-        alerts.data.map((x: any) => x.pnl).reduce((x: any, y: any) => x + y)
+      let totalPnl = parseFloat(
+        data.map((x: any) => x.pnl).reduce((x: any, y: any) => x + y)
       );
+      const diff = dayPnl - orginalDetails.dayPnl;
+      totalPnl = totalPnl + diff;
+
       const dayPnlPer = (dayPnl / totalInvestment) * 100;
       const totalPnlPer = (totalPnl / totalInvestment) * 100;
 
@@ -65,7 +106,26 @@ const Alerts = () => {
         dayPnlPer,
         totalPnlPer,
       });
-      console.log(details);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      const alerts = await axios.get(`${serverUrl}/portfolio/False`);
+      const dayPnl = parseFloat(
+        alerts.data
+          .map((x: any) => x.day_change)
+          .reduce((x: any, y: any) => x + y)
+      );
+      const dayPnlList = alerts.data.map((x: any) => ({
+        symbol: x.symbol,
+        day_change: x.day_change,
+      }));
+      setOriginalDetails({ ...orginalDetails, dayPnl, dayPnlList });
+      setData(alerts.data);
+      setInstrumentTokens(alerts.data.map((x: any) => x.instrument_token));
+
       setLoading(false);
     })();
   }, [index, refresh]);
@@ -75,6 +135,16 @@ const Alerts = () => {
       (async () => {
         setLoading(true);
         const alerts = await axios.get(`${serverUrl}/portfolio/True`);
+        const dayPnl = parseFloat(
+          alerts.data
+            .map((x: any) => x.day_change)
+            .reduce((x: any, y: any) => x + y)
+        );
+        const dayPnlList = alerts.data.map((x: any) => ({
+          symbol: x.symbol,
+          day_change: x.day_change,
+        }));
+        setOriginalDetails({ ...orginalDetails, dayPnl, dayPnlList });
         setData(alerts.data);
         setLoading(false);
       })();
@@ -113,73 +183,123 @@ const Alerts = () => {
             Portfolio
           </Title>
         </Col>
+
         {details && (
           <Col span={9} xs={24} sm={24} lg={16}>
-            <Row gutter={50}>
-              <Col xs={12} sm={4}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-around",
+                flexWrap: "wrap",
+                gap: "1rem",
+              }}
+            >
+              <Statistic
+                title="Total investment"
+                valueStyle={{
+                  fontSize: 13,
+                }}
+                value={details.totalInvestment}
+                precision={2}
+                prefix="₹"
+              />
+
+              <Statistic
+                title="Current value"
+                valueStyle={{
+                  fontSize: 13,
+                }}
+                value={details.currentValue}
+                precision={2}
+                prefix="₹"
+              />
+
+              <Statistic
+                title="Day's P&L"
+                valueStyle={{
+                  color: details.dayPnl > 0 ? "#5b9a5d" : "#e25f5b",
+                  fontSize: 13,
+                }}
+                value={details.dayPnl?.toFixed(2)}
+                precision={2}
+                prefix="₹"
+                suffix={<small>{`(${details.dayPnlPer?.toFixed(2)}%)`}</small>}
+              />
+
+              <Statistic
+                title="Total P&L"
+                value={details.totalPnl?.toFixed(2)}
+                valueStyle={{
+                  color: details.totalPnl > 0 ? "#5b9a5d" : "#e25f5b",
+                  fontSize: 13,
+                }}
+                prefix="₹"
+                suffix={
+                  <small>{`(${details.totalPnlPer?.toFixed(2)}%)`}</small>
+                }
+                precision={2}
+              />
+
+              <Statistic
+                title="Available Fund"
+                value={availableMargin?.toFixed(2)}
+                valueStyle={{
+                  fontSize: 13,
+                }}
+                prefix="₹"
+                precision={2}
+              />
+
+              {niftyValues && (
                 <Statistic
-                  title="Total investment"
+                  title="Nifty 50"
                   valueStyle={{
-                    fontSize: 14,
+                    fontSize: 13,
+                    width: 100,
+                    color: niftyValues.change > 0 ? "#5b9a5d" : "#e25f5b",
                   }}
-                  value={details.totalInvestment}
-                  precision={2}
-                  prefix="₹"
+                  valueRender={() => (
+                    <span
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <span>{niftyValues.lastPrice}</span>{" "}
+                      <span>
+                        ({niftyValues.change.toFixed(2)}
+                        %)
+                      </span>
+                    </span>
+                  )}
                 />
-              </Col>
-              <Col xs={12} sm={4}>
+              )}
+
+              {nifty500Values && (
                 <Statistic
-                  title="Current value"
+                  title="Nifty 500"
                   valueStyle={{
-                    fontSize: 14,
+                    color: nifty500Values.change > 0 ? "#5b9a5d" : "#e25f5b",
+                    fontSize: 13,
+                    width: 100,
                   }}
-                  value={details.currentValue}
-                  precision={2}
-                  prefix="₹"
+                  valueRender={() => (
+                    <span
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <span> {nifty500Values.lastPrice} </span>{" "}
+                      <span>
+                        ({nifty500Values.change.toFixed(2)}
+                        %){" "}
+                      </span>
+                    </span>
+                  )}
                 />
-              </Col>
-              <Col xs={12} sm={4}>
-                <Statistic
-                  title="Day's P&L"
-                  valueStyle={{
-                    color: details.dayPnl > 0 ? "#5b9a5d" : "#e25f5b",
-                    fontSize: 14,
-                  }}
-                  value={details.dayPnl?.toFixed(2)}
-                  precision={2}
-                  prefix="₹"
-                  suffix={
-                    <small>{`(${details.dayPnlPer?.toFixed(2)}%)`}</small>
-                  }
-                />
-              </Col>
-              <Col xs={12} sm={4}>
-                <Statistic
-                  title="Total P&L"
-                  value={details.totalPnl?.toFixed(2)}
-                  valueStyle={{
-                    color: details.totalPnl > 0 ? "#5b9a5d" : "#e25f5b",
-                    fontSize: 14,
-                  }}
-                  prefix="₹"
-                  suffix={
-                    <small>{`(${details.totalPnlPer?.toFixed(2)}%)`}</small>
-                  }
-                  precision={2}
-                />
-              </Col>
-              <Col xs={12} sm={4}>
-                <Statistic
-                  title="Available Fund"
-                  value={availableMargin?.toFixed(2)}
-                  valueStyle={{
-                    fontSize: 14,
-                  }}
-                  prefix="₹"
-                  precision={2}
-                />
-              </Col>
-            </Row>
+              )}
+            </div>
           </Col>
         )}
         <Col

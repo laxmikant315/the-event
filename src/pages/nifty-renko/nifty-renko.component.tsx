@@ -73,7 +73,6 @@ const NiftyRenko = () => {
         name: moment.unix(+x / 1000).format("DD/MM/YYYY"),
         value: rawData[x],
       }));
-      console.log("data", data);
       setTechIndex(alerts.data.nifty_tech_index);
       setAvailableMargin(alerts.data.availableMargin);
       setAllData(allData);
@@ -107,7 +106,6 @@ const NiftyRenko = () => {
   useEffect(() => {
     if (data.length) {
       const off: any = gradientOffset(data);
-      console.log("off", off);
       setOff(off);
       const latestRenko = data[data.length - 1].value;
       setLatestRenko(latestRenko);
@@ -125,7 +123,6 @@ const NiftyRenko = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const latestTechIndex =
     (techIndex && techIndex.split(",").slice(-1)[0]) || "";
-  console.log("techIndex", techIndex);
   const techColor = (techIndex && getTechColor(+latestTechIndex)) || "";
 
   const [isTechIndexVisible, setIsTechIndexVisible] = useState(false);
@@ -208,7 +205,8 @@ const NiftyRenko = () => {
               href={`https://trademachine.herokuapp.com/api/v1/main/scanNifty`}
             >
               Scan Nifty
-            </Button><Button
+            </Button>
+            <Button
               type="ghost"
               size="small"
               target="_blank"
@@ -216,7 +214,8 @@ const NiftyRenko = () => {
               href={`https://trademachine.herokuapp.com/api/v1/main/scanforMl`}
             >
               Scan Stocks
-            </Button><Button
+            </Button>
+            <Button
               type="ghost"
               size="small"
               target="_blank"
@@ -224,7 +223,8 @@ const NiftyRenko = () => {
               href={`https://trademachine.herokuapp.com/api/v1/main/updateStocks/PORTFOLIO`}
             >
               Update Portfolio
-            </Button><Button
+            </Button>
+            <Button
               type="ghost"
               size="small"
               target="_blank"
@@ -233,7 +233,7 @@ const NiftyRenko = () => {
             >
               Update Alerts
             </Button>
-<Button
+            <Button
               type="ghost"
               size="small"
               target="_blank"
