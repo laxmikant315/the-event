@@ -212,7 +212,7 @@ const NiftyRenko = () => {
               size="small"
               target="_blank"
               style={{ margin: "0 10px" }}
-              href={`https://trademachine.herokuapp.com/api/v1/main/scanforMl`}
+              href={`https://trademachine.herokuapp.com/api/v1/main/scanForMl`}
             >
               Scan Stocks
             </Button>
