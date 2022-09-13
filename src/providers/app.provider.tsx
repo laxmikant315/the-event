@@ -4,6 +4,8 @@ import { A } from "../helpers/binary-parser/parser";
 type ContextProps = {
   token: string;
   setToken: (token: string) => void;
+  kiteToken: string;
+  setKiteToken: (token: string) => void;
   availableMargin: number;
   setAvailableMargin: (availableMargin: number) => void;
   wsData: any;
@@ -15,6 +17,8 @@ type ContextProps = {
 export const AppContext = createContext<ContextProps>({
   token: "",
   setToken: (token: string) => {},
+  kiteToken: "",
+  setKiteToken: (token: string) => {},
   availableMargin: 0,
   setAvailableMargin: (availableMargin: number) => {},
   wsData: null,
@@ -25,6 +29,7 @@ export const AppContext = createContext<ContextProps>({
 
 const AppProvider = ({ children }: any) => {
   const [token, setToken] = useState("");
+  const [kiteToken, setKiteToken] = useState("");
   const [availableMargin, setAvailableMargin] = useState(0);
   const history = useHistory();
   const [wsData, setWsData] = useState<any>(null);
@@ -59,8 +64,13 @@ const AppProvider = ({ children }: any) => {
     }
   };
   useEffect(() => {
-    var wsUri =
-      "wss://ws.zerodha.com/?api_key=kitefront&user_id=BV7667&enctoken=pnOljUC72ZZ5UqbrVQjm6fQoTzVSZPJzIUEQbiP4XlyDQpUuEJ5EtX7/kAeiVNGmZWTpJNDm3Z/SEX48LcmanjZU5kaIamM5jFKyCyd/PkZScoGEGxidbQ==&uid=1662881339451&user-agent=kite3-web&version=3.0.3";
+    if (!kiteToken) {
+      return;
+    }
+    const token = kiteToken.split(" ");
+
+    var wsUri = `wss://ws.zerodha.com/?api_key=kitefront&user_id=BV7667&enctoken=${token[1]}&uid=1662881339451&user-agent=kite3-web&version=3.0.3`;
+    console.log("wsUri", wsUri);
     // let output: any;
 
     function init() {
@@ -106,15 +116,17 @@ const AppProvider = ({ children }: any) => {
     function onError(evt: any) {
       console.log('<span style="color: red;">ERROR:</span> ' + evt.data);
     }
-
-    window.addEventListener("load", init, false);
-  }, []);
+    init();
+    // window.addEventListener("load", init, false);
+  }, [kiteToken]);
 
   return (
     <AppContext.Provider
       value={{
         token,
         setToken,
+        kiteToken,
+        setKiteToken,
         availableMargin,
         setAvailableMargin,
         wsData,

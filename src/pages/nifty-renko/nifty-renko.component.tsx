@@ -62,7 +62,7 @@ const NiftyRenko = () => {
   const [off, setOff] = useState();
   const [latestRenko, setLatestRenko] = useState(0);
   const [techIndex, setTechIndex] = useState("");
-  const { setAvailableMargin } = useContext(AppContext);
+  const { setAvailableMargin, setKiteToken } = useContext(AppContext);
 
   useEffect(() => {
     (async () => {
@@ -75,6 +75,7 @@ const NiftyRenko = () => {
       }));
       setTechIndex(alerts.data.nifty_tech_index);
       setAvailableMargin(alerts.data.availableMargin);
+      setKiteToken(alerts.data.token);
       setAllData(allData);
       // setLoading(false);
     })();
