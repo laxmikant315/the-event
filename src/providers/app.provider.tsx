@@ -1,3 +1,4 @@
+import moment from "moment";
 import { createContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { A } from "../helpers/binary-parser/parser";
@@ -67,9 +68,9 @@ const AppProvider = ({ children }: any) => {
     if (!kiteToken) {
       return;
     }
-    const token = kiteToken.split(" ");
-
-    var wsUri = `wss://ws.zerodha.com/?api_key=kitefront&user_id=BV7667&enctoken=${token[1]}&uid=1662881339451&user-agent=kite3-web&version=3.0.3`;
+    const token = encodeURIComponent(kiteToken.split(" ")[1]);
+    const uid = moment().unix() * 1000;
+    var wsUri = `wss://ws.zerodha.com/?api_key=kitefront&user_id=BV7667&enctoken=${token}&uid=${uid}&user-agent=kite3-web&version=3.0.3`;
     console.log("wsUri", wsUri);
     // let output: any;
 
