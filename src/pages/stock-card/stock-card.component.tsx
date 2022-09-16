@@ -70,6 +70,18 @@ const StockCard = ({ data, onfetch, descriptions, topLeftControls }: any) => {
     }
   }, [data]);
   const isMobile = mobileCheck();
+
+  let progress = 0;
+  if (data["pnl"] > 0) {
+    progress =
+      ((data.last_price - data.buy_price) * 100) /
+      (data.target - data.buy_price);
+  } else {
+    progress =
+      -((data.buy_price - data.last_price) * 100) /
+      (data.buy_price - (data.trail_stop_loss || data.stopLoss));
+  }
+
   return (
     <>
       <Card
@@ -194,13 +206,14 @@ const StockCard = ({ data, onfetch, descriptions, topLeftControls }: any) => {
             {data["pnl"] > 0 ? (
               <Progress
                 size="small"
-                percent={+data["progress"].toFixed(1)}
+                percent={+progress.toFixed(1)}
                 status="active"
                 strokeColor="#73d13d"
               />
             ) : (
               <Progress
-                percent={+Math.abs(data["progress"]).toFixed(1)}
+                size="small"
+                percent={+Math.abs(progress).toFixed(1)}
                 status="active"
                 strokeColor="#ff4d4f"
               />
