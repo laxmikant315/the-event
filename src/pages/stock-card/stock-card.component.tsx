@@ -182,7 +182,7 @@ const StockCard = ({ data, onfetch, descriptions, topLeftControls }: any) => {
                 >
                   <LineChartOutlined />
                 </Button>
-                {totalPnl && (
+                {totalPnl && data.change_percentage && (
                   <span style={{ color: totalPnl > 0 ? "#73d13d" : "#ff4d4f" }}>
                     {totalPnl.toFixed(2)}
                     <small>{` (${data.change_percentage.toFixed(2)}%)`}</small>
