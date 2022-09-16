@@ -194,9 +194,9 @@ const StockCard = ({ data, onfetch, descriptions, topLeftControls }: any) => {
         style={{
           marginBottom: 10,
           backgroundColor:
-            data["progress"] > 0
-              ? `rgba(0, 58, 45, ${+Math.abs(data["progress"]) / 100})`
-              : `rgba(122, 40, 40, ${+Math.abs(data["progress"]) / 100})`,
+            progress > 0
+              ? `rgba(0, 58, 45, ${+Math.abs(progress) / 100})`
+              : `rgba(122, 40, 40, ${+Math.abs(progress) / 100})`,
           borderRadius: 10,
           zoom: -4,
         }}
