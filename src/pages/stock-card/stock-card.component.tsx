@@ -74,15 +74,19 @@ const StockCard = ({ data, onfetch, descriptions, topLeftControls }: any) => {
   let progress = 0;
   const currentPrice = data.last_price || data.lastPrice;
 
+  if (!data.pnl) {
+    data["pnl"] = data.buyPrice - data.lastPrice;
+    console.log('data["pnl"] ', data["pnl"]);
+  }
+  const buyPrice = data.buy_price || data.buyPrice;
   if (data["pnl"] > 0) {
-    progress =
-      ((currentPrice - data.buy_price) * 100) / (data.target - data.buy_price);
+    progress = ((currentPrice - buyPrice) * 100) / (data.target - buyPrice);
   } else {
     progress =
-      -((data.buy_price - currentPrice) * 100) /
-      (data.buy_price - (data.trail_stop_loss || data.stopLoss));
+      -((buyPrice - currentPrice) * 100) /
+      (buyPrice - (data.trail_stop_loss || data.stopLoss));
   }
-
+  console.log("progress", progress);
   return (
     <>
       <Card
@@ -204,7 +208,7 @@ const StockCard = ({ data, onfetch, descriptions, topLeftControls }: any) => {
       >
         <Row justify="space-around">
           <Col lg={17} xs={17} sm={17} md={17}>
-            {data["pnl"] > 0 ? (
+            {progress > 0 ? (
               <Progress
                 size="small"
                 percent={+progress.toFixed(1)}
@@ -250,7 +254,7 @@ const StockCard = ({ data, onfetch, descriptions, topLeftControls }: any) => {
                 stoplossPer: data.stopLossPer,
                 targetPer: data.targetPer,
 
-                buyPrice: data.buy_price ? data.buy_price : data.buyPrice,
+                buyPrice,
                 target: data.target,
                 stoploss: data.stopLoss,
                 currentPrice,
