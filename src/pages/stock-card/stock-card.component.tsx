@@ -72,13 +72,14 @@ const StockCard = ({ data, onfetch, descriptions, topLeftControls }: any) => {
   const isMobile = mobileCheck();
 
   let progress = 0;
+  const currentPrice = data.last_price || data.lastPrice;
+
   if (data["pnl"] > 0) {
     progress =
-      ((data.last_price - data.buy_price) * 100) /
-      (data.target - data.buy_price);
+      ((currentPrice - data.buy_price) * 100) / (data.target - data.buy_price);
   } else {
     progress =
-      -((data.buy_price - data.last_price) * 100) /
+      -((data.buy_price - currentPrice) * 100) /
       (data.buy_price - (data.trail_stop_loss || data.stopLoss));
   }
 
@@ -252,9 +253,7 @@ const StockCard = ({ data, onfetch, descriptions, topLeftControls }: any) => {
                 buyPrice: data.buy_price ? data.buy_price : data.buyPrice,
                 target: data.target,
                 stoploss: data.stopLoss,
-                currentPrice: data.last_price
-                  ? data.last_price
-                  : data.lastPrice,
+                currentPrice,
               }}
             />
           </Col>
