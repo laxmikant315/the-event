@@ -101,11 +101,13 @@ const Alerts = () => {
       totalPnl = parseFloat(
         data.map((x: any) => x.pnl).reduce((x: any, y: any) => x + y)
       );
-      const diff = dayPnl - orginalDetails.dayPnl;
-      totalPnl = totalPnl + diff;
+      if (orginalDetails) {
+        const diff = dayPnl - orginalDetails.dayPnl;
+        totalPnl = totalPnl + diff;
 
-      dayPnlPer = (dayPnl / totalInvestment) * 100;
-      totalPnlPer = (totalPnl / totalInvestment) * 100;
+        dayPnlPer = (dayPnl / totalInvestment) * 100;
+        totalPnlPer = (totalPnl / totalInvestment) * 100;
+      }
     }
     setDetails({
       totalInvestment,
