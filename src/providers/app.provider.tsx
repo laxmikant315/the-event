@@ -49,8 +49,12 @@ const AppProvider = ({ children }: any) => {
   const [websocket, setWebsocket] = useState<any>(null);
   const [orginalDetails, setOriginalDetails] = useState<any>(null);
   useEffect(() => {
-    if (isOpened && doSend && instrumentTokens) {
-      const tokens = `[256265,268041,${instrumentTokens.join(",")}]`;
+    if (isOpened && doSend) {
+      const tokens = `[256265,268041${
+        instrumentTokens && instrumentTokens.length
+          ? "," + instrumentTokens.join(",")
+          : ""
+      } ]`;
       doSend(`{"a":"unsubscribe","v":${tokens}}`);
       doSend(`{"a":"subscribe","v":${tokens}}`);
       doSend(`{"a":"mode","v":["ltpc",${tokens}]}`);

@@ -3,6 +3,7 @@ import {
   Col,
   notification,
   Popconfirm,
+  Result,
   Row,
   Spin,
   Statistic,
@@ -16,6 +17,7 @@ import StockCard from "../stock-card/stock-card.component";
 import moment from "moment";
 import NiftyRenko from "../nifty-renko/nifty-renko.component";
 import { AppContext } from "../../providers/app.provider";
+import { useHistory } from "react-router-dom";
 
 const serverUrl = process.env.REACT_APP_SERVER_URL + "/main";
 
@@ -41,6 +43,7 @@ const Alerts = () => {
   const [nifty500Values, setNifty500Values] = useState<any>(null);
   useEffect(() => {
     const niftyWsData = wsData && wsData.find((x: any) => x.token === 256265);
+    console.log("niftyWsData", niftyWsData);
     if (niftyWsData) {
       setNiftyValues(niftyWsData);
     }
@@ -75,56 +78,65 @@ const Alerts = () => {
     }
   }, [wsData]);
   useEffect(() => {
+    let totalInvestment = 0,
+      currentValue = 0,
+      dayPnl = 0,
+      totalPnl = 0,
+      dayPnlPer = 0,
+      totalPnlPer = 0;
     if (data && data.length) {
-      const totalInvestment = parseFloat(
+      totalInvestment = parseFloat(
         data
           .map((x: any) => x.buy_price * x.quantity)
           .reduce((x: any, y: any) => x + y)
       );
-      const currentValue = parseFloat(
+      currentValue = parseFloat(
         data
           .map((x: any) => x.last_price * x.quantity)
           .reduce((x: any, y: any) => x + y)
       );
-      const dayPnl = parseFloat(
+      dayPnl = parseFloat(
         data.map((x: any) => x.day_change).reduce((x: any, y: any) => x + y)
       );
-      let totalPnl = parseFloat(
+      totalPnl = parseFloat(
         data.map((x: any) => x.pnl).reduce((x: any, y: any) => x + y)
       );
       const diff = dayPnl - orginalDetails.dayPnl;
       totalPnl = totalPnl + diff;
 
-      const dayPnlPer = (dayPnl / totalInvestment) * 100;
-      const totalPnlPer = (totalPnl / totalInvestment) * 100;
-
-      setDetails({
-        totalInvestment,
-        currentValue,
-        dayPnl,
-        totalPnl,
-        dayPnlPer,
-        totalPnlPer,
-      });
+      dayPnlPer = (dayPnl / totalInvestment) * 100;
+      totalPnlPer = (totalPnl / totalInvestment) * 100;
     }
+    setDetails({
+      totalInvestment,
+      currentValue,
+      dayPnl,
+      totalPnl,
+      dayPnlPer,
+      totalPnlPer,
+    });
   }, [data]);
 
   useEffect(() => {
     (async () => {
       setLoading(true);
       const alerts = await axios.get(`${serverUrl}/portfolio/False`);
-      const dayPnl = parseFloat(
-        alerts.data
-          .map((x: any) => x.day_change)
-          .reduce((x: any, y: any) => x + y)
-      );
-      const dayPnlList = alerts.data.map((x: any) => ({
-        symbol: x.symbol,
-        day_change: x.day_change,
-      }));
+      let dayPnl = 0;
+      let dayPnlList = {};
+      if (alerts.data && alerts.data.length) {
+        dayPnl = parseFloat(
+          alerts.data
+            .map((x: any) => x.day_change)
+            .reduce((x: any, y: any) => x + y)
+        );
+        dayPnlList = alerts.data.map((x: any) => ({
+          symbol: x.symbol,
+          day_change: x.day_change,
+        }));
+        setData(alerts.data);
+        setInstrumentTokens(alerts.data.map((x: any) => x.instrument_token));
+      }
       setOriginalDetails({ ...orginalDetails, dayPnl, dayPnlList });
-      setData(alerts.data);
-      setInstrumentTokens(alerts.data.map((x: any) => x.instrument_token));
 
       setLoading(false);
     })();
@@ -167,6 +179,7 @@ const Alerts = () => {
       }
     }, 300000);
   }, []);
+  const history = useHistory();
   return (
     <div
       className="site-card-wrapper"
@@ -344,6 +357,20 @@ const Alerts = () => {
         gutter={20}
         style={{ overflow: "auto", height: "100%" }}
       >
+        {!data.length && (
+          <Result
+            title="Your portfolio is empty"
+            extra={
+              <Button
+                type="primary"
+                key="console"
+                onClick={() => history.push("/notifications")}
+              >
+                Go to Notifications
+              </Button>
+            }
+          />
+        )}
         {data
           .map((x: any) => ({
             ...x,
