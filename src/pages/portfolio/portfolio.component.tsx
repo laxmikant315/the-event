@@ -359,118 +359,122 @@ const Alerts = () => {
         gutter={20}
         style={{ overflow: "auto", height: "100%" }}
       >
-        {!data.length && (
-          <Result
-            title="Your portfolio is empty"
-            extra={
-              <Button
-                type="primary"
-                key="console"
-                onClick={() => history.push("/notifications")}
-              >
-                Go to Notifications
-              </Button>
-            }
-          />
-        )}
-        {data
-          .map((x: any) => ({
-            ...x,
-            max:
-              Math.abs(x.progress) > Math.abs(x.timePer)
-                ? Math.abs(x.progress)
-                : Math.abs(x.timePer),
-          }))
-          .sort((x: any, y: any) => y.max - x.max)
-          .map((item: any) => (
-            <Col xs={24} sm={12} md={12} lg={12} xl={6} span={8}>
-              <StockCard
-                descriptions={
-                  <Row gutter={16} style={{ marginBottom: 10 }}>
-                    <Col span={3}>
-                      <Statistic
-                        title="QTY"
-                        value={item.quantity}
-                        precision={0}
-                        valueStyle={{ fontSize: 14 }}
-                        // valueStyle={{ color: "#3f8600" }}
-                      />
-                    </Col>
-
-                    <Col span={8}>
-                      <Statistic
-                        title="Invested"
-                        value={(item.buy_price * item.quantity).toFixed(2)}
-                        precision={0}
-                        valueStyle={{ fontSize: 14 }}
-                        // valueStyle={{ color: "#3f8600" }}
-                        prefix={"₹"}
-                      />
-                    </Col>
-                    <Col span={8}>
-                      <Statistic
-                        title="Value"
-                        value={(item.last_price * item.quantity).toFixed(2)}
-                        precision={0}
-                        prefix={"₹"}
-                        valueStyle={{ fontSize: 14 }}
-                        // valueStyle={{ color: "#3f8600" }}
-                      />
-                    </Col>
-                    {/* <Col span={8}></Col> */}
-                    <Col span={5}>
-                      <Statistic
-                        title="Buy on"
-                        value={moment(item.buy_date).format("D MMM h:mm a")}
-                        precision={0}
-                        valueStyle={{ fontSize: 12 }}
-                      />
-                    </Col>
-                    {/* <Col span={8}></Col> */}
-                  </Row>
-                }
-                id={item.symbol}
-                data={item}
-                onfetch={() =>
-                  axios.get(`${serverUrl}/portfolio/True/${item.symbol}`)
-                }
-                topLeftControls={
-                  <Popconfirm
-                    placement="bottomRight"
-                    title={"Are you sure?"}
-                    onConfirm={async () => {
-                      const order = await axios.get(
-                        `${serverUrl}/sell/${item.symbol}`
-                      );
-
-                      if (
-                        order.data &&
-                        order.data.status === "order_completed"
-                      ) {
-                        notification.success({
-                          message: "Order Success",
-                          description: "Order successfully placed.",
-                        });
-                      } else {
-                        notification.error({
-                          message: "Order Failed",
-                          description: "Order placing failed.",
-                        });
-                      }
-                    }}
-                    okText="Yes"
-                    cancelText="No"
-                    okButtonProps={{ size: "large" }}
-                    cancelButtonProps={{ size: "large" }}
+        {!loading && (
+          <>
+            {!data.length && (
+              <Result
+                title="Your portfolio is empty"
+                extra={
+                  <Button
+                    type="primary"
+                    key="console"
+                    onClick={() => history.push("/notifications")}
                   >
-                    <Button type="text" size="small">
-                      Sell
-                    </Button>
-                  </Popconfirm>
+                    Go to Notifications
+                  </Button>
                 }
               />
-            </Col>
-          ))}
+            )}
+            {data
+              .map((x: any) => ({
+                ...x,
+                max:
+                  Math.abs(x.progress) > Math.abs(x.timePer)
+                    ? Math.abs(x.progress)
+                    : Math.abs(x.timePer),
+              }))
+              .sort((x: any, y: any) => y.max - x.max)
+              .map((item: any) => (
+                <Col xs={24} sm={12} md={12} lg={12} xl={6} span={8}>
+                  <StockCard
+                    descriptions={
+                      <Row gutter={16} style={{ marginBottom: 10 }}>
+                        <Col span={3}>
+                          <Statistic
+                            title="QTY"
+                            value={item.quantity}
+                            precision={0}
+                            valueStyle={{ fontSize: 14 }}
+                            // valueStyle={{ color: "#3f8600" }}
+                          />
+                        </Col>
+
+                        <Col span={8}>
+                          <Statistic
+                            title="Invested"
+                            value={(item.buy_price * item.quantity).toFixed(2)}
+                            precision={0}
+                            valueStyle={{ fontSize: 14 }}
+                            // valueStyle={{ color: "#3f8600" }}
+                            prefix={"₹"}
+                          />
+                        </Col>
+                        <Col span={8}>
+                          <Statistic
+                            title="Value"
+                            value={(item.last_price * item.quantity).toFixed(2)}
+                            precision={0}
+                            prefix={"₹"}
+                            valueStyle={{ fontSize: 14 }}
+                            // valueStyle={{ color: "#3f8600" }}
+                          />
+                        </Col>
+                        {/* <Col span={8}></Col> */}
+                        <Col span={5}>
+                          <Statistic
+                            title="Buy on"
+                            value={moment(item.buy_date).format("D MMM h:mm a")}
+                            precision={0}
+                            valueStyle={{ fontSize: 12 }}
+                          />
+                        </Col>
+                        {/* <Col span={8}></Col> */}
+                      </Row>
+                    }
+                    id={item.symbol}
+                    data={item}
+                    onfetch={() =>
+                      axios.get(`${serverUrl}/portfolio/True/${item.symbol}`)
+                    }
+                    topLeftControls={
+                      <Popconfirm
+                        placement="bottomRight"
+                        title={"Are you sure?"}
+                        onConfirm={async () => {
+                          const order = await axios.get(
+                            `${serverUrl}/sell/${item.symbol}`
+                          );
+
+                          if (
+                            order.data &&
+                            order.data.status === "order_completed"
+                          ) {
+                            notification.success({
+                              message: "Order Success",
+                              description: "Order successfully placed.",
+                            });
+                          } else {
+                            notification.error({
+                              message: "Order Failed",
+                              description: "Order placing failed.",
+                            });
+                          }
+                        }}
+                        okText="Yes"
+                        cancelText="No"
+                        okButtonProps={{ size: "large" }}
+                        cancelButtonProps={{ size: "large" }}
+                      >
+                        <Button type="text" size="small">
+                          Sell
+                        </Button>
+                      </Popconfirm>
+                    }
+                  />
+                </Col>
+              ))}
+          </>
+        )}
       </Row>{" "}
     </div>
   );
