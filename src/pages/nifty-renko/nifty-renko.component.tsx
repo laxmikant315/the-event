@@ -139,15 +139,6 @@ const NiftyRenko = () => {
         <TechIndexChart data={techIndex} isMobile={isMobile} />
       </Modal>
 
-      <Button
-        type="text"
-        size="small"
-        target="_blank"
-        href={`https://in.tradingview.com/chart/i6VwIssE/?symbol=NSE%3A${"NIFTY"}`}
-      >
-        <LineChartOutlined />
-      </Button>
-
       {/* <Card size="small"> */}
       <span
         onClick={() => setVisible(true)}

@@ -67,6 +67,11 @@ const Alerts = () => {
           if (!selected.isInPositions) {
             selected.day_change = item.absoluteChange * selected.quantity;
             selected.day_change_percentage = item.change;
+          } else {
+            selected.day_change =
+              (item.lastPrice - selected.buy_price) * selected.quantity;
+            selected.day_change_percentage =
+              (item.lastPrice * 100) / selected.buy_price - 100;
           }
           const newData: any = [...data];
           newData[index] = selected;
@@ -266,53 +271,63 @@ const Alerts = () => {
               />
 
               {niftyValues && (
-                <Statistic
-                  title="Nifty 50"
-                  valueStyle={{
-                    fontSize: 13,
-                    width: 100,
-                    color: niftyValues.change > 0 ? "#5b9a5d" : "#e25f5b",
-                  }}
-                  valueRender={() => (
-                    <span
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <span>{niftyValues.lastPrice}</span>{" "}
-                      <span>
-                        ({niftyValues.change.toFixed(2)}
-                        %)
+                <a
+                  target="_blank"
+                  href={`https://in.tradingview.com/chart/i6VwIssE/?symbol=NSE%3A${"NIFTY"}`}
+                >
+                  <Statistic
+                    title="Nifty 50"
+                    valueStyle={{
+                      fontSize: 13,
+                      width: 100,
+                      color: niftyValues.change > 0 ? "#5b9a5d" : "#e25f5b",
+                    }}
+                    valueRender={() => (
+                      <span
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <span>{niftyValues.lastPrice}</span>{" "}
+                        <span>
+                          ({niftyValues.change.toFixed(2)}
+                          %)
+                        </span>
                       </span>
-                    </span>
-                  )}
-                />
+                    )}
+                  />
+                </a>
               )}
 
               {nifty500Values && (
-                <Statistic
-                  title="Nifty 500"
-                  valueStyle={{
-                    color: nifty500Values.change > 0 ? "#5b9a5d" : "#e25f5b",
-                    fontSize: 13,
-                    width: 100,
-                  }}
-                  valueRender={() => (
-                    <span
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <span> {nifty500Values.lastPrice} </span>{" "}
-                      <span>
-                        ({nifty500Values.change.toFixed(2)}
-                        %){" "}
+                <a
+                  target="_blank"
+                  href={`https://in.tradingview.com/chart/i6VwIssE/?symbol=NSE%3A${"CNX500"}`}
+                >
+                  <Statistic
+                    title="Nifty 500"
+                    valueStyle={{
+                      color: nifty500Values.change > 0 ? "#5b9a5d" : "#e25f5b",
+                      fontSize: 13,
+                      width: 100,
+                    }}
+                    valueRender={() => (
+                      <span
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <span> {nifty500Values.lastPrice} </span>{" "}
+                        <span>
+                          ({nifty500Values.change.toFixed(2)}
+                          %){" "}
+                        </span>
                       </span>
-                    </span>
-                  )}
-                />
+                    )}
+                  />
+                </a>
               )}
             </div>
           </Col>
