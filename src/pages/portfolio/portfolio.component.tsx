@@ -72,6 +72,9 @@ const Alerts = () => {
             selected.totalPnl = gap * selected.quantity;
 
             selected.day_change_percentage = item.change;
+            selected.change_percentage =
+              (selected.totalPnl * 100) /
+              (selected.buy_price * selected.quantity);
           } else {
             selected.day_change =
               (item.lastPrice - selected.buy_price) * selected.quantity;
