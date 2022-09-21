@@ -43,7 +43,6 @@ const Alerts = () => {
   const [nifty500Values, setNifty500Values] = useState<any>(null);
   useEffect(() => {
     const niftyWsData = wsData && wsData.find((x: any) => x.token === 256265);
-    console.log("niftyWsData", niftyWsData);
     if (niftyWsData) {
       setNiftyValues(niftyWsData);
     }

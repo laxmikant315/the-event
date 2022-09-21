@@ -76,7 +76,6 @@ const StockCard = ({ data, onfetch, descriptions, topLeftControls }: any) => {
 
   if (!data.pnl) {
     data["pnl"] = data.buyPrice - data.lastPrice;
-    console.log('data["pnl"] ', data["pnl"]);
   }
   const buyPrice = data.buy_price || data.buyPrice;
   if (data["pnl"] > 0) {
@@ -86,7 +85,6 @@ const StockCard = ({ data, onfetch, descriptions, topLeftControls }: any) => {
       -((buyPrice - currentPrice) * 100) /
       (buyPrice - (data.trail_stop_loss || data.stopLoss));
   }
-  console.log("progress", progress);
   return (
     <>
       <Card

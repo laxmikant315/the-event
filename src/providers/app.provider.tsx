@@ -75,7 +75,6 @@ const AppProvider = ({ children }: any) => {
     const token = encodeURIComponent(kiteToken.split(" ")[1]);
     const uid = moment().unix() * 1000;
     var wsUri = `wss://ws.zerodha.com/?api_key=kitefront&user_id=BV7667&enctoken=${token}&uid=${uid}&user-agent=kite3-web&version=3.0.3`;
-    console.log("wsUri", wsUri);
     // let output: any;
 
     function init() {
