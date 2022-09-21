@@ -59,12 +59,18 @@ const Alerts = () => {
         );
 
         if (selected) {
+          if (selected.symbol === "TNPETRO") {
+            console.log("TNPETRO ", selected, item);
+          }
           const index = data.findIndex(
             (x: any) => x.instrument_token === item.token
           );
           selected.last_price = item.lastPrice;
           if (!selected.isInPositions) {
             selected.day_change = item.absoluteChange * selected.quantity;
+            const gap = item.lastPrice - selected.buy_price;
+            selected.totalPnl = gap * selected.quantity;
+
             selected.day_change_percentage = item.change;
           } else {
             selected.day_change =
@@ -103,11 +109,11 @@ const Alerts = () => {
         data.map((x: any) => x.day_change).reduce((x: any, y: any) => x + y)
       );
       totalPnl = parseFloat(
-        data.map((x: any) => x.pnl).reduce((x: any, y: any) => x + y)
+        data.map((x: any) => x.totalPnl).reduce((x: any, y: any) => x + y)
       );
       if (orginalDetails) {
-        const diff = dayPnl - orginalDetails.dayPnl;
-        totalPnl = totalPnl + diff;
+        // const diff = dayPnl - orginalDetails.dayPnl;
+        // totalPnl = totalPnl + diff;
 
         dayPnlPer = (dayPnl / totalInvestment) * 100;
         totalPnlPer = (totalPnl / totalInvestment) * 100;

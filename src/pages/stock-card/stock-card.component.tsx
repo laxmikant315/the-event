@@ -51,23 +51,23 @@ const StockCard = ({ data, onfetch, descriptions, topLeftControls }: any) => {
       })();
     }
   }, [isModalVisible]);
-  const [totalPnl, setTotalPnl] = useState(0);
+  // const [totalPnl, setTotalPnl] = useState(0);
   useEffect(() => {
-    if (
-      orginalDetails &&
-      orginalDetails.dayPnlList &&
-      orginalDetails.dayPnlList.length
-    ) {
-      const original_day_change_Stock = orginalDetails.dayPnlList.find(
-        (x: any) => x.symbol === data.symbol
-      );
-      if (original_day_change_Stock) {
-        const diff = data.day_change - original_day_change_Stock.day_change;
-        setTotalPnl(data.pnl + diff);
-      } else {
-        setTotalPnl(data.pnl);
-      }
-    }
+    // if (
+    //   orginalDetails &&
+    //   orginalDetails.dayPnlList &&
+    //   orginalDetails.dayPnlList.length
+    // ) {
+    //   const original_day_change_Stock = orginalDetails.dayPnlList.find(
+    //     (x: any) => x.symbol === data.symbol
+    //   );
+    //   if (original_day_change_Stock) {
+    //     const diff = data.day_change - original_day_change_Stock.day_change;
+    //     setTotalPnl(data.pnl + diff);
+    //   } else {
+    //     setTotalPnl(data.pnl);
+    //   }
+    // }
   }, [data]);
   const isMobile = mobileCheck();
 
@@ -180,9 +180,11 @@ const StockCard = ({ data, onfetch, descriptions, topLeftControls }: any) => {
                 >
                   <LineChartOutlined />
                 </Button>
-                {totalPnl && data.change_percentage && (
-                  <span style={{ color: totalPnl > 0 ? "#73d13d" : "#ff4d4f" }}>
-                    {totalPnl.toFixed(2)}
+                {data.totalPnl && data.change_percentage && (
+                  <span
+                    style={{ color: data.totalPnl > 0 ? "#73d13d" : "#ff4d4f" }}
+                  >
+                    {data.totalPnl.toFixed(2)}
                     <small>{` (${data.change_percentage.toFixed(2)}%)`}</small>
                   </span>
                 )}
