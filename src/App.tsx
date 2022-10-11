@@ -5,6 +5,7 @@ import {
   EyeOutlined,
   DollarCircleOutlined,
   DotChartOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
 import Alerts from "./pages/alerts/alerts.component";
 import Portfolio from "./pages/portfolio/portfolio.component";
@@ -24,6 +25,7 @@ import { useEffect, useState } from "react";
 import Login from "./pages/login/login.component";
 import AppProvider from "./providers/app.provider";
 import { LoadInterceptor } from "./helpers/interceptor";
+import KiteLogin from "./pages/kite-login/kite-login.component";
 const { Header, Content, Footer, Sider } = Layout;
 const App = () => {
   return (
@@ -77,6 +79,11 @@ const App = () => {
                         Report
                       </NavLink>
                     </Menu.Item>
+                    <Menu.Item key="7" icon={<UserOutlined />}>
+                      <NavLink to="/kiteLogin" activeClassName="active">
+                        Kite Login
+                      </NavLink>
+                    </Menu.Item>
                   </Menu>
                 </Sider>
                 <Layout>
@@ -120,6 +127,11 @@ const App = () => {
                           component={Notifications}
                         ></Route>
                         <Route exact path="/report" component={Report}></Route>
+                        <Route
+                          exact
+                          path="/kiteLogin"
+                          component={KiteLogin}
+                        ></Route>
                       </Switch>
                     </div>
                   </Content>
