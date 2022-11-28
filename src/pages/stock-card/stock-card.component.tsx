@@ -23,7 +23,7 @@ import BoxPlotTwoTone from "@ant-design/icons/lib/icons/BoxPlotTwoTone";
 import TechIndicator from "../../components/tech-indicator.component";
 import { mobileCheck } from "../../helpers/util";
 import { AppContext } from "../../providers/app.provider";
-const serverUrl = process.env.REACT_APP_SERVER_URL + "/main";
+const serverUrl = process.env.REACT_APP_SERVER_URL + "/api/v1/main";
 
 const StockCard = ({ data, onfetch, descriptions, topLeftControls }: any) => {
   // const [data, setData] = useState(dataFromProps);

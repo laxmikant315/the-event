@@ -36,7 +36,8 @@ import TechIndexChart from "../../components/tech-index-chart.component";
 import { mobileCheck } from "../../helpers/util";
 import { AppContext } from "../../providers/app.provider";
 
-const serverUrl = process.env.REACT_APP_SERVER_URL + "/main";
+const appUrl = process.env.REACT_APP_SERVER_URL;
+const serverUrl = appUrl + "/api/v1/main";
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (payload && payload.length) {
@@ -194,7 +195,7 @@ const NiftyRenko = () => {
               size="small"
               target="_blank"
               style={{ margin: "0 10px" }}
-              href={`https://trademachine.herokuapp.com/api/v1/main/scanNifty`}
+              href={`${serverUrl}/scanNifty`}
             >
               Scan Nifty
             </Button>
@@ -203,7 +204,7 @@ const NiftyRenko = () => {
               size="small"
               target="_blank"
               style={{ margin: "0 10px" }}
-              href={`https://trademachine.herokuapp.com/api/v1/main/scanForMl`}
+              href={`${serverUrl}/scanForMl`}
             >
               Scan Stocks
             </Button>
@@ -212,7 +213,7 @@ const NiftyRenko = () => {
               size="small"
               target="_blank"
               style={{ margin: "0 10px" }}
-              href={`https://trademachine.herokuapp.com/api/v1/main/updateStocks/PORTFOLIO`}
+              href={`${serverUrl}/updateStocks/PORTFOLIO`}
             >
               Update Portfolio
             </Button>
@@ -221,7 +222,7 @@ const NiftyRenko = () => {
               size="small"
               target="_blank"
               style={{ margin: "0 10px" }}
-              href={`https://trademachine.herokuapp.com/api/v1/main/updateStocks/ALERT`}
+              href={`${serverUrl}/updateStocks/ALERT`}
             >
               Update Alerts
             </Button>
@@ -230,7 +231,7 @@ const NiftyRenko = () => {
               size="small"
               target="_blank"
               style={{ margin: "0 10px" }}
-              href={`https://trademachine.herokuapp.com/api/v1/main/updateStocks/BUY`}
+              href={`${serverUrl}/updateStocks/BUY`}
             >
               Look for buy
             </Button>

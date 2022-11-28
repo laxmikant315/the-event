@@ -3,7 +3,7 @@ import axios from "axios";
 import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
 import { AppContext } from "../../providers/app.provider";
-const serverUrl = process.env.REACT_APP_SERVER_URL + "/auth";
+const serverUrl = process.env.REACT_APP_SERVER_URL + "/api/v1/auth";
 
 const Login: React.FC = () => {
   const { token, setToken } = useContext(AppContext);

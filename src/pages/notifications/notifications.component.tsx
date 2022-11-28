@@ -18,7 +18,7 @@ import moment from "moment";
 import StockCard from "../stock-card/stock-card.component";
 import AlertStockCard from "../alerts/alerts-stock-card.component";
 import { Input } from "antd";
-const serverUrl = process.env.REACT_APP_SERVER_URL + "/main";
+const serverUrl = process.env.REACT_APP_SERVER_URL + "/api/v1/main";
 
 const { Search } = Input;
 

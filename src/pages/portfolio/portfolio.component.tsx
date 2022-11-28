@@ -19,7 +19,7 @@ import NiftyRenko from "../nifty-renko/nifty-renko.component";
 import { AppContext } from "../../providers/app.provider";
 import { useHistory } from "react-router-dom";
 
-const serverUrl = process.env.REACT_APP_SERVER_URL + "/main";
+const serverUrl = process.env.REACT_APP_SERVER_URL + "/api/v1/main";
 
 const Alerts = () => {
   const [data, setData] = useState<any>([]);

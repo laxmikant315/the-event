@@ -1,7 +1,7 @@
 import { Button, Card, Form, Input, message } from "antd";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
-const serverUrl = process.env.REACT_APP_SERVER_URL + "/main";
+const serverUrl = process.env.REACT_APP_SERVER_URL + "/api/v1/main";
 
 const KiteLogin = () => {
   const [loading, setLoading] = useState(false);

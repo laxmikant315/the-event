@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-const serverUrl = process.env.REACT_APP_SERVER_URL + "/auth";
+const serverUrl = process.env.REACT_APP_SERVER_URL + "/api/v1/auth";
 
 export const LoadInterceptor = () => {
   const history = useHistory();

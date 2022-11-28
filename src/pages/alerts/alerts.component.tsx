@@ -28,7 +28,7 @@ import TechIndexChart from "../../components/tech-index-chart.component";
 import Indicator from "../indicator/indicator.component";
 import StockCard from "../stock-card/stock-card.component";
 import AlertStockCard from "./alerts-stock-card.component";
-const serverUrl = process.env.REACT_APP_SERVER_URL + "/main";
+const serverUrl = process.env.REACT_APP_SERVER_URL + "/api/v1/main";
 
 // const StockCard1 = ({
 //   data: dataFromProps,
