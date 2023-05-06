@@ -77,3 +77,13 @@
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
 }
+
+.neonGreenTxt{
+  color: #00ff7f; 
+  text-shadow: 0 0 3px #00ff7f, 0 0 8px #00ff7f, 0 0 15px #00ff7f, 0 0 25px #00ff7f; 
+}
+
+.neonRedTxt {
+  color: #fb2f2f;
+  text-shadow: 0 0 3px #9c0000, 0 0 8px #9c0000, 0 0 15px #9c0000, 0 0 25px #9c0000;
+}

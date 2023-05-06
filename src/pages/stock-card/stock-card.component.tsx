@@ -140,7 +140,18 @@ const StockCard = ({ data, onfetch, descriptions, topLeftControls }: any) => {
                       if (isMobile) setIsTechIndexVisible(true);
                     }}
                   >
-                    &nbsp;{data.symbol}
+                    &nbsp;
+                    <span
+                      className={
+                        data.prediction === "UP"
+                          ? "neonGreenTxt"
+                          : data.prediction === "DOWN"
+                          ? "neonRedTxt"
+                          : "normalTxt"
+                      }
+                    >
+                      {data.symbol}
+                    </span>
                     {"  "}
                     {data.isInPositions && (
                       <StarTwoTone
