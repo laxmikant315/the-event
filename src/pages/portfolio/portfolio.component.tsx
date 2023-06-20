@@ -112,7 +112,7 @@ const Alerts = () => {
         data.map((x: any) => x.day_change).reduce((x: any, y: any) => x + y)
       );
       totalPnl = parseFloat(
-        data.map((x: any) => x.totalPnl).reduce((x: any, y: any) => x + y)
+        data.map((x: any) => x.pnl).reduce((x: any, y: any) => x + y)
       );
       if (orginalDetails) {
         // const diff = dayPnl - orginalDetails.dayPnl;

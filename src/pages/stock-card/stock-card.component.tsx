@@ -150,7 +150,7 @@ const StockCard = ({ data, onfetch, descriptions, topLeftControls }: any) => {
                           : "normalTxt"
                       }
                     >
-                      {data.symbol}
+                      {data.symbol} {data.status === "block" ? " !!!" : ""}
                     </span>
                     {"  "}
                     {data.isInPositions && (
