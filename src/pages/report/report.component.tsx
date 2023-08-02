@@ -138,7 +138,7 @@ const Report = () => {
                               +text.split(" ")[1] > 0 ? "green" : "red";
                             return (
                               <Tag color={color} key={text}>
-                                {shortAmount(text)}
+                                {"₹ " + shortAmount(text)}
                               </Tag>
                             );
                           },
