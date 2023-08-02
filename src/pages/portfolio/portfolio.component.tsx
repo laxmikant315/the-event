@@ -21,6 +21,24 @@ import { useHistory } from "react-router-dom";
 
 const serverUrl = process.env.REACT_APP_SERVER_URL + "/api/v1/main";
 
+export const shortAmount = (amount: number) => {
+  if (amount < 1000) {
+    return amount;
+  } else {
+    let result = amount / 1000;
+    if (result < 100) {
+      return result.toFixed(2) + " K";
+    } else {
+      result = amount / 100000;
+      if (result < 100) {
+        return result.toFixed(2) + " L";
+      } else {
+        result = amount / 10000000;
+        return result.toFixed(2) + " CR";
+      }
+    }
+  }
+};
 const Alerts = () => {
   const [data, setData] = useState<any>([]);
   const [index, setIndex] = useState(0);
@@ -194,6 +212,7 @@ const Alerts = () => {
       }
     }, 300000);
   }, []);
+
   const history = useHistory();
   return (
     <div
@@ -248,7 +267,7 @@ const Alerts = () => {
                   color: details.dayPnl > 0 ? "#5b9a5d" : "#e25f5b",
                   fontSize: 13,
                 }}
-                value={details.dayPnl?.toFixed(2)}
+                value={shortAmount(details.dayPnl)}
                 precision={2}
                 prefix="₹"
                 suffix={<small>{`(${details.dayPnlPer?.toFixed(2)}%)`}</small>}
@@ -256,7 +275,7 @@ const Alerts = () => {
 
               <Statistic
                 title="Total P&L"
-                value={details.totalPnl?.toFixed(2)}
+                value={shortAmount(details.totalPnl)}
                 valueStyle={{
                   color: details.totalPnl > 0 ? "#5b9a5d" : "#e25f5b",
                   fontSize: 13,
@@ -270,7 +289,7 @@ const Alerts = () => {
 
               <Statistic
                 title="Available Fund"
-                value={availableMargin?.toFixed(2)}
+                value={shortAmount(availableMargin)}
                 valueStyle={{
                   fontSize: 13,
                 }}
@@ -425,7 +444,7 @@ const Alerts = () => {
                         <Col span={8}>
                           <Statistic
                             title="Invested"
-                            value={(item.buy_price * item.quantity).toFixed(2)}
+                            value={shortAmount(item.buy_price * item.quantity)}
                             precision={0}
                             valueStyle={{ fontSize: 14 }}
                             // valueStyle={{ color: "#3f8600" }}
@@ -435,7 +454,7 @@ const Alerts = () => {
                         <Col span={8}>
                           <Statistic
                             title="Value"
-                            value={(item.last_price * item.quantity).toFixed(2)}
+                            value={shortAmount(item.last_price * item.quantity)}
                             precision={0}
                             prefix={"₹"}
                             valueStyle={{ fontSize: 14 }}

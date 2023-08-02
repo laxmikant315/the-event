@@ -24,6 +24,7 @@ import StockCard from "../stock-card/stock-card.component";
 import AlertStockCard from "../alerts/alerts-stock-card.component";
 import type { RadioChangeEvent } from "antd";
 import Chart from "./chart.component";
+import { shortAmount } from "../portfolio/portfolio.component";
 const serverUrl = process.env.REACT_APP_SERVER_URL + "/api/v1/main";
 const Report = () => {
   const [data, setData] = useState<any>({});
@@ -137,7 +138,7 @@ const Report = () => {
                               +text.split(" ")[1] > 0 ? "green" : "red";
                             return (
                               <Tag color={color} key={text}>
-                                {text}
+                                {shortAmount(text)}
                               </Tag>
                             );
                           },
