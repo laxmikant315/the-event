@@ -21,9 +21,12 @@ import { useHistory } from "react-router-dom";
 
 const serverUrl = process.env.REACT_APP_SERVER_URL + "/api/v1/main";
 
-export const shortAmount = (amount: number) => {
+export const shortAmount = (amount: any) => {
+  if (typeof amount === "string") {
+    amount = +amount.replace(/,/g, "");
+  }
   if (amount < 1000) {
-    return amount;
+    return amount.toFixed(2);
   } else {
     let result = amount / 1000;
     if (result < 100) {
@@ -246,7 +249,7 @@ const Alerts = () => {
                 valueStyle={{
                   fontSize: 13,
                 }}
-                value={details.totalInvestment}
+                value={shortAmount(details.totalInvestment)}
                 precision={2}
                 prefix="₹"
               />
@@ -256,7 +259,7 @@ const Alerts = () => {
                 valueStyle={{
                   fontSize: 13,
                 }}
-                value={details.currentValue}
+                value={shortAmount(details.currentValue)}
                 precision={2}
                 prefix="₹"
               />
