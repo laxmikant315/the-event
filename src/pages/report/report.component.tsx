@@ -172,7 +172,7 @@ const Report = () => {
                                 key={text}
                                 style={{ fontSize: 25, padding: 10 }}
                               >
-                                {"₹ " + text}
+                                {"₹ " + shortAmount(text)}
                               </Tag>
                             );
                           }}

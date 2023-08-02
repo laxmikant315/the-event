@@ -23,7 +23,7 @@ const serverUrl = process.env.REACT_APP_SERVER_URL + "/api/v1/main";
 
 export const shortAmount = (amount: any) => {
   if (typeof amount === "string") {
-    amount = +amount.replace(/,/g, "");
+    amount = +amount.replace(/,/g, "").replace(/₹/g, "").replace(/ /g, "");
   }
   if (amount < 1000) {
     return amount.toFixed(2);
