@@ -27,7 +27,7 @@ const App = () => {
   const onLogout = () => {
     localStorage.removeItem("machine_token");
     localStorage.removeItem("machine_refresh_token");
-    window.location = "/";
+    location.pathname = "/";
   };
   return (
     <div
