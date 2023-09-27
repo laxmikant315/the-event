@@ -27,6 +27,7 @@ const App = () => {
   const onLogout = () => {
     localStorage.removeItem("machine_token");
     localStorage.removeItem("machine_refresh_token");
+    window.location = "/";
   };
   return (
     <div
@@ -84,8 +85,10 @@ const App = () => {
                         Kite Login
                       </NavLink>
                     </Menu.Item>
-                    <Menu.Item key="8" icon={<UserOutlined />}>
-                      <Button onClick={onLogout}>Logout</Button>
+                    <Menu.Item key="8">
+                      <Button type="link" onClick={onLogout}>
+                        Logout
+                      </Button>
                     </Menu.Item>
                   </Menu>
                 </Sider>
