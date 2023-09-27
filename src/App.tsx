@@ -24,6 +24,10 @@ import { LoadInterceptor } from "./helpers/interceptor";
 import KiteLogin from "./pages/kite-login/kite-login.component";
 const { Content, Sider } = Layout;
 const App = () => {
+  const onLogout = () => {
+    localStorage.removeItem("machine_token");
+    localStorage.removeItem("machine_refresh_token");
+  };
   return (
     <div
       style={{
@@ -81,9 +85,7 @@ const App = () => {
                       </NavLink>
                     </Menu.Item>
                     <Menu.Item key="8" icon={<UserOutlined />}>
-                      <NavLink to="/login" activeClassName="active">
-                        Logout
-                      </NavLink>
+                      <Button onClick={onLogout}>Logout</Button>
                     </Menu.Item>
                   </Menu>
                 </Sider>

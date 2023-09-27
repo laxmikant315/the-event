@@ -1,16 +1,13 @@
 import { Button, Checkbox, Form, Input } from "antd";
 import axios from "axios";
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
 import { AppContext } from "../../providers/app.provider";
 const serverUrl = process.env.REACT_APP_SERVER_URL + "/api/v1/auth";
 
 const Login: React.FC = () => {
   const { token, setToken } = useContext(AppContext);
-  useEffect(() => {
-    localStorage.removeItem("machine_token");
-    localStorage.removeItem("machine_refresh_token");
-  }, []);
+
   const onFinish = async (values: any) => {
     console.log("Success:", values);
     const { email, password } = values;
