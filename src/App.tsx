@@ -1,5 +1,5 @@
 import "./App.css";
-import { Layout, Menu } from "antd";
+import { Button, Layout, Menu } from "antd";
 import {
   NotificationOutlined,
   EyeOutlined,
@@ -20,14 +20,18 @@ import {
 } from "react-router-dom";
 import Notifications from "./pages/notifications/notifications.component";
 import Report from "./pages/report/report.component";
-import NiftyRenko from "./pages/nifty-renko/nifty-renko.component";
-import { useEffect, useState } from "react";
 import Login from "./pages/login/login.component";
 import AppProvider from "./providers/app.provider";
 import { LoadInterceptor } from "./helpers/interceptor";
 import KiteLogin from "./pages/kite-login/kite-login.component";
-const { Header, Content, Footer, Sider } = Layout;
+const { Content, Sider } = Layout;
 const App = () => {
+  const history = useHistory();
+  const onLogout = () => {
+    localStorage.removeItem("machine_token");
+    localStorage.removeItem("machine_refresh_token");
+    history.push("/login");
+  };
   return (
     <div
       style={{
@@ -133,6 +137,7 @@ const App = () => {
                           component={KiteLogin}
                         ></Route>
                       </Switch>
+                      <Button onClick={onLogout}>Logout</Button>
                     </div>
                   </Content>
                   {/* <Footer style={{ textAlign: "center" }}>Teksa ©2021</Footer> */}
