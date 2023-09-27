@@ -13,10 +13,8 @@ import Portfolio from "./pages/portfolio/portfolio.component";
 import {
   BrowserRouter as Router,
   Route,
-  Link,
   Switch,
   NavLink,
-  useHistory,
 } from "react-router-dom";
 import Notifications from "./pages/notifications/notifications.component";
 import Report from "./pages/report/report.component";
@@ -26,12 +24,6 @@ import { LoadInterceptor } from "./helpers/interceptor";
 import KiteLogin from "./pages/kite-login/kite-login.component";
 const { Content, Sider } = Layout;
 const App = () => {
-  const history = useHistory();
-  const onLogout = () => {
-    localStorage.removeItem("machine_token");
-    localStorage.removeItem("machine_refresh_token");
-    history.push("/login");
-  };
   return (
     <div
       style={{
@@ -88,6 +80,11 @@ const App = () => {
                         Kite Login
                       </NavLink>
                     </Menu.Item>
+                    <Menu.Item key="8" icon={<UserOutlined />}>
+                      <NavLink to="/login" activeClassName="active">
+                        Logout
+                      </NavLink>
+                    </Menu.Item>
                   </Menu>
                 </Sider>
                 <Layout>
@@ -137,7 +134,6 @@ const App = () => {
                           component={KiteLogin}
                         ></Route>
                       </Switch>
-                      <Button onClick={onLogout}>Logout</Button>
                     </div>
                   </Content>
                   {/* <Footer style={{ textAlign: "center" }}>Teksa ©2021</Footer> */}
