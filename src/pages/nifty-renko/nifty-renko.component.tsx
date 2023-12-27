@@ -62,6 +62,7 @@ const NiftyRenko = () => {
   const [data, setData] = useState<any>([]);
   const [off, setOff] = useState();
   const [latestRenko, setLatestRenko] = useState(0);
+  const [renkoPower, setRenkoPower] = useState(null);
   const [techIndex, setTechIndex] = useState("");
   const { setAvailableMargin, setKiteToken } = useContext(AppContext);
 
@@ -75,6 +76,8 @@ const NiftyRenko = () => {
         value: rawData[x],
       }));
       setTechIndex(alerts.data.nifty_tech_index);
+      setRenkoPower(alerts.data.nifty_renko_power);
+
       setAvailableMargin(alerts.data.availableMargin);
       setKiteToken(alerts.data.token);
       setAllData(allData);
@@ -157,6 +160,16 @@ const NiftyRenko = () => {
           style={{ backgroundColor: latestRenko > 0 ? "#3f8600" : "#cf1322" }}
         >
           {latestRenko}
+          <small
+            style={{
+              fontSize: 10,
+              fontStyle: "italic",
+              fontFamily: "math",
+              marginLeft: 3,
+            }}
+          >
+            ({renkoPower})
+          </small>
         </Button>
       </span>
       {/* </Card> */}
