@@ -303,7 +303,7 @@ const Alerts = () => {
               {niftyValues && (
                 <a
                   target="_blank"
-                  href={`https://in.tradingview.com/chart/i6VwIssE/?symbol=NSE%3A${"NIFTY"}`}
+                  href={`https://in.tradingview.com/chart/?symbol=NSE%3A${"NIFTY"}`}
                 >
                   <Statistic
                     title="Nifty 50"
@@ -333,7 +333,7 @@ const Alerts = () => {
               {nifty500Values && (
                 <a
                   target="_blank"
-                  href={`https://in.tradingview.com/chart/i6VwIssE/?symbol=NSE%3A${"CNX500"}`}
+                  href={`https://in.tradingview.com/chart/?symbol=NSE%3A${"CNX500"}`}
                 >
                   <Statistic
                     title="Nifty 500"

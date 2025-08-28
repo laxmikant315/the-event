@@ -188,7 +188,7 @@ const StockCard = ({ data, onfetch, descriptions, topLeftControls }: any) => {
                   type="text"
                   size="small"
                   target="_blank"
-                  href={`https://in.tradingview.com/chart/i6VwIssE/?symbol=NSE%3A${data.symbol}`}
+                  href={`https://in.tradingview.com/chart/?symbol=NSE%3A${data.symbol}`}
                 >
                   <LineChartOutlined />
                 </Button>
