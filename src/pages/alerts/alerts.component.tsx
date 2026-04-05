@@ -1,33 +1,34 @@
+import { ReloadOutlined } from "@ant-design/icons";
+import BarChartOutlined from "@ant-design/icons/lib/icons/BarChartOutlined";
+import LineChartOutlined from "@ant-design/icons/lib/icons/LineChartOutlined";
 import {
-  Badge,
-  Button,
-  Card,
-  Col,
-  InputNumber,
-  Modal,
-  notification,
-  Popover,
-  Progress,
-  Row,
-  Skeleton,
-  Space,
-  Spin,
-  Statistic,
-  Switch,
+	Badge,
+	Button,
+	Card,
+	Col,
+	Descriptions,
+	InputNumber,
+	Modal,
+	notification,
+	Popover,
+	Progress,
+	Row,
+	Skeleton,
+	Space,
+	Spin,
+	Statistic,
+	Switch,
 } from "antd";
+import Title from "antd/lib/typography/Title";
 import axios from "axios";
 import moment from "moment";
 import { useEffect, useState } from "react";
-import { Descriptions } from "antd";
-import Title from "antd/lib/typography/Title";
-import { ReloadOutlined } from "@ant-design/icons";
-import LineChartOutlined from "@ant-design/icons/lib/icons/LineChartOutlined";
-import BarChartOutlined from "@ant-design/icons/lib/icons/BarChartOutlined";
-import { LineChart, Line, CartesianGrid, XAxis, YAxis } from "recharts";
+import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 import TechIndexChart from "../../components/tech-index-chart.component";
 import Indicator from "../indicator/indicator.component";
 import StockCard from "../stock-card/stock-card.component";
 import AlertStockCard from "./alerts-stock-card.component";
+
 const serverUrl = process.env.REACT_APP_SERVER_URL + "/api/v1/main";
 
 // const StockCard1 = ({
@@ -183,133 +184,133 @@ const serverUrl = process.env.REACT_APP_SERVER_URL + "/api/v1/main";
 // };
 
 const Alerts = () => {
-  const [data, setData] = useState([]);
-  const [index, setIndex] = useState(0);
-  const [refresh, setRefresh] = useState(0);
-  const [isUpdate, setIsUpdate] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [dates, setDates] = useState<any>([]);
-  useEffect(() => {
-    (async () => {
-      setLoading(true);
-      const alerts = await axios.get(
-        `${serverUrl}/alerts/${index}/${isUpdate ? "True" : "False"}`,
-        { timeout: 100000 }
-      );
-      const datesSet: any = new Set(
-        alerts.data.map((x: any) => x["date_created"].slice(0, 10))
-      );
-      setDates([...datesSet]);
-      setData(alerts.data);
-      setLoading(false);
-    })();
-  }, [index, isUpdate, refresh]);
-  return (
-    <div
-      className="site-card-wrapper"
-      style={{ height: "100%", display: "flex", flexDirection: "column" }}
-    >
-      <Row justify="space-between" style={{ marginBottom: 20 }}>
-        <Col>
-          <Title level={3} style={{ marginLeft: 20 }}>
-            Watchlist
-          </Title>
-        </Col>
-        <Col>
-          <Space>
-            <Button
-              type="text"
-              icon={<ReloadOutlined />}
-              loading={loading}
-              onClick={() => setRefresh(refresh + 1)}
-            />
-            <Switch
-              checkedChildren="Sync On"
-              unCheckedChildren="Sync Off"
-              defaultChecked={isUpdate}
-              loading={loading}
-              onClick={() => setIsUpdate(!isUpdate)}
-            />
+	const [data, setData] = useState([]);
+	const [index, setIndex] = useState(0);
+	const [refresh, setRefresh] = useState(0);
+	const [isUpdate, setIsUpdate] = useState(false);
+	const [loading, setLoading] = useState(false);
+	const [dates, setDates] = useState<any>([]);
+	useEffect(() => {
+		(async () => {
+			setLoading(true);
+			const alerts = await axios.get(
+				`${serverUrl}/alerts/${index}/${isUpdate ? "True" : "False"}`,
+				{ timeout: 100000 },
+			);
+			const datesSet: any = new Set(
+				alerts.data.map((x: any) => x["date_created"].slice(0, 10)),
+			);
+			setDates([...datesSet]);
+			setData(alerts.data);
+			setLoading(false);
+		})();
+	}, [index, isUpdate, refresh]);
+	return (
+		<div
+			className="site-card-wrapper"
+			style={{ height: "100%", display: "flex", flexDirection: "column" }}
+		>
+			<Row justify="space-between" style={{ marginBottom: 20 }}>
+				<Col>
+					<Title level={3} style={{ marginLeft: 20 }}>
+						Watchlist
+					</Title>
+				</Col>
+				<Col>
+					<Space>
+						<Button
+							type="text"
+							icon={<ReloadOutlined />}
+							loading={loading}
+							onClick={() => setRefresh(refresh + 1)}
+						/>
+						<Switch
+							checkedChildren="Sync On"
+							unCheckedChildren="Sync Off"
+							defaultChecked={isUpdate}
+							loading={loading}
+							onClick={() => setIsUpdate(!isUpdate)}
+						/>
 
-            <Button onClick={() => setIndex(index - 1)} disabled={index <= 0}>
-              Prev
-            </Button>
-            <Button onClick={() => setIndex(index + 1)}>Next</Button>
-          </Space>
-        </Col>
-      </Row>
-      <Row
-        justify="center"
-        gutter={20}
-        style={{ overflow: "auto", height: "100%" }}
-      >
-        <Col lg={24}>
-          {loading ? (
-            <Skeleton />
-          ) : (
-            <>
-              {dates &&
-                dates.map((date: string) => {
-                  const filtered = data.filter(
-                    (x: any) => x["date_created"].slice(0, 10) === date
-                  );
-                  return (
-                    <Row
-                      justify="center"
-                      style={{
-                        margin: 20,
-                        background: "#00000047",
-                        borderRadius: 10,
-                      }}
-                    >
-                      <Col>
-                        <Title level={5}>
-                          {" "}
-                          {moment(date).format("DD MMM YYYY")}
-                        </Title>
-                      </Col>
-                      <Col lg={24} xs={24} sm={24} xl={24}>
-                        <Row
-                          gutter={16}
-                          justify="center"
-                          style={{ overflow: "auto", height: "100%" }}
-                        >
-                          {filtered.map(
-                            (item: any) => (
-                              <Col
-                                xs={24}
-                                sm={12}
-                                md={12}
-                                lg={12}
-                                xl={6}
-                                span={8}
-                              >
-                                <AlertStockCard
-                                  item={item}
-                                  index={index}
-                                  setRefresh={setRefresh}
-                                  refresh={refresh}
-                                />
-                              </Col>
-                            )
-                            // <StockCard
-                            //   index={index}
-                            //   data={item}
-                            //   setRefresh={setRefresh}
-                            //   refresh={refresh}
-                            // />
-                          )}
-                        </Row>
-                      </Col>
-                    </Row>
-                  );
-                })}
-            </>
-          )}
-        </Col>
-      </Row>
-    </div>
-  );
+						<Button onClick={() => setIndex(index - 1)} disabled={index <= 0}>
+							Prev
+						</Button>
+						<Button onClick={() => setIndex(index + 1)}>Next</Button>
+					</Space>
+				</Col>
+			</Row>
+			<Row
+				justify="center"
+				gutter={20}
+				style={{ overflow: "auto", height: "100%" }}
+			>
+				<Col lg={24}>
+					{loading ? (
+						<Skeleton />
+					) : (
+						<>
+							{dates &&
+								dates.map((date: string) => {
+									const filtered = data.filter(
+										(x: any) => x["date_created"].slice(0, 10) === date,
+									);
+									return (
+										<Row
+											justify="center"
+											style={{
+												margin: 20,
+												background: "#00000047",
+												borderRadius: 10,
+											}}
+										>
+											<Col>
+												<Title level={5}>
+													{" "}
+													{moment(date).format("DD MMM YYYY")}
+												</Title>
+											</Col>
+											<Col lg={24} xs={24} sm={24} xl={24}>
+												<Row
+													gutter={16}
+													justify="center"
+													style={{ overflow: "auto", height: "100%" }}
+												>
+													{filtered.map(
+														(item: any) => (
+															<Col
+																xs={24}
+																sm={12}
+																md={12}
+																lg={12}
+																xl={6}
+																span={8}
+															>
+																<AlertStockCard
+																	item={item}
+																	index={index}
+																	setRefresh={setRefresh}
+																	refresh={refresh}
+																/>
+															</Col>
+														),
+														// <StockCard
+														//   index={index}
+														//   data={item}
+														//   setRefresh={setRefresh}
+														//   refresh={refresh}
+														// />
+													)}
+												</Row>
+											</Col>
+										</Row>
+									);
+								})}
+						</>
+					)}
+				</Col>
+			</Row>
+		</div>
+	);
 };
 
 export default Alerts;

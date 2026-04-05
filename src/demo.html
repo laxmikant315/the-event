@@ -87,7 +87,7 @@
       }
       processLazyPayload() {
         if (this.isConnected())
-          for (let e of this.lazyPayload)
+          for (const e of this.lazyPayload)
             this._send(e), this.lazyPayload.shift();
         else
           this.ws &&
@@ -108,7 +108,7 @@
             this.ws.readyState === this.ws.OPEN)
         )
           return;
-        let s = new n.a({
+        const s = new n.a({
           api_key: this.apiKey,
           user_id: this.userId,
           enctoken: this.encToken,
@@ -145,8 +145,8 @@
       }
       subscribe(e, t) {
         t = this.getTag(t);
-        let s = [];
-        for (let i of e)
+        const s = [];
+        for (const i of e)
           "number" !== typeof i ||
             isNaN(i) ||
             this.isElementInArray(this.subscribedTokens, i) ||
@@ -157,8 +157,8 @@
       }
       unsubscribe(e, t) {
         t = this.getTag(t);
-        let s = [];
-        for (let i of e)
+        const s = [];
+        for (const i of e)
           "number" !== typeof i ||
             isNaN(i) ||
             (this.deleteTokenTags(i, t),
@@ -170,8 +170,8 @@
       }
       setMode(e, t, s) {
         s = this.getTag(s);
-        let i = {};
-        for (let n of t) {
+        const i = {};
+        for (const n of t) {
           if (!this.isElementInArray(this.subscribedTokens, n)) {
             this.deleteTokenTags(n, s);
             continue;
@@ -179,20 +179,20 @@
           if (e === this.tokenTags[n].mode) continue;
           if ("number" !== typeof n || isNaN(n)) continue;
           this.updateTokenTags(n, e, s);
-          let t = this.getBestMode(n, e, s);
+          const t = this.getBestMode(n, e, s);
           t &&
             t !== this.tokenTags[n].mode &&
             (i[t] || (i[t] = []), i[t].push(n)),
             (this.tokenTags[n].mode = t);
         }
-        for (let n of Object.keys(i))
+        for (const n of Object.keys(i))
           this.send({ a: this.mSetMode, v: [n, i[n]] });
       }
       resubscribe() {
         if (0 === this.subscribedTokens.length) return;
-        let e = {},
+        const e = {},
           t = [];
-        for (let i of this.subscribedTokens)
+        for (const i of this.subscribedTokens)
           "number" !== typeof i ||
             isNaN(i) ||
             (t.push(i),
@@ -208,7 +208,7 @@
           (this.quoteMap[e] = new r()),
           i || (i = this.getQuoteTimeout),
           setTimeout(() => {
-            let t = this.quoteMap[e];
+            const t = this.quoteMap[e];
             t && (t.reject(), delete this.quoteMap[e]);
           }, 1e3 * i),
           this.send({
@@ -220,11 +220,11 @@
         );
       }
       isElementInArray(e, t) {
-        let s = e.filter((e) => e === t);
+        const s = e.filter((e) => e === t);
         return s.length > 0;
       }
       deleteSubscriptionToken(e) {
-        let t = this.subscribedTokens.indexOf(e);
+        const t = this.subscribedTokens.indexOf(e);
         t > -1 && this.subscribedTokens.splice(t, 1);
       }
       getTag(e) {
@@ -243,7 +243,7 @@
       }
       getBestMode(e, t, s) {
         if (s === this.defaultTokenTag) return t;
-        let i = Math.min.apply(
+        const i = Math.min.apply(
           Math,
           Object.keys(this.tokenTags[e].tags).map(
             (t) => this.tokenTags[e].tags[t]
@@ -255,7 +255,7 @@
         if (!this.isElementInArray(this.subscribedTokens, e)) return !1;
         if (t === this.defaultTokenTag) return !0;
         if (!this.tokenTags[e]) return !0;
-        let s = Object.keys(this.tokenTags[e].tags).filter((e) => e !== t);
+        const s = Object.keys(this.tokenTags[e].tags).filter((e) => e !== t);
         return !(s.length > 0);
       }
       triggerDisconnect() {
@@ -280,7 +280,7 @@
       setLazyDisconnect() {
         clearInterval(this.lazyDisconnectTimer),
           (this.lazyDisconnectTimer = setInterval(() => {
-            let e = 0 === this.subscribedTokens.length;
+            const e = 0 === this.subscribedTokens.length;
             e &&
               ((this.currentWsUrl = null),
               (this.isLazyInitialConnect = !1),
@@ -324,7 +324,7 @@
           r.length < 2 && (r = "0" + r),
           n.length < 2 && (n = "0" + n),
           o.length < 2 && (o = "0" + o);
-        let a = `${t}-${s}-${i} ${r}:${n}:${o}`;
+        const a = `${t}-${s}-${i} ${r}:${n}:${o}`;
         return a;
       }
       calculateChange(e) {
@@ -346,9 +346,9 @@
         );
       }
       parseBinary(e) {
-        let t = this.splitPackets(e),
+        const t = this.splitPackets(e),
           s = [];
-        for (let i of t) {
+        for (const i of t) {
           let e,
             t = this.buf2long(i.slice(0, 4)),
             n = 255 & t,
@@ -434,13 +434,13 @@
                 ) {
                   let t = 44;
                   184 === i.byteLength && (t = 64);
-                  let s = t + 120;
+                  const s = t + 120;
                   if (
                     ((e.mode = this.modeFull),
                     (e.depth = { buy: [], sell: [] }),
                     184 === i.byteLength)
                   ) {
-                    let t = this.buf2long(i.slice(44, 48));
+                    const t = this.buf2long(i.slice(44, 48));
                     (e.lastTradedTime =
                       t && t > 0 ? this.dateToString(new Date(1e3 * t)) : null),
                       (e.oi = this.buf2long(i.slice(48, 52))),
@@ -480,8 +480,8 @@
         } catch (n) {
           return;
         }
-        if (!t.hasOwnProperty("t") && !t.hasOwnProperty("type")) return;
-        let s = t.t || t.type,
+        if (!Object.hasOwn(t, "t") && !Object.hasOwn(t, "type")) return;
+        const s = t.t || t.type,
           i = t.p || t.data;
         switch (s) {
           case this.mAlert:
@@ -504,7 +504,7 @@
           case this.mClearCacheStr:
             if (i)
               try {
-                let e = JSON.parse(i);
+                const e = JSON.parse(i);
                 this.eventClearCache.trigger(e);
               } catch (n) {}
             else this.eventClearCache.trigger();
@@ -515,7 +515,7 @@
         }
       }
       processQuoteMessage(e, t) {
-        let s = this.quoteMap[e];
+        const s = this.quoteMap[e];
         s && (s.resolve(t), delete this.quoteMap[e]);
       }
       buf2long(e) {
@@ -541,15 +541,15 @@
     function testWebSocket() {
       websocket = new WebSocket(wsUri);
 
-      websocket.onopen = function (evt) {
+      websocket.onopen = (evt) => {
         onOpen(evt);
       };
 
-      websocket.onmessage = async function (evt) {
+      websocket.onmessage = async (evt) => {
         await onMessage(evt);
       };
 
-      websocket.onerror = function (evt) {
+      websocket.onerror = (evt) => {
         onError(evt);
       };
     }
