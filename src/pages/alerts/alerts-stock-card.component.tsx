@@ -15,7 +15,7 @@ import moment from "moment";
 import { useEffect, useState } from "react";
 import StockCard from "../stock-card/stock-card.component";
 
-const serverUrl = process.env.REACT_APP_SERVER_URL + "/api/v1/main";
+const serverUrl = `${process.env.REACT_APP_SERVER_URL}/api/v1/main`;
 
 export const getTechColor = (techIndex: number) => {
 	return `rgba(${techIndex > 50 ? 115 : 255}, ${techIndex > 50 ? 209 : 77}, ${
@@ -24,7 +24,7 @@ export const getTechColor = (techIndex: number) => {
 };
 const TopLetControls = ({ data: dataFromProps, refresh, setRefresh }: any) => {
 	const [data, setData] = useState(dataFromProps);
-	const { progress, last_price, techIndex } = JSON.parse(
+	const { techIndex } = JSON.parse(
 		data.additionalInfo || "{}",
 	);
 	const [orderLoading, setOrderLoading] = useState(false);
@@ -96,7 +96,7 @@ const TopLetControls = ({ data: dataFromProps, refresh, setRefresh }: any) => {
 					notification.error({
 						message: "Order Failed",
 						description:
-							order.data.reason == "low_margin"
+							order.data.reason === "low_margin"
 								? "Due to unsuffiecient margin, please add funds."
 								: "Order placing failed.",
 					});
@@ -145,11 +145,11 @@ const AlertStockCard = ({
 					},
 				);
 				setLoading(false);
-				if (alerts && alerts.data && alerts.data.length) {
+				if (alerts?.data?.length) {
 					setItem(alerts.data[0]);
 				} else {
 					notification.error({
-						message: "Alert ID " + alertId + " not found!!!",
+						message: `Alert ID ${alertId} not found!!!`,
 					});
 				}
 			}

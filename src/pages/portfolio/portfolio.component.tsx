@@ -1,5 +1,4 @@
 import ReloadOutlined from "@ant-design/icons/lib/icons/ReloadOutlined";
-import SyncOutlined from "@ant-design/icons/lib/icons/SyncOutlined";
 import {
 	Button,
 	Col,
@@ -19,7 +18,7 @@ import { AppContext } from "../../providers/app.provider";
 import NiftyRenko from "../nifty-renko/nifty-renko.component";
 import StockCard from "../stock-card/stock-card.component";
 
-const serverUrl = process.env.REACT_APP_SERVER_URL + "/api/v1/main";
+const serverUrl = `${process.env.REACT_APP_SERVER_URL}/api/v1/main`;
 
 export const shortAmount = (amount: any) => {
 	if (typeof amount === "string") {
@@ -30,26 +29,25 @@ export const shortAmount = (amount: any) => {
 	} else {
 		let result = amount / 1000;
 		if (result < 100) {
-			return result.toFixed(2) + " K";
+			return `${result.toFixed(2)} K`;
 		} else {
 			result = amount / 100000;
 			if (result < 100) {
-				return result.toFixed(2) + " L";
+				return `${result.toFixed(2)} L`;
 			} else {
 				result = amount / 10000000;
-				return result.toFixed(2) + " CR";
+				return `${result.toFixed(2)} CR`;
 			}
 		}
 	}
 };
 const Alerts = () => {
 	const [data, setData] = useState<any>([]);
-	const [index, setIndex] = useState(0);
+	const index = 0;
 	const [loading, setLoading] = useState(false);
 	const [refresh, setRefresh] = useState(0);
-	const [refreshAll, setRefreshAll] = useState(0);
+	const refreshAll = 0;
 	const btnRefresh = useRef<any>();
-	const btnRefreshAll = useRef<any>();
 
 	// const [isUpdate, setIsUpdate] = useState(true);
 	const [details, setDetails] = useState<any>(null);
@@ -63,17 +61,17 @@ const Alerts = () => {
 	const [niftyValues, setNiftyValues] = useState<any>(null);
 	const [nifty500Values, setNifty500Values] = useState<any>(null);
 	useEffect(() => {
-		const niftyWsData = wsData && wsData.find((x: any) => x.token === 256265);
+		const niftyWsData = wsData?.find((x: any) => x.token === 256265);
 		if (niftyWsData) {
 			setNiftyValues(niftyWsData);
 		}
 		const nifty500WsData =
-			wsData && wsData.find((x: any) => x.token === 268041);
+			wsData?.find((x: any) => x.token === 268041);
 		if (nifty500WsData) {
 			setNifty500Values(nifty500WsData);
 		}
 
-		if (data && data.length) {
+		if (data?.length) {
 			for (const item of wsData) {
 				const selected: any = data.find(
 					(x: any) => x.instrument_token === item.token,
@@ -118,7 +116,7 @@ const Alerts = () => {
 			totalPnl = 0,
 			dayPnlPer = 0,
 			totalPnlPer = 0;
-		if (data && data.length) {
+		if (data?.length) {
 			totalInvestment = parseFloat(
 				data
 					.map((x: any) => x.buy_price * x.quantity)
@@ -159,7 +157,7 @@ const Alerts = () => {
 			const alerts = await axios.get(`${serverUrl}/portfolio/False`);
 			let dayPnl = 0;
 			let dayPnlList = {};
-			if (alerts.data && alerts.data.length) {
+			if (alerts.data?.length) {
 				dayPnl = parseFloat(
 					alerts.data
 						.map((x: any) => x.day_change)
@@ -202,7 +200,7 @@ const Alerts = () => {
 	useEffect(() => {
 		setInterval(() => {
 			// setRefresh(refresh + 1);
-			if (btnRefresh && btnRefresh.current) {
+			if (btnRefresh?.current) {
 				btnRefresh.current.click();
 			}
 		}, 11160000);
@@ -210,7 +208,7 @@ const Alerts = () => {
 		setInterval(() => {
 			// setRefresh(refresh + 1);
 
-			if (btnRefresh && btnRefresh.current) {
+			if (btnRefresh?.current) {
 				btnRefresh.current.click();
 			}
 		}, 300000);
@@ -432,7 +430,7 @@ const Alerts = () => {
 							}))
 							.sort((x: any, y: any) => y.max - x.max)
 							.map((item: any) => (
-								<Col xs={24} sm={12} md={12} lg={12} xl={6} span={8}>
+								<Col key={item.symbol} xs={24} sm={12} md={12} lg={12} xl={6} span={8}>
 									<StockCard
 										descriptions={
 											<Row gutter={16} style={{ marginBottom: 10 }}>

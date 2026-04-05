@@ -2,19 +2,8 @@ import {
 	AreaChartOutlined,
 	ArrowDownOutlined,
 	ArrowUpOutlined,
-	LineChartOutlined,
 } from "@ant-design/icons";
-import {
-	Button,
-	Card,
-	Col,
-	Modal,
-	Popover,
-	Radio,
-	Row,
-	Statistic,
-	Switch,
-} from "antd";
+import { Button, Modal, Popover, Radio } from "antd";
 import axios from "axios";
 import moment from "moment";
 import { useContext, useEffect, useState } from "react";
@@ -35,10 +24,10 @@ import { AppContext } from "../../providers/app.provider";
 import { getTechColor } from "../alerts/alerts-stock-card.component";
 
 const appUrl = process.env.REACT_APP_SERVER_URL;
-const serverUrl = appUrl + "/api/v1/main";
+const serverUrl = `${appUrl}/api/v1/main`;
 
-const CustomTooltip = ({ active, payload, label }: any) => {
-	if (payload && payload.length) {
+const CustomTooltip = ({ payload, label }: any) => {
+	if (payload?.length) {
 		payload = payload[0].payload;
 		return (
 			<div
@@ -53,7 +42,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 			</div>
 		);
 	}
-	return <></>;
+	return null;
 };
 const NiftyRenko = () => {
 	const [allData, setAllData] = useState<any>([]);
@@ -125,7 +114,7 @@ const NiftyRenko = () => {
 
 	const [isModalVisible, setIsModalVisible] = useState(false);
 	const latestTechIndex =
-		(techIndex && techIndex.split(",").slice(-1)[0]) || "";
+		(techIndex?.split(",").slice(-1)[0]) || "";
 	const techColor = (techIndex && getTechColor(+latestTechIndex)) || "";
 
 	const [isTechIndexVisible, setIsTechIndexVisible] = useState(false);
@@ -142,9 +131,15 @@ const NiftyRenko = () => {
 			</Modal>
 
 			{/* <Card size="small"> */}
-			<span
+			<button
+				type="button"
 				onClick={() => setVisible(true)}
-				style={{ cursor: "pointer", marginRight: 5 }}
+				onKeyDown={(e) => {
+					if (e.key === "Enter" || e.key === " ") {
+						setVisible(true);
+					}
+				}}
+				style={{ cursor: "pointer", marginRight: 5, border: "none", background: "transparent", padding: 0 }}
 			>
 				<Button
 					type="text"
@@ -169,7 +164,7 @@ const NiftyRenko = () => {
 						({renkoPower})
 					</small>
 				</Button>
-			</span>
+			</button>
 			{/* </Card> */}
 			<TechIndicator
 				symbol={"NIFTY 500"}
@@ -187,15 +182,23 @@ const NiftyRenko = () => {
 				content={<TechIndexChart data={techIndex} isMobile={isMobile} />}
 				title="Tech Index Journey"
 			>
-				<span
-					style={{ cursor: "pointer" }}
+				<button
+					type="button"
+					style={{
+						cursor: "pointer",
+						border: "none",
+						background: "transparent",
+						padding: 0,
+						display: "inline-flex",
+						alignItems: "center",
+					}}
 					onClick={() => {
 						if (isMobile) setIsTechIndexVisible(true);
 					}}
 				>
 					&nbsp;
 					<AreaChartOutlined />
-				</span>
+				</button>
 			</Popover>
 			<Modal
 				title={

@@ -5,21 +5,18 @@ import {
 	Col,
 	Input,
 	List,
-	Popconfirm,
 	Popover,
 	Row,
 	Skeleton,
 	Space,
-	Switch,
 } from "antd";
 import Title from "antd/lib/typography/Title";
 import axios from "axios";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import AlertStockCard from "../alerts/alerts-stock-card.component";
-import StockCard from "../stock-card/stock-card.component";
 
-const serverUrl = process.env.REACT_APP_SERVER_URL + "/api/v1/main";
+const serverUrl = `${process.env.REACT_APP_SERVER_URL}/api/v1/main`;
 
 const { Search } = Input;
 
@@ -35,14 +32,14 @@ const Notifications = () => {
 			setLoading(true);
 			const alerts = await axios.get(
 				`${serverUrl}/notifications/${index}${
-					searchInput ? "/" + searchInput : ""
+					searchInput ? `/${searchInput}` : ""
 				}`,
 				{
 					timeout: 100000,
 				},
 			);
 			const datesSet: any = new Set(
-				alerts.data.map((x: any) => x["date_created"].slice(0, 10)),
+				alerts.data.map((x: any) => x.date_created.slice(0, 10)),
 			);
 			setDates([...datesSet]);
 			setData(alerts.data);
@@ -90,100 +87,98 @@ const Notifications = () => {
 					{loading ? (
 						<Skeleton />
 					) : (
-						<>
-							{dates &&
-								dates.map((date: string) => {
-									const filtered = data.filter(
-										(x: any) => x["date_created"].slice(0, 10) === date,
-									);
-									const soldItems: any = filtered.filter((x: any) =>
-										x.heading.toLowerCase().includes("sold"),
-									);
-									const sum: any = soldItems.reduce(
-										(x: any, y: any) => {
-											const xAmount =
-												(x.heading &&
-													parseFloat(
-														x.heading.split(" ")[
-															x.heading.split(" ").indexOf("₹") + 1
-														],
-													)) ||
-												0;
-											const yAmount =
-												(y.heading &&
-													parseFloat(
-														y.heading.split(" ")[
-															y.heading.split(" ").indexOf("₹") + 1
-														],
-													)) ||
-												0;
-											return { heading: "₹ " + (xAmount + yAmount) };
-										},
-										{ heading: "₹ 0" },
-									);
-									const sumAmount = +sum.heading.split(" ")[1];
+						dates?.map((date: string) => {
+							const filtered = data.filter(
+								(x: any) => x.date_created.slice(0, 10) === date,
+							);
+							const soldItems: any = filtered.filter((x: any) =>
+								x.heading.toLowerCase().includes("sold"),
+							);
+							const sum: any = soldItems.reduce(
+								(x: any, y: any) => {
+									const xAmount =
+										(x.heading &&
+											parseFloat(
+												x.heading.split(" ")[
+													x.heading.split(" ").indexOf("₹") + 1
+												],
+											)) ||
+										0;
+									const yAmount =
+										(y.heading &&
+											parseFloat(
+												y.heading.split(" ")[
+													y.heading.split(" ").indexOf("₹") + 1
+												],
+											)) ||
+										0;
+									return { heading: `₹ ${(xAmount + yAmount).toFixed(2)}` };
+								},
+								{ heading: "₹ 0" },
+							);
+							const sumAmount = +sum.heading.split(" ")[1];
 
-									return (
-										<Row
-											justify="center"
-											style={{
-												margin: 20,
-												background: "#0303037a",
-												borderRadius: 10,
-											}}
-										>
-											<Col>
-												<Title level={5}>
-													{" "}
-													{moment(date).format("DD MMM YYYY")}
-													{sumAmount ? (
-														<span
-															style={{
-																color: sumAmount > 0 ? "#73d13d" : "#ff4d4f",
-															}}
-														>
-															{"  ₹ " + sumAmount.toFixed(2)}
-														</span>
-													) : (
-														""
-													)}
-												</Title>
-											</Col>
-											<Col lg={24} xs={24} sm={24} xl={24}>
-												<List
-													size="small"
-													style={{ margin: 5 }}
-													itemLayout="horizontal"
-													dataSource={filtered}
-													renderItem={(item: any) => (
-														<List.Item>
-															<List.Item.Meta
-																avatar={
-																	<Avatar
-																		style={{ backgroundColor: "#87d068" }}
-																		icon={<NotificationOutlined />}
-																	/>
-																}
-																title={
-																	<Popover
-																		trigger={"click"}
-																		content={
-																			<AlertStockCard alertId={item.alert_id} />
-																		}
-																	>
-																		<a>{item.heading}</a>
-																	</Popover>
-																}
-																description={item.contents}
+							return (
+								<Row
+									key={date}
+									justify="center"
+									style={{
+										margin: 20,
+										background: "#0303037a",
+										borderRadius: 10,
+									}}
+								>
+									<Col>
+										<Title level={5}>
+											{" "}
+											{moment(date).format("DD MMM YYYY")}
+											{sumAmount ? (
+												<span
+													style={{
+														color: sumAmount > 0 ? "#73d13d" : "#ff4d4f",
+													}}
+												>
+													{"  ₹ " + sumAmount.toFixed(2)}
+												</span>
+											) : (
+												""
+											)}
+										</Title>
+									</Col>
+									<Col lg={24} xs={24} sm={24} xl={24}>
+										<List
+											size="small"
+											style={{ margin: 5 }}
+											itemLayout="horizontal"
+											dataSource={filtered}
+											renderItem={(item: any) => (
+												<List.Item>
+													<List.Item.Meta
+														avatar={
+															<Avatar
+																style={{ backgroundColor: "#87d068" }}
+																icon={<NotificationOutlined />}
 															/>
-														</List.Item>
-													)}
-												/>
-											</Col>
-										</Row>
-									);
-								})}
-						</>
+														}
+														title={
+															<Popover
+																trigger={"click"}
+																content={
+																	<AlertStockCard alertId={item.alert_id} />
+																}
+															>
+																<a>{item.heading}</a>
+															</Popover>
+														}
+														description={item.contents}
+													/>
+												</List.Item>
+											)}
+										/>
+									</Col>
+								</Row>
+							);
+						})
 					)}
 				</Col>
 			</Row>

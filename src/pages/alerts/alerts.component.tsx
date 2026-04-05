@@ -1,35 +1,12 @@
 import { ReloadOutlined } from "@ant-design/icons";
-import BarChartOutlined from "@ant-design/icons/lib/icons/BarChartOutlined";
-import LineChartOutlined from "@ant-design/icons/lib/icons/LineChartOutlined";
-import {
-	Badge,
-	Button,
-	Card,
-	Col,
-	Descriptions,
-	InputNumber,
-	Modal,
-	notification,
-	Popover,
-	Progress,
-	Row,
-	Skeleton,
-	Space,
-	Spin,
-	Statistic,
-	Switch,
-} from "antd";
+import { Button, Col, Row, Skeleton, Space, Switch } from "antd";
 import Title from "antd/lib/typography/Title";
 import axios from "axios";
 import moment from "moment";
 import { useEffect, useState } from "react";
-import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
-import TechIndexChart from "../../components/tech-index-chart.component";
-import Indicator from "../indicator/indicator.component";
-import StockCard from "../stock-card/stock-card.component";
 import AlertStockCard from "./alerts-stock-card.component";
 
-const serverUrl = process.env.REACT_APP_SERVER_URL + "/api/v1/main";
+const serverUrl = `${process.env.REACT_APP_SERVER_URL}/api/v1/main`;
 
 // const StockCard1 = ({
 //   data: dataFromProps,
@@ -198,7 +175,7 @@ const Alerts = () => {
 				{ timeout: 100000 },
 			);
 			const datesSet: any = new Set(
-				alerts.data.map((x: any) => x["date_created"].slice(0, 10)),
+				alerts.data.map((x: any) => x.date_created.slice(0, 10)),
 			);
 			setDates([...datesSet]);
 			setData(alerts.data);
@@ -248,64 +225,55 @@ const Alerts = () => {
 					{loading ? (
 						<Skeleton />
 					) : (
-						<>
-							{dates &&
-								dates.map((date: string) => {
-									const filtered = data.filter(
-										(x: any) => x["date_created"].slice(0, 10) === date,
-									);
-									return (
+						dates?.map((date: string) => {
+							const filtered = data.filter(
+								(x: any) => x.date_created.slice(0, 10) === date,
+							);
+							return (
+								<Row
+									key={date}
+									justify="center"
+									style={{
+										margin: 20,
+										background: "#00000047",
+										borderRadius: 10,
+									}}
+								>
+									<Col>
+										<Title level={5}>
+											{" "}
+											{moment(date).format("DD MMM YYYY")}
+										</Title>
+									</Col>
+									<Col lg={24} xs={24} sm={24} xl={24}>
 										<Row
+											gutter={16}
 											justify="center"
-											style={{
-												margin: 20,
-												background: "#00000047",
-												borderRadius: 10,
-											}}
+											style={{ overflow: "auto", height: "100%" }}
 										>
-											<Col>
-												<Title level={5}>
-													{" "}
-													{moment(date).format("DD MMM YYYY")}
-												</Title>
-											</Col>
-											<Col lg={24} xs={24} sm={24} xl={24}>
-												<Row
-													gutter={16}
-													justify="center"
-													style={{ overflow: "auto", height: "100%" }}
-												>
-													{filtered.map(
-														(item: any) => (
-															<Col
-																xs={24}
-																sm={12}
-																md={12}
-																lg={12}
-																xl={6}
-																span={8}
-															>
-																<AlertStockCard
-																	item={item}
-																	index={index}
-																	setRefresh={setRefresh}
-																	refresh={refresh}
-																/>
-															</Col>
-														),
-														// <StockCard
-														//   index={index}
-														//   data={item}
-														//   setRefresh={setRefresh}
-														//   refresh={refresh}
-														// />
-													)}
-												</Row>
-											</Col>
+											{filtered.map(
+												(item: any) => (
+													<Col key={item.id} xs={24} sm={12} md={12} lg={12} xl={6} span={8}>
+														<AlertStockCard
+															item={item}
+															index={index}
+															setRefresh={setRefresh}
+															refresh={refresh}
+														/>
+													</Col>
+												),
+												// <StockCard
+												//   index={index}
+												//   data={item}
+												//   setRefresh={setRefresh}
+												//   refresh={refresh}
+												// />
+											)}
 										</Row>
-									);
-								})}
-						</>
+									</Col>
+								</Row>
+							);
+						})
 					)}
 				</Col>
 			</Row>

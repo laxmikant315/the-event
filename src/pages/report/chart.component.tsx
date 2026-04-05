@@ -1,5 +1,4 @@
 import moment from "moment";
-import React, { PureComponent } from "react";
 import {
 	Area,
 	AreaChart,
@@ -24,8 +23,8 @@ const gradientOffset = (data: any) => {
 	return dataMax / (dataMax - dataMin);
 };
 
-const CustomTooltip = ({ active, payload, label }: any) => {
-	if (payload && payload.length) {
+const CustomTooltip = ({ payload, label }: any) => {
+	if (payload?.length) {
 		payload = payload[0].payload;
 		return (
 			<div
@@ -40,14 +39,12 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 			</div>
 		);
 	}
-	return <></>;
+	return null;
 };
 
 export default ({ data, selected }: any) => {
-	const demoUrl = "https://codesandbox.io/s/area-chart-filled-by-sign-0h7rt";
 	const finalData =
-		(data &&
-			data.length &&
+		(data?.length &&
 			data.map((x: any) => {
 				const name =
 					selected === "month"
