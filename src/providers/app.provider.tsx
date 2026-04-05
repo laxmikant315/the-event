@@ -52,8 +52,8 @@ const AppProvider = ({ children }: any) => {
 	useEffect(() => {
 		if (isOpened && doSend) {
 			const tokens = `[256265,268041${
-				instrumentTokens && instrumentTokens.length
-					? "," + instrumentTokens.join(",")
+				instrumentTokens?.length
+					? `,${instrumentTokens.join(",")}`
 					: ""
 			} ]`;
 			doSend(`{"a":"unsubscribe","v":${tokens}}`);
@@ -99,7 +99,7 @@ const AppProvider = ({ children }: any) => {
 			};
 		}
 
-		function onOpen(evt: any) {
+		function onOpen() {
 			console.log("WSS CONNECTED");
 			setIsOpen(true);
 			// doSend('{"a":"subscribe","v":[256265,268041,4754177]}');

@@ -23,10 +23,7 @@ code {
 		display: block !important;
 	}
 	.row.visible-xs {
-		display: flex !important;
-		display: -webkit-flex !important;
-		display: -ms-flexbox !important;
-		display: -webkit-box !important;
+		
 		display: flex !important;
 	}
 	table.visible-xs {
@@ -46,10 +43,6 @@ code {
 	}
 	.row.visible-sm {
 		display: flex !important;
-		display: -webkit-flex !important;
-		display: -ms-flexbox !important;
-		display: -webkit-box !important;
-		display: flex !important;
 	}
 	table.visible-sm {
 		display: table !important;
@@ -67,10 +60,7 @@ code {
 		display: block !important;
 	}
 	.row.visible-md {
-		display: flex !important;
-		display: -webkit-flex !important;
-		display: -ms-flexbox !important;
-		display: -webkit-box !important;
+		
 		display: flex !important;
 	}
 	table.visible-md {
@@ -89,10 +79,7 @@ code {
 		display: block !important;
 	}
 	.row.visible-lg {
-		display: flex !important;
-		display: -webkit-flex !important;
-		display: -ms-flexbox !important;
-		display: -webkit-box !important;
+		
 		display: flex !important;
 	}
 	table.visible-lg {
