@@ -1,12 +1,12 @@
 import BarChartOutlined from "@ant-design/icons/lib/icons/BarChartOutlined";
-import { Button, Modal } from "antd";
+import { Button } from "antd";
 
 const TechIndicator = ({
-	symbol,
-	visible,
-	onCancel,
+	// symbol,
+	// visible,
+	// onCancel,
 	onClick,
-	category = "NSE",
+	// category = "NSE",
 	techColor,
 	buttonText,
 	loading,
@@ -32,7 +32,7 @@ const TechIndicator = ({
 		>
 			<BarChartOutlined /> {buttonText}
 		</Button>
-		<Modal
+		{/* <Modal
 			title="Technical"
 			footer=""
 			width={800}
@@ -47,7 +47,7 @@ const TechIndicator = ({
 				)}&theme=dark`}
 				style={{ height: "100%", width: "100%", border: 0 }}
 			/>
-		</Modal>
+		</Modal> */}
 	</>
 );
 

@@ -1,11 +1,10 @@
-import { LineChartOutlined } from "@ant-design/icons";
+import { BoxPlotTwoTone, LineChartOutlined } from "@ant-design/icons";
 import StarTwoTone from "@ant-design/icons/lib/icons/StarTwoTone";
 import { Button, Card, Col, Modal, Popover, Progress, Row } from "antd";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import TechIndexChart from "../../components/tech-index-chart.component";
 import TechIndicator from "../../components/tech-indicator.component";
 import { mobileCheck } from "../../helpers/util";
-import { AppContext } from "../../providers/app.provider";
 import Indicator from "../indicator/indicator.component";
 import { shortAmount } from "../portfolio/portfolio.component";
 
@@ -86,7 +85,14 @@ const StockCard = ({ data, onfetch, descriptions, topLeftControls }: any) => {
 								symbol={data.symbol}
 								visible={isModalVisible}
 								onCancel={() => setIsModalVisible(false)}
-								onClick={() => setIsModalVisible(true)}
+								onClick={() => {
+									window.open(
+										`https://technicalwidget.streak.tech/?utm_source=context-menu&utm_medium=kite&stock=${"NSE"}:${encodeURIComponent(
+											data.symbol,
+										)}&theme=dark`,
+										"_blank",
+									);
+								}}
 								loading={loading}
 								buttonText={techIndex}
 								techColor={techColor}

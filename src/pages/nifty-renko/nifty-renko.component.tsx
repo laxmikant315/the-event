@@ -113,8 +113,7 @@ const NiftyRenko = () => {
 	];
 
 	const [isModalVisible, setIsModalVisible] = useState(false);
-	const latestTechIndex =
-		(techIndex?.split(",").slice(-1)[0]) || "";
+	const latestTechIndex = techIndex?.split(",").slice(-1)[0] || "";
 	const techColor = (techIndex && getTechColor(+latestTechIndex)) || "";
 
 	const [isTechIndexVisible, setIsTechIndexVisible] = useState(false);
@@ -139,7 +138,13 @@ const NiftyRenko = () => {
 						setVisible(true);
 					}
 				}}
-				style={{ cursor: "pointer", marginRight: 5, border: "none", background: "transparent", padding: 0 }}
+				style={{
+					cursor: "pointer",
+					marginRight: 5,
+					border: "none",
+					background: "transparent",
+					padding: 0,
+				}}
 			>
 				<Button
 					type="text"
@@ -173,7 +178,14 @@ const NiftyRenko = () => {
 				category="INDICES"
 				visible={isModalVisible}
 				onCancel={() => setIsModalVisible(false)}
-				onClick={() => setIsModalVisible(true)}
+				onClick={() => {
+					window.open(
+						`https://technicalwidget.streak.tech/?utm_source=context-menu&utm_medium=kite&stock=${"INDICES"}:${encodeURIComponent(
+							"NIFTY 500",
+						)}&theme=dark`,
+						"_blank",
+					);
+				}}
 			/>
 			<Popover
 				overlayInnerStyle={{ display: isMobile ? "none" : "block" }}
