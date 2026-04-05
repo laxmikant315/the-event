@@ -87,7 +87,7 @@ const AppProvider = ({ children }: any) => {
 			const websocket = new WebSocket(wsUri);
 			setWebsocket(websocket);
 			websocket.onopen = (evt: any) => {
-				onOpen(evt);
+				onOpen();
 			};
 
 			websocket.onmessage = async (evt: any) => {

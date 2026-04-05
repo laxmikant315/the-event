@@ -75,8 +75,10 @@ export class A {
 			n = 0;
 		return (
 			e.closePrice &&
+				// biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
 				((s = e.lastPrice - e.closePrice), (t = (100 * s) / e.closePrice)),
 			e.openPrice &&
+				// biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
 				((i = e.lastPrice - e.openPrice), (n = (100 * i) / e.openPrice)),
 			{
 				change: t,
