@@ -41,7 +41,7 @@ const TechIndicator = ({
       onCancel={onCancel}
     >
       <iframe
-        src={`https://mo.streak.tech/?utm_source=context-menu&utm_medium=kite&stock=${category}:${encodeURIComponent(
+        src={`https://technicalwidget.streak.tech/?utm_source=context-menu&utm_medium=kite&stock=${category}:${encodeURIComponent(
           symbol
         )}&theme=dark`}
         style={{ height: "100%", width: "100%", border: 0 }}
