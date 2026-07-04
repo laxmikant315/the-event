@@ -203,7 +203,7 @@ const StockCard = ({ data, onfetch, descriptions, topLeftControls }: any) => {
 			}}
 		>
 			<Row justify="space-around">
-				<Col lg={17} xs={17} sm={17} md={17}>
+				<Col lg={12} xs={12} sm={12} md={12}>
 					{progress > 0 ? (
 						<Progress
 							size="small"
@@ -230,6 +230,22 @@ const StockCard = ({ data, onfetch, descriptions, topLeftControls }: any) => {
 							data["pnl"] < 0 && data.timePer >= 100
 								? "exception"
 								: data.timePer > 100
+									? "success"
+									: "active"
+						}
+						strokeColor={data["pnl"] > 0 ? "#73d13d" : "#ff4d4f"}
+					/>
+				</Col>
+				<Col lg={5}>
+					<Progress
+						// type="circle"
+						percent={data.actualTimePer}
+						steps={10}
+						size="small"
+						status={
+							data["pnl"] < 0 && data.actualTimePer >= 100
+								? "exception"
+								: data.actualTimePer > 100
 									? "success"
 									: "active"
 						}
