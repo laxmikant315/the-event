@@ -154,9 +154,10 @@ const LineIndicator = ({ data, type }: any) => {
 	}, [data]);
 	return (
 		<>
-			<Tooltip placement="topLeft" title={state.value}>
+			<Tooltip placement="topLeft" title={type + ": " + state.value}>
 				<span
 					className="value"
+					// title={type}
 					style={{
 						top: state.top,
 						// backgroundColor: "#181818",
@@ -185,6 +186,7 @@ const LineIndicator = ({ data, type }: any) => {
 					{state.value}
 					{type === "current" && state.currentPer && (
 						<span
+							title={type}
 							style={{ color: state.currentPer > 0 ? "#83e44c" : "#ff6163" }}
 						>
 							{" (" + state.currentPer.toFixed(2) + "%)"}
@@ -194,6 +196,7 @@ const LineIndicator = ({ data, type }: any) => {
 			</Tooltip>
 			<span
 				className={`line ${state.className}`}
+				title={type}
 				style={{
 					left: state.left + "%",
 					right: state.right + "%",

@@ -14,7 +14,7 @@ const StockCard = ({ data, onfetch, descriptions, topLeftControls }: any) => {
 	const [isTechIndexVisible, setIsTechIndexVisible] = useState(false);
 	const [loading, setLoading] = useState(false);
 
-	const { techIndex } = data;
+	const { techIndex, status } = data;
 	const techColor = `rgba(${techIndex > 50 ? 115 : 255}, ${
 		techIndex > 50 ? 209 : 77
 	}, ${techIndex > 50 ? 60 : 79}, ${
@@ -69,8 +69,13 @@ const StockCard = ({ data, onfetch, descriptions, topLeftControls }: any) => {
 	}
 	return (
 		<Card
-			headStyle={{ padding: 0, minHeight: 0 }}
-			bodyStyle={{ padding: "0px 10px" }}
+			headStyle={{
+				padding: 0,
+				minHeight: 0,
+			}}
+			bodyStyle={{
+				padding: "0px 10px",
+			}}
 			title={
 				<span style={{ margin: 0 }}>
 					<Row justify="space-between" style={{ padding: 2 }}>
@@ -127,6 +132,7 @@ const StockCard = ({ data, onfetch, descriptions, topLeftControls }: any) => {
 								>
 									&nbsp;
 									<span
+										
 										className={
 											data.prediction === "UP"
 												? "neonGreenTxt"
@@ -203,7 +209,7 @@ const StockCard = ({ data, onfetch, descriptions, topLeftControls }: any) => {
 			}}
 		>
 			<Row justify="space-around">
-				<Col lg={12} xs={12} sm={12} md={12}>
+				<Col lg={9} xs={9} sm={9} md={9}>
 					{progress > 0 ? (
 						<Progress
 							size="small"
@@ -220,7 +226,7 @@ const StockCard = ({ data, onfetch, descriptions, topLeftControls }: any) => {
 						/>
 					)}
 				</Col>
-				<Col lg={5}>
+				<Col lg={6}>
 					<Progress
 						// type="circle"
 						percent={data.timePer}
@@ -235,9 +241,12 @@ const StockCard = ({ data, onfetch, descriptions, topLeftControls }: any) => {
 						}
 						strokeColor={data["pnl"] > 0 ? "#73d13d" : "#ff4d4f"}
 					/>
+					
 				</Col>
-				<Col lg={5}>
+				<Col lg={6}>
+					
 					<Progress
+					  
 						// type="circle"
 						percent={data.actualTimePer}
 						steps={10}
@@ -254,7 +263,7 @@ const StockCard = ({ data, onfetch, descriptions, topLeftControls }: any) => {
 				</Col>
 			</Row>
 			{descriptions}
-			<Row>
+			<Row style={{ paddingTop: 20 }}>
 				<Col lg={24} xs={24} sm={24} xl={24}>
 					<Indicator
 						data={{

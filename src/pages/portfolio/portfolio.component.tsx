@@ -65,8 +65,7 @@ const Alerts = () => {
 		if (niftyWsData) {
 			setNiftyValues(niftyWsData);
 		}
-		const nifty500WsData =
-			wsData?.find((x: any) => x.token === 268041);
+		const nifty500WsData = wsData?.find((x: any) => x.token === 268041);
 		if (nifty500WsData) {
 			setNifty500Values(nifty500WsData);
 		}
@@ -430,51 +429,96 @@ const Alerts = () => {
 							}))
 							.sort((x: any, y: any) => y.max - x.max)
 							.map((item: any) => (
-								<Col key={item.symbol} xs={24} sm={12} md={12} lg={12} xl={6} span={8}>
+								<Col
+									key={item.symbol}
+									xs={24}
+									sm={12}
+									md={12}
+									lg={12}
+									xl={6}
+									span={8}
+								>
 									<StockCard
 										descriptions={
-											<Row gutter={16} style={{ marginBottom: 10 }}>
-												<Col span={3}>
-													<Statistic
-														title="QTY"
-														value={item.quantity}
-														precision={0}
-														valueStyle={{ fontSize: 14 }}
-														// valueStyle={{ color: "#3f8600" }}
-													/>
-												</Col>
+											<>
+												<Row gutter={16} style={{  }}>
+													{item.status === "block" && (
+														<Col
+															span={3}
+															style={{
+																color: "#ffe14d",
+																fontSize: 10,
+																fontWeight: "bold",
+																borderRadius:5,
+																border:
+																	item.status === "block"
+																		? "1px solid #ffe14d"
+																		: "",
+															}}
+														>
+															Blocked
+														</Col>
+													)}
+												</Row>
+												<Row gutter={16} style={{ marginBottom: 10 }}>
+													<Col span={2}>
+														<Statistic
+															title="Q"
+															value={item.quantity}
+															precision={0}
+															valueStyle={{ fontSize: 12 }}
+															// valueStyle={{ color: "#3f8600" }}
+														/>
+													</Col>
 
-												<Col span={8}>
-													<Statistic
-														title="Invested"
-														value={shortAmount(item.buy_price * item.quantity)}
-														precision={0}
-														valueStyle={{ fontSize: 14 }}
-														// valueStyle={{ color: "#3f8600" }}
-														prefix={"₹"}
-													/>
-												</Col>
-												<Col span={8}>
-													<Statistic
-														title="Value"
-														value={shortAmount(item.last_price * item.quantity)}
-														precision={0}
-														prefix={"₹"}
-														valueStyle={{ fontSize: 14 }}
-														// valueStyle={{ color: "#3f8600" }}
-													/>
-												</Col>
-												{/* <Col span={8}></Col> */}
-												<Col span={5}>
-													<Statistic
-														title="Buy on"
-														value={moment(item.buy_date).format("D MMM h:mm a")}
-														precision={0}
-														valueStyle={{ fontSize: 12 }}
-													/>
-												</Col>
-												{/* <Col span={8}></Col> */}
-											</Row>
+													<Col span={6}>
+														<Statistic
+															title="Invest"
+															value={shortAmount(
+																item.buy_price * item.quantity,
+															)}
+															precision={0}
+															valueStyle={{ fontSize: 12 }}
+															// valueStyle={{ color: "#3f8600" }}
+															prefix={"₹"}
+														/>
+													</Col>
+													<Col span={6}>
+														<Statistic
+															title="Value"
+															value={shortAmount(
+																item.last_price * item.quantity,
+															)}
+															precision={0}
+															prefix={"₹"}
+															valueStyle={{ fontSize: 12 }}
+															// valueStyle={{ color: "#3f8600" }}
+														/>
+													</Col>
+													{/* <Col span={8}></Col> */}
+													<Col span={5}>
+														<Statistic
+															title="Buy"
+															value={moment(item.buy_date).format(
+																"D MMM h:mm a",
+															)}
+															precision={0}
+															valueStyle={{ fontSize: 10 }}
+														/>
+													</Col>
+													<Col span={5}>
+														<Statistic
+															title="Bought"
+															value={moment(item.actualBuyDate).format(
+																"D MMM h:mm a",
+															)}
+															precision={0}
+															valueStyle={{ fontSize: 10 }}
+														/>
+													</Col>
+													{/* <Col span={8}></Col> */}
+												</Row>
+											</>
 										}
 										id={item.symbol}
 										data={item}
