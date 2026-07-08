@@ -2,12 +2,14 @@ import ReloadOutlined from "@ant-design/icons/lib/icons/ReloadOutlined";
 import {
 	Button,
 	Col,
+	Modal,
 	notification,
 	Popconfirm,
 	Result,
 	Row,
 	Spin,
 	Statistic,
+	Tag,
 } from "antd";
 import Title from "antd/lib/typography/Title";
 import axios from "axios";
@@ -17,6 +19,7 @@ import { useHistory } from "react-router-dom";
 import { AppContext } from "../../providers/app.provider";
 import NiftyRenko from "../nifty-renko/nifty-renko.component";
 import StockCard from "../stock-card/stock-card.component";
+import LiveStockComponent from "./live-stock.component";
 
 const serverUrl = `${process.env.REACT_APP_SERVER_URL}/api/v1/main`;
 
@@ -441,24 +444,18 @@ const Alerts = () => {
 									<StockCard
 										descriptions={
 											<>
-												<Row gutter={16} style={{  }}>
-													{item.status === "block" && (
+												<Row gutter={16} style={{}}>
+
+													{item.live_stock_details && <Col
+														span={4}><LiveStockComponent data={item.live_stock_details} /></Col>}
+													{item.status === "block" || item.status === "hold" && (
 														<Col
-															span={3}
-															style={{
-																color: "#ffe14d",
-																fontSize: 10,
-																fontWeight: "bold",
-																borderRadius:5,
-																border:
-																	item.status === "block"
-																		? "1px solid #ffe14d"
-																		: "",
-															}}
-														>
-															Blocked
+															span={3}>
+																<Tag color="gold">{item.status.toUpperCase()}</Tag>
+															
 														</Col>
 													)}
+
 												</Row>
 												<Row gutter={16} style={{ marginBottom: 10 }}>
 													<Col span={2}>
@@ -467,7 +464,7 @@ const Alerts = () => {
 															value={item.quantity}
 															precision={0}
 															valueStyle={{ fontSize: 12 }}
-															// valueStyle={{ color: "#3f8600" }}
+														// valueStyle={{ color: "#3f8600" }}
 														/>
 													</Col>
 
@@ -492,7 +489,7 @@ const Alerts = () => {
 															precision={0}
 															prefix={"₹"}
 															valueStyle={{ fontSize: 12 }}
-															// valueStyle={{ color: "#3f8600" }}
+														// valueStyle={{ color: "#3f8600" }}
 														/>
 													</Col>
 													{/* <Col span={8}></Col> */}
