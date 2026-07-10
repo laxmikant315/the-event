@@ -447,7 +447,7 @@ const Alerts = () => {
 												<Row gutter={16} style={{}}>
 
 													{item.live_stock_details && <Col
-														span={5}><LiveStockComponent data={item.live_stock_details} /></Col>}
+														span={6}><LiveStockComponent data={item.live_stock_details} /></Col>}
 													{item.status === "block" || item.status === "hold" && (
 														<Col
 															span={3}>

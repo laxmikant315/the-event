@@ -1,11 +1,12 @@
 import { Alert, Button, Card, Descriptions, Modal, Tag } from "antd";
 import Meta from "antd/lib/card/Meta";
+import moment from "moment";
 import { useState } from "react";
 
 export default ({ data }: any) => {
 
 
-    const { our_buy_or_sell, indmoney_buy_or_sell, new_sentiments_count: { positive, negative }, latest_news } = data
+    const { update_date,our_buy_or_sell, indmoney_buy_or_sell, new_sentiments_count: { positive, negative }, latest_news } = data
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -27,6 +28,8 @@ export default ({ data }: any) => {
         </Tag >
         <Modal title={title}  visible={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
             <Descriptions title="Details">
+                <Descriptions.Item label="Updated">{moment(update_date).fromNow()
+                }</Descriptions.Item>
                 <Descriptions.Item label="IndMoney">{indmoney_buy_or_sell
                 }</Descriptions.Item>
 
@@ -41,7 +44,7 @@ export default ({ data }: any) => {
                 return <><Descriptions title="Latest News">
                     
 
-                    <Descriptions.Item label="How many days old">{latest_news_how_much_old_day}</Descriptions.Item>
+                    <Descriptions.Item label="How many weekdays old">{latest_news_how_much_old_day} days</Descriptions.Item>
 
 
 
