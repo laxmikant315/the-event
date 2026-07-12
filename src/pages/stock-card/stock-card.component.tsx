@@ -14,7 +14,7 @@ const StockCard = ({ data, onfetch, descriptions, topLeftControls }: any) => {
 	const [isTechIndexVisible, setIsTechIndexVisible] = useState(false);
 	const [loading, setLoading] = useState(false);
 
-	const { techIndex, status } = data;
+	const { techIndex } = data;
 	const techColor = `rgba(${techIndex > 50 ? 115 : 255}, ${
 		techIndex > 50 ? 209 : 77
 	}, ${techIndex > 50 ? 60 : 79}, ${
@@ -56,10 +56,11 @@ const StockCard = ({ data, onfetch, descriptions, topLeftControls }: any) => {
 	let progress = 0;
 	const currentPrice = data.last_price || data.lastPrice;
 
-	if (!data.pnl) {
-		data.pnl = data.buyPrice - data.lastPrice;
-	}
 	const buyPrice = data.buy_price || data.buyPrice;
+	if (!data.pnl || Number.isNaN(data.pnl)) {
+		data.pnl = currentPrice - buyPrice;
+	}
+
 	if (data.pnl > 0) {
 		progress = ((currentPrice - buyPrice) * 100) / (data.target - buyPrice);
 	} else {
@@ -67,6 +68,7 @@ const StockCard = ({ data, onfetch, descriptions, topLeftControls }: any) => {
 			-((buyPrice - currentPrice) * 100) /
 			(buyPrice - (data.trail_stop_loss || data.stopLoss));
 	}
+	
 	return (
 		<Card
 			headStyle={{
@@ -111,7 +113,6 @@ const StockCard = ({ data, onfetch, descriptions, topLeftControls }: any) => {
 							>
 								<TechIndexChart data={data.indexProgress} isMobile={isMobile} />
 							</Modal>
-
 							<Popover
 								overlayInnerStyle={{ display: isMobile ? "none" : "block" }}
 								popupVisible={!isMobile}
@@ -132,7 +133,6 @@ const StockCard = ({ data, onfetch, descriptions, topLeftControls }: any) => {
 								>
 									&nbsp;
 									<span
-										
 										className={
 											data.prediction === "UP"
 												? "neonGreenTxt"
@@ -241,12 +241,9 @@ const StockCard = ({ data, onfetch, descriptions, topLeftControls }: any) => {
 						}
 						strokeColor={data["pnl"] > 0 ? "#73d13d" : "#ff4d4f"}
 					/>
-					
 				</Col>
 				<Col lg={6}>
-					
 					<Progress
-					  
 						// type="circle"
 						percent={data.actualTimePer}
 						steps={10}
@@ -263,6 +260,7 @@ const StockCard = ({ data, onfetch, descriptions, topLeftControls }: any) => {
 				</Col>
 			</Row>
 			{descriptions}
+			
 			<Row style={{ paddingTop: 20 }}>
 				<Col lg={24} xs={24} sm={24} xl={24}>
 					<Indicator
