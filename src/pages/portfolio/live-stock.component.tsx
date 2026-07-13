@@ -1,4 +1,4 @@
-import { Alert,  Descriptions, Modal, Tag } from "antd";
+import { Alert, Descriptions, Modal, Tag } from "antd";
 import moment from "moment";
 import { useState } from "react";
 
@@ -9,8 +9,8 @@ export default ({ data }: any) => {
 		indmoney_buy_or_sell,
 		news_sentiments_count,
 		latest_news,
-        insights,
-        stock_name
+		insights,
+		stock_name,
 	} = data;
 
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -51,21 +51,21 @@ export default ({ data }: any) => {
 				onOk={handleOk}
 				onCancel={handleCancel}
 			>
-				
-				<Descriptions title={<a href={indUrl} target="_blank" rel="noopener noreferrer">
-					IndMoney
-				</a>}>
+				<Descriptions
+					title={
+						<a href={indUrl} target="_blank" rel="noopener noreferrer">
+							IndMoney
+						</a>
+					}
+				>
 					<Descriptions.Item label="Updated">
-						{moment(update_date).fromNow()}
+						{moment(update_date, moment.ISO_8601, true).fromNow()}
 					</Descriptions.Item>
 					<Descriptions.Item label="IndMoney">
 						{indmoney_buy_or_sell}
 					</Descriptions.Item>
-
-				
 				</Descriptions>
-                <Descriptions title={"Insights"}>
-					
+				<Descriptions title={"Insights"}>
 					<Descriptions.Item label="Positive Insights">
 						{insights.positive || 0}
 					</Descriptions.Item>
@@ -73,7 +73,7 @@ export default ({ data }: any) => {
 					<Descriptions.Item label="Negative Insights">
 						{insights.negative || 0}
 					</Descriptions.Item>
-                    <Descriptions.Item label="Neutral Insights">
+					<Descriptions.Item label="Neutral Insights">
 						{insights.neutral || 0}
 					</Descriptions.Item>
 				</Descriptions>
