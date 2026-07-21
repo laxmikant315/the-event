@@ -447,27 +447,29 @@ const Alerts = () => {
 												<Row gutter={16} style={{}}>
 													{item.live_stock_details && (
 														<Col span={6}>
+															
 															<LiveStockComponent
-																data={item.live_stock_details}
+																data={{ ...item.live_stock_details, symbol: item.symbol, liveData: item.live_data }}
 															/>
+
 														</Col>
 													)}
 													{(item.status === "block" ||
 														item.status === "hold") && (
-														<Col span={3}>
-															<Tag
-																color={
-																	item.status === "block"
-																		? "black"
-																		: item.status === "hold"
-																			? "gold" 
-																			: "blue"
-																}
-															>
-																{item.status.toUpperCase()}
-															</Tag>
-														</Col>
-													)}
+															<Col span={3}>
+																<Tag
+																	color={
+																		item.status === "block"
+																			? "black"
+																			: item.status === "hold"
+																				? "gold"
+																				: "blue"
+																	}
+																>
+																	{item.status.toUpperCase()}
+																</Tag>
+															</Col>
+														)}
 												</Row>
 												<Row gutter={16} style={{ marginBottom: 10 }}>
 													<Col span={2}>
@@ -476,7 +478,7 @@ const Alerts = () => {
 															value={item.quantity}
 															precision={0}
 															valueStyle={{ fontSize: 12 }}
-															// valueStyle={{ color: "#3f8600" }}
+														// valueStyle={{ color: "#3f8600" }}
 														/>
 													</Col>
 
@@ -501,7 +503,7 @@ const Alerts = () => {
 															precision={0}
 															prefix={"₹"}
 															valueStyle={{ fontSize: 12 }}
-															// valueStyle={{ color: "#3f8600" }}
+														// valueStyle={{ color: "#3f8600" }}
 														/>
 													</Col>
 													{/* <Col span={8}></Col> */}

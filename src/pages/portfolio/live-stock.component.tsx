@@ -1,8 +1,12 @@
-import { Alert, Descriptions, Modal, Tag } from "antd";
+import { Alert, Button, Descriptions, Modal, Tag } from "antd";
 import moment from "moment";
 import { useState } from "react";
+import ReloadOutlined from "@ant-design/icons/lib/icons/ReloadOutlined";
+
+const serverUrl = `${process.env.REACT_APP_SERVER_URL}/api/v1/main`;
 
 export default ({ data }: any) => {
+	console.log({ data })
 	const {
 		update_date,
 		our_buy_or_sell,
@@ -11,6 +15,8 @@ export default ({ data }: any) => {
 		latest_news,
 		insights,
 		stock_name,
+		symbol,
+		liveData
 	} = data;
 
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -46,16 +52,30 @@ export default ({ data }: any) => {
 			</Tag>
 
 			<Modal
+				
+
 				title={title}
+
 				visible={isModalOpen}
 				onOk={handleOk}
 				onCancel={handleCancel}
+
 			>
 				<Descriptions
 					title={
-						<a href={indUrl} target="_blank" rel="noopener noreferrer">
-							IndMoney
-						</a>
+						<>
+							<a href={indUrl} target="_blank" rel="noopener noreferrer">
+								IndMoney
+							</a>
+							<Button
+								type="text"
+								size="small"
+								target="_blank"
+								icon={<ReloadOutlined />}
+								href={`${serverUrl}/check_stock_details_today/${symbol}`}
+							/>
+
+						</>
 					}
 				>
 					<Descriptions.Item label="Updated">
@@ -118,6 +138,37 @@ export default ({ data }: any) => {
 							</>
 						);
 					})()}
+				<Descriptions title={"Live Data"}>
+					<Descriptions.Item label="RSI">
+						{liveData.rsi || 0}
+					</Descriptions.Item>
+
+					<Descriptions.Item label="MacD">
+						{liveData.macd.toFixed(2) || 0}
+					</Descriptions.Item>
+					<Descriptions.Item label="SMA">
+						{liveData.sma.toFixed(2) || 0}
+					</Descriptions.Item>
+					<Descriptions.Item label="EMA">
+						{liveData.ema.toFixed(2) || 0}
+					</Descriptions.Item>
+					<Descriptions.Item label="ATR">
+						{liveData.atr.toFixed(2) || 0}
+					</Descriptions.Item>
+					<Descriptions.Item label="BB High">
+						{liveData.bb_high.toFixed(2) || 0}
+					</Descriptions.Item>
+					<Descriptions.Item label="BB Low">
+						{liveData.bb_low.toFixed(2) || 0}
+					</Descriptions.Item>
+					<Descriptions.Item label="MacD Signal">
+						{liveData.macd_signal.toFixed(2) || 0}
+					</Descriptions.Item>
+					<Descriptions.Item label="MacD Diff">
+						{liveData.macd_diff.toFixed(2) || 0}
+					</Descriptions.Item>
+
+				</Descriptions>
 			</Modal>
 		</>
 	);
